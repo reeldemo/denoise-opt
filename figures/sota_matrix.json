@@ -4,7 +4,7 @@
   "blend_alpha": 0.7,
   "device": "cuda",
   "canonical_eval_seed": 20260719,
-  "overnight_search_seed": 1902771841,
+  "search_seed": 1902771841,
   "score_batch": 64,
   "cycle_length": 256,
   "prolong_tiles": 16,
@@ -10589,7 +10589,7 @@
       "nas": 0.9867673516273499,
       "combo": 0.9896763265132904
     },
-    "note": "Arch evaluations \u2248 clean search iterations (one fitted proposal per iter). Peak mem from this bench process is not overnight peak; overnight peak not logged \u2014 report GPU model + hours + eval count as primary budget."
+    "note": "Arch evaluations \u2248 clean search iterations (one fitted proposal per iter). Peak mem from this bench process is not meta-search peak; meta-search peak not logged \u2014 report GPU model + hours + eval count as primary budget."
   },
   "n2n_retrain_provenance_sha256": "6cfe0c63c7a9fc3b5d605e005f8774243a4afc4522b89405c45e35ddd92862ff"
 }

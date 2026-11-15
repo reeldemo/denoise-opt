@@ -12,7 +12,7 @@ The \textbf{repair operator} $\Theta$ (legacy code: bake cell) is
 \Theta:\mathbb{R}^{L}\times\mathcal{H}\to\mathbb{R}^{L},\qquad
 y=\Theta(x;h),\quad h\in\mathcal{H}.
 \end{equation}
-When continuous parameters alone are emphasized we write $\theta$ for the continuous slice of $h$ and $y=\Theta(x;\theta)$.
+When continuous parameters alone are emphasized I write $\theta$ for the continuous slice of $h$ and $y=\Theta(x;\theta)$.
 $r^{\star}\in\mathbb{R}^{L}$ is the procedural ideal sibling defined below.
 Tiling length $N$ (typically $N{=}16$) forms $y_{\mathrm{tiled}}=\mathrm{Tile}(y,N)$ and $r^{\star}_{\mathrm{tiled}}=\mathrm{Tile}(r^{\star},N)$.
 Seam width $W$ (code: \texttt{SEAM\_W}, typically $8$) is the neighborhood edited by classical fade and polish ops.
@@ -97,7 +97,7 @@ For masked sample set $\mathcal{M}\in\{\mathcal{S},\mathcal{B}\}$, let $|\mathca
 \begin{equation}
 \mathrm{RMS}_{\mathcal{M}}(u)=\sqrt{\frac{1}{|\mathcal{M}|}\sum_{i\in\mathcal{M}} u_i^2}.
 \end{equation}
-The implementation fixes $\varepsilon>0$ with $\varepsilon=10^{-6}$ (\texttt{reelsynth/scripts/metrics\_snr\_sdr.py}; mirrored in \texttt{overnight\_gpu\_rl\_arch.py}).
+The implementation fixes $\varepsilon>0$ with $\varepsilon=10^{-6}$.
 Component scores use the unit clamp (same normalized-error form as SNR-style objectives on a mask~\cite{purwins2019}):
 \begin{equation}
 \label{eq:R-component}
@@ -194,7 +194,7 @@ When tables show $\Delta R$ vs DualCosine, that is a reporting gap vs one classi
 \begin{remark}[DualCosine centering is PPO advantage only]
 \label{rem:dualcosine-centering}
 The outer objective remains~\eqref{eq:outer-obj}: maximize absolute $R(y,r^{\star})$.
-In the PPO branch only, we optionally form a centered advantage
+In the PPO branch only, I optionally form a centered advantage
 \begin{equation}
 \label{eq:dualcosine-centering}
 \rho = R - R_{\mathrm{DualCosine}},
@@ -245,7 +245,7 @@ On the sine{+}cliff generator, no-bake already sits near $R\approx 0.97$, and st
 Absolute gaps of order $10^{-3}$--$10^{-2}$ are real but tiny as raw PPO/GA signals.
 Without shaping, advantages collapse.
 Hyperparameters (clip, entropy, mutation rate, population size, fit steps, learning rate) then decide whether the outer loop can climb the last percent.
-We therefore treat reward shaping and search hyperparameters as first-class tunables alongside bake architecture.
+I therefore treat reward shaping and search hyperparameters as first-class tunables alongside bake architecture.
 In the present hybrid, PPO uses a searchable shaping mode among $\{\texttt{abs\_r},\,\texttt{vs\_dualcosine},\,\texttt{vs\_nobake},\,\texttt{neglog\_gap}\}$ (PBT-mutated, default $\rho = R - R_{\mathrm{DualCosine}}$ per Remark~\ref{rem:dualcosine-centering}).
 PBT mutates fit / PPO hyperparameters and reward mode in-population. Plateau adaptation retunes branch mix and depth/MoE bias when champions stall.
 The matched $5$k meta-approach comparison (Section~\ref{sec:meta-compare}) selects the outer-loop family under a shared short FitCell budget; the hybrid-only converge campaign then spends GPU on that winner.
@@ -253,9 +253,9 @@ The matched $5$k meta-approach comparison (Section~\ref{sec:meta-compare}) selec
 \subsection{Meta-learning approach comparison}
 \label{sec:meta-compare}
 
-Beyond the hybrid outer loop, we compare five additional outer-loop families under a matched $5{,}000$-evaluation budget,
+Beyond the hybrid outer loop, I compare five additional outer-loop families under a matched $5{,}000$-evaluation budget,
 three search seeds (\texttt{1902771841}, \texttt{2026072701}, \texttt{2026072702}), and the same FitCell / $R_{\mathrm{blend}}{+}J$ protocol (LSTM and xLSTM included in the searchable bake vocabulary).
-Table and figure legends use the short display names below. Artifact folders keep stable code keys (see the \href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/NOMENCLATURE.md}{nomenclature}):
+Table and figure legends use the short display names below. Artifact folders keep stable code keys (see the \href{https://github.com/reeldemo/denoise-opt}{nomenclature}):
 \begin{itemize}
   \item \textbf{Random NAS} (\texttt{random}): independent uniform draws over bake graphs and fit hyperparameters (control).
   \item \textbf{Cont.\ CMA-ES} (\texttt{cmaes}): diagonal covariance-matrix adaptation over a continuous encoding of depth, width, operator kind, block logits, and fit hyperparameters~\cite{hansen2016cmaes}.
@@ -263,7 +263,7 @@ Table and figure legends use the short display names below. Artifact folders kee
   \item \textbf{Aging evolution} (\texttt{aging\_evo}): regularized evolution with oldest-member replacement after tournament parent selection~\cite{real2017large,real2019}, distinct from the hybrid's non-aging tournament GA branch.
   \item \textbf{TPE Bayes NAS} (\texttt{tpe}): lightweight tree-structured Parzen estimator over discrete bake categoricals in the spirit of practical Bayesian optimization~\cite{snoek2012}.
 \end{itemize}
-We also run \textbf{Ours (hybrid GA--PPO)} (\texttt{hybrid\_lstm}): the multi-branch hybrid loop for $5{,}000$ evaluations with LSTM/xLSTM in the block vocabulary and online reward-mode / fit--PPO hyperparameter co-tuning, as the proposed matched-budget arm.
+I also run \textbf{Ours (hybrid GA--PPO)} (\texttt{hybrid\_lstm}): the multi-branch hybrid loop for $5{,}000$ evaluations with LSTM/xLSTM in the block vocabulary and online reward-mode / fit--PPO hyperparameter co-tuning, as the proposed matched-budget arm.
 Results appear in Appendix~\ref{app:supplement} (Table~\ref{tab:meta-approaches}, Figures~\ref{fig:meta-approach-bars}--\ref{fig:meta-approach-compare}). Healed-sample overlays appear in Figure~\ref{fig:meta-heal-samples}.
 
 \begin{remark}[Trial complexity]
@@ -301,6 +301,7 @@ Companion listings: Algorithms~\ref{alg:residual}--\ref{alg:hybrid} (Appendix~\r
     PBT exploit / mutate & elite fraction $0.25$, multi-step arch+hp mutate \\
     MoE routing & \texttt{sequential} or \texttt{moe\_parallel} when enabled \\
     Plateau boredom threshold & $1000$ iters without champ improve \\
+    E2 plateau stopping rule & $\text{rel.\ }\Delta R_{\mathrm{blend}}<10^{-4}$ for $\text{patience}{=}3$ steps, grad clip $1.0$ \\
     Cycle length $L$ / tiles $N$ / seam $W$ & $256$ / $16$ / $8$ \\
     Fit steps / batch (default) & $24$ / $48$ \\
     Algo tag & \texttt{PPO+GA+PBT+NAS+depth+MoE} \\

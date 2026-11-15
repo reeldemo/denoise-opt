@@ -10,17 +10,17 @@ does the \emph{same} wrap-discontinuity protocol (open a cliff at a period join,
 They are stress tests of that geometry.
 They are \emph{not} claims that an audio-trained bake transfers as bearing-fault or ECG diagnosis SOTA,
 and they are not claims that fatigue cracks or grid phase events ``are'' wavetable seams.
-Reported transfer evidence is only locked $R_{\mathrm{blend}}$ on the seven wrap boards in Table~\ref{tab:transfer-main}; we do not claim cross-domain generalization beyond that residual protocol.
+Reported transfer evidence is only locked $R_{\mathrm{blend}}$ on the seven wrap boards in Table~\ref{tab:transfer-main}; I do not claim cross-domain generalization beyond that residual protocol.
 
 \paragraph{Shared transfer recipe.}
-For each domain we cut fixed-length periods ($L{=}256$) and build an ideal sibling (smooth / template / cubic path) plus a cracked engine (same content with an open-wrap cliff, sometimes with a deliberately worse interpolant).
-We then score classical baselines and a domain-trained DenoiseOpt / Noise2Noise stack under locked $R_{\mathrm{blend}}$ as defined in Section~\ref{sec:residual-score}
+For each domain I cut fixed-length periods ($L{=}256$) and build an ideal sibling (smooth / template / cubic path) plus a cracked engine (same content with an open-wrap cliff, sometimes with a deliberately worse interpolant).
+I then score classical baselines and a domain-trained DenoiseOpt / Noise2Noise stack under locked $R_{\mathrm{blend}}$ as defined in Section~\ref{sec:residual-score}
 (\texttt{hybrid\_lstm} FitCell, $150$--$250$ outer iterations where searched, short \texttt{fit\_steps}${}={}40$ on transfer boards).
 Classical baselines on every board: no-bake (passthrough), DualCosine (raised-cosine end fade), \texttt{seam\_fir3}, and endpoint-pin (shared DualCosine/FIR interface; Section~\ref{sec:classical-board}).
 SeamN2N: corrupt$\to$corrupt CNN, ${\approx}53.5$k params, $4000$ Adam steps, train seed \texttt{424242}.
 Domain-trained Noise2Noise (corrupt$\to$corrupt, $4000$ Adam steps) is scored on the same seven boards and reported beside classical rows in Table~\ref{tab:transfer-main}.
 Artifacts:
-\href{https://github.com/reeldemo/reelsynth/tree/main/brand/artifacts/signal_heal_transfer}{signal\_heal\_transfer}.
+\href{https://github.com/reeldemo/denoise-opt}{signal\_heal\_transfer}.
 
 \paragraph{Seam analogy by domain family.}
 \textbf{Bearing revolutions (CWRU / MFPT / Paderborn).}

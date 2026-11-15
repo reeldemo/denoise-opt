@@ -21,24 +21,25 @@ whole-curve prolonged $R$ is debug-only and never used for selection.
 PESQ/STOI/MUSHRA are out of scope on non-speech cycles ($N_{\mathrm{listeners}}{=}0$).
 
 \paragraph{Which numbers are multi-seed.}
-Holdout / multi-family means are mean$\pm$std over five evaluation seeds (\texttt{20260719}--\texttt{20260723}), extended to ten evaluation seeds (\texttt{20260719}--\texttt{20260728}) in \texttt{results/e1\_holdout\_10seed.json}.
+Holdout / multi-family means are mean$\pm$std over five evaluation seeds (\texttt{20260719}--\texttt{20260723}), extended to ten evaluation seeds (\texttt{20260719}--\texttt{20260728}) in the released artifacts.
 Matched-$5$k ($5{,}000$-evaluation) outer-loop bake-off means are mean$\pm$std over $n{=}3$ pilot search seeds (\texttt{1902771841}, \texttt{2026072701}, \texttt{2026072702}), supplemented by two extra search seeds (\texttt{2026072703}, \texttt{2026072704}) and a three-seed $5$k branch ablation.
-The FitCell-to-plateau follow-up (Section~\ref{sec:v14-converge}) reports both the single-seed in-loop freeze (\texttt{1902771841}) and three-seed holdout replication (\texttt{results/e2\_v14\_converge\_multiseed.json}).
+The FitCell-to-plateau follow-up (Section~\ref{sec:v14-converge}) reports both the single-seed in-loop freeze (\texttt{1902771841}) and three-seed holdout replication.
 N2N train seed is \texttt{424242}.
 Transfer Table~\ref{tab:transfer-main} is one domain-trained hybrid per board (search seed \texttt{1902771841}), not multi-seed averages.
-We report the hybrid\_lstm freeze plus holdout / multi-family / Factory+FX / AKWF / transfer benches.
+I report the hybrid\_lstm freeze plus holdout / multi-family / Factory+FX / AKWF / transfer benches.
 Venue: DSP / synthesis artifact repair (DAFx / AES / arXiv cs.SD).
 
-\paragraph{Statistical reporting (what we compute).}
+\paragraph{Statistical reporting (what I compute).}
 Unless a table caption says otherwise, multi-seed cells are arithmetic mean$\pm$sample std over the named seed list (not Gaussian confidence intervals).
-Paired holdout comparisons test the null hypothesis $H_0{:}\,\mathbb{E}[\Delta]{=}0$ on identical paired seed lists ($n{=}5$ or $n{=}10$ evaluation seeds) using both a two-sided exact binomial sign test on win counts and a two-sided exact sign-flip permutation test (enumerating all $2^n$ sign assignments on per-seed deltas $\Delta_i$, giving minimum attainable $p{=}2/2^n$: $0.0625$ at $n{=}5$ and $0.0020$ at $n{=}10$), alongside $10{,}000$-resample paired bootstrap 95\% CIs and Hedges $g_z$ in Appendix~\ref{app:secondary-results} (\texttt{figures/stats\_paired\_holdout.json}).
-All primary four-board comparisons in Table~\ref{tab:n2n-vs-ours} (\texttt{results/table10\_rigorous\_stats.json}) apply Holm--Bonferroni multiple-testing correction ($p_{\mathrm{adj}}{\le}0.0039$ across all four boards); small-$n{=}3$ outer-loop pilot checks remain unadjusted exploratory diagnostics.
+Paired holdout comparisons test the null hypothesis $H_0{:}\,\mathbb{E}[\Delta]{=}0$ on identical paired seed lists ($n{=}5$ or $n{=}10$ evaluation seeds) using both a two-sided exact binomial sign test on win counts and a two-sided exact sign-flip permutation test (enumerating all $2^n$ sign assignments on per-seed deltas $\Delta_i$, giving minimum attainable $p{=}2/2^n$: $0.0625$ at $n{=}5$ and $0.0020$ at $n{=}10$), alongside $10{,}000$-resample paired bootstrap 95\% CIs and Hedges $g_z$ in Appendix~\ref{app:secondary-results}.
+All primary four-board comparisons in Table~\ref{tab:n2n-vs-ours} apply Holm--Bonferroni multiple-testing correction ($p_{\mathrm{adj}}{\le}0.0039$ across all four boards); small-$n{=}3$ outer-loop pilot checks remain unadjusted exploratory diagnostics.
 Search hyperparameters (learning rates, population sizes, mutation rates, and FitCell steps) are listed in Table~\ref{tab:hyperparams}.
 Win/loss \emph{counts} at small $n$ also report Wilson 95\% score intervals for the win proportion (e.g.\ 10/20 board wins $\Rightarrow$ CI $[0.30,0.70]$).
 Paired multi-family comparisons use a two-sided sign test on per-board mean deltas (reported $p$ values; $p{=}1.0$ means parity, not overlap-driven superiority).
-Matched-$5$k outer-loop comparisons use paired deltas across three search seeds per family (\texttt{figures/stats\_meta\_approach\_5k.json}); with $n{=}3$, two-sided sign-flip tests cannot reach $p<0.25$ when all deltas share sign---treat Table~\ref{tab:meta-approaches} as descriptive selection, not inferential ranking.
-We do \emph{not} run ANOVA across outer-loop families beyond mean$\pm$std in Table~\ref{tab:meta-approaches}, and we do not invent MOS confidence intervals.
+Matched-$5$k outer-loop comparisons use paired deltas across three search seeds per family; with $n{=}3$, two-sided sign-flip tests cannot reach $p<0.25$ when all deltas share sign, treat Table~\ref{tab:meta-approaches} as descriptive selection, not inferential ranking.
+I do \emph{not} run ANOVA across outer-loop families beyond mean$\pm$std in Table~\ref{tab:meta-approaches}, and I do not invent MOS confidence intervals.
 Scope: this is a technical investigation, not a human listening trial ($N_{\mathrm{listeners}}{=}0$; no preference rates).
+Reproducibility: all primary tables, statistical tests, and figures reproduce from the unified repository (\url{https://github.com/reeldemo/denoise-opt}, RTX~3090, CUDA, PyTorch) via the repository's evaluation, domain-search, and plotting scripts.
 
 \paragraph{Experimental setup (datasets, compute).}
 \begin{itemize}
@@ -85,7 +86,7 @@ Multi-family SOTA scores $20$ waveforms ($10$ families $\times$ $2$ seeds, batch
 Wavetable-native boards use ReelSynth Factory+FX exports ($n{=}1{,}280$: $640$ dry + $640$ FX) and AKWF CC0 cycles ($n{=}1{,}280$) so Plot~4 corpus bars are comparable to multi-family ($1{,}280$).
 Sci/eng transfer tiles ($1{,}536$ periods total) are summarized in Appendix~\ref{app:transfer-bundle}.
 Search never trains on the frozen holdout. N2N/seq baselines use disjoint train seeds \texttt{424242}/\texttt{424243}.
-Artifacts: \href{https://github.com/reeldemo/denoise-opt-meta/tree/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v14/figures}{dataset artifacts}.
+Artifacts: \href{https://github.com/reeldemo/denoise-opt}{dataset artifacts}.
 
 \begin{table}[htbp]
   \centering
@@ -126,7 +127,7 @@ Artifacts: \href{https://github.com/reeldemo/denoise-opt-meta/tree/master/paper/
 \paragraph{Dataset metrics.}
 A metrics draw of $4{,}096$ cycles under the holdout seed yields mean ideal RMS $0.721\pm0.016$, mean engine residual RMS $0.021\pm0.013$, and mean absolute wrap jump $|x_0-x_{L-1}|$ of $0.913\pm0.634$.
 No-bake (passthrough) on that draw scores mean $R\approx0.971$.
-Method tables use a matched score batch of $64$ cycles from the same seed (the \href{https://github.com/reeldemo/reelsynth/tree/main/brand/artifacts/canonical_eval_dataset}{canonical evaluation tensors}), five consecutive seeds for mean$\pm$std on the classical table, and the 20-waveform matrix for SOTA secondary metrics.
+Method tables use a matched score batch of $64$ cycles from the same seed (the \href{https://github.com/reeldemo/denoise-opt}{canonical evaluation tensors}), five consecutive seeds for mean$\pm$std on the classical table, and the 20-waveform matrix for SOTA secondary metrics.
 Figure~\ref{fig:dataset-distributions} summarizes the $4{,}096$-cycle metrics draw: ideal RMS clusters near $0.72$, wrap jumps span nearly three orders of magnitude (median $\approx 0.83$), and no-bake $R$ is high on easy tiles but falls below $0.91$ on the hardest decile of wrap jumps.
 Figure~\ref{fig:intro-sine} is the documented sine-wrap edge case: a high-$|wrap|$ holdout tile where cliff modulation is visible, scored with DualCosine and the top neural favorite under the same residual $R$ (tile $R\approx0.9917$, favorite batch mean $R\approx0.991$).
 
@@ -147,14 +148,14 @@ Figure~\ref{fig:intro-sine} is the documented sine-wrap edge case: a high-$|wrap
 \paragraph{Inference, classical, and learned baselines.}
 High-$R$ fitted operators ($R\ge 0.98$) are timed on CUDA (batch 64, prolonged residual).
 Ten non-learnable bake denoisers share the frozen canonical holdout against the neural favorite (Table~\ref{tab:canonical-methods}).
-Cycle-local BLIT/BLEP, PolyBLEP, and BLAMP seam repairs are scored on the same holdout / cliff / multi-family protocol (Table~\ref{tab:va-seam-blep} and the \href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/figures/va_seam_blep.json}{VA results}) and illustrated on the intro high-wrap tile (Figure~\ref{fig:va-seam-techniques}).
+Cycle-local BLIT/BLEP, PolyBLEP, and BLAMP seam repairs are scored on the same holdout / cliff / multi-family protocol (Table~\ref{tab:va-seam-blep} and the \href{https://github.com/reeldemo/denoise-opt}{VA results}) and illustrated on the intro high-wrap tile (Figure~\ref{fig:va-seam-techniques}).
 Fixed-arch MLP-on-$R$ and CNN/U-Net-lite-on-$R$ baselines (no outer NAS) are trained on $1{-}R$ with the same generator and scored in the SOTA matrix.
 Phase~B adds a primary corrupt$\to$corrupt Noise2Noise seam CNN (train seed \texttt{424242}, disjoint from holdout), a secondary sibling-supervised ceiling on the same architecture, and lightweight LSTM / depthwise 1D-CNN seq restorers (train seed \texttt{424243}).
 No search-champion weights initialize those baselines.
 Family-conditional hardness uses the separate Rust procedural $100{,}000$-cycle bench reported in Results.
 
 \paragraph{Cliff strata and wavetable-native realism.}
-A $4{,}096$-tile holdout draw (seed \texttt{20260719}) is stratified by engine wrap-jump percentiles (top 25\% / top 10\%), with cutoffs in the \href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/figures/cliff_strata.json}{cliff-strata data}.
+A $4{,}096$-tile holdout draw (seed \texttt{20260719}) is stratified by engine wrap-jump percentiles (top 25\% / top 10\%), with cutoffs in the \href{https://github.com/reeldemo/denoise-opt}{cliff-strata data}.
 Hard-cliff is the operative regime for claims about DualCosine collapse vs favorite retention.
 Edge RMSE is the locked required seam-local secondary. Click energy is optional.
 Wavetable-native transfer (Phase~F1) scores true ReelSynth-exported factory periods (primary) and external AKWF CC0 WAVs (secondary) under the same close-seam$\to$open-wrap protocol.

@@ -5,7 +5,7 @@
 - Repo: `reelsynth` (`https://github.com/reeldemo/reelsynth`)
 - Python: `.venv_gpu/Scripts/python.exe` (CUDA preferred; RTX 3090 class)
 - Period length: `L=256`
-- Primary metric: locked \(R_{\mathrm{blend}}\) (`α=0.7`) via `overnight_gpu_rl_arch.residual_score` / FitCell converge
+- Primary metric: locked \(R_{\mathrm{blend}}\) (`α=0.7`) via `gpu_rl_arch.residual_score` / FitCell converge
 - Outer loop under test for converge: **hybrid_lstm only** (chosen after D1 matched bake-off)
 - Search seeds: `1902771841`, `2026072701`, `2026072702`
 - Holdout seeds: `20260719`–`20260723`

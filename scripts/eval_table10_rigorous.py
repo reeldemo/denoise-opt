@@ -19,7 +19,7 @@ sys.path.insert(0, "/home/s4il0r/reelsynth/scripts")
 
 from holdout_eval import load_hybrid_champ, load_n2n  # noqa: E402
 from baselines.n2n_seam import SeamN2N  # noqa: E402
-import overnight_gpu_rl_arch as og  # noqa: E402
+import gpu_rl_arch as og  # noqa: E402
 import bench_sota_matrix as bsm  # noqa: E402
 import real_wt_wrap_protocol as rw  # noqa: E402
 import train_n2n_transfer_domains as tnt  # noqa: E402

@@ -51,6 +51,6 @@
   "cuda_available": true,
   "cuda_device": "NVIDIA GeForce RTX 3090",
   "python": "3.12.10",
-  "notes": "Matched 5k outer-loop compare is the sole GPU experimentation vehicle. Selection/reporting use absolute prolonged R vs ideal sibling; PPO/REINFORCE credit uses searchable reward_mode. No concurrent overnight hybrid during this run.",
+  "notes": "Matched 5k outer-loop compare is the sole GPU experimentation vehicle. Selection/reporting use absolute prolonged R vs ideal sibling; PPO/REINFORCE credit uses searchable reward_mode. No concurrent meta-search hybrid during this run.",
   "git_sha_note": "updated after commit of launcher"
 }

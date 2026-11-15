@@ -15,7 +15,7 @@ from common import DEFAULT_HOLDOUT_SEEDS, bootstrap_reelsynth, save_json, utc_no
 
 def load_n2n(root: Path, device: torch.device):
     bootstrap_reelsynth()
-    import overnight_gpu_rl_arch as og  # noqa: E402
+    import gpu_rl_arch as og  # noqa: E402
     from baselines import n2n_seam  # noqa: E402
 
     path = root / "brand" / "artifacts" / "n2n_seam_baselines" / "n2n_corrupt_corrupt.pt"
@@ -36,7 +36,7 @@ def load_n2n(root: Path, device: torch.device):
 
 def load_hybrid_champ(champ_pt: Path, device: torch.device):
     bootstrap_reelsynth()
-    import overnight_gpu_rl_arch as og  # noqa: E402
+    import gpu_rl_arch as og  # noqa: E402
 
     blob = torch.load(champ_pt, map_location=device, weights_only=False)
     cfg = og.ArchConfig.from_dict(blob["architecture"])
@@ -58,7 +58,7 @@ def score_seed(
     batch: int,
     methods: dict[str, Callable[[torch.Tensor], torch.Tensor]],
 ) -> dict[str, float]:
-    import overnight_gpu_rl_arch as og  # noqa: E402
+    import gpu_rl_arch as og  # noqa: E402
 
     torch.manual_seed(eval_seed)
     if device.type == "cuda":
@@ -95,7 +95,7 @@ def eval_holdout(
     n2n_fn, n2n_path = load_n2n(root, dev)
     methods["n2n"] = n2n_fn
 
-    import overnight_gpu_rl_arch as og  # noqa: E402
+    import gpu_rl_arch as og  # noqa: E402
 
     methods["dual_cosine"] = og.dual_cosine_blend  # placeholder; scored by name
     methods["no_bake"] = lambda x: x  # placeholder; scored by name

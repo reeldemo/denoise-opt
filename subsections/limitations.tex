@@ -13,7 +13,7 @@ These constraints bound claim strength; they are not optional honesty footnotes.
     Why listening was deferred: primary claims are objective cycle-local residual under a locked protocol for a DSP venue;
     a powered listener study needs IRB/recruitment budget outside this campaign.
     Generalization to ``sounds better'' is therefore \emph{not} claimed.
-    PESQ/STOI are excluded (non-speech tiles). We do not invent THD+N or MOS tables.
+    PESQ/STOI are excluded (non-speech tiles). I do not invent THD+N or MOS tables.
   \item \textbf{Metric lock and seed labeling.}
     Primary holdout and multi-family claims in Table~\ref{tab:n2n-vs-ours} use locked $R_{\mathrm{blend}}$ (Section~\ref{sec:residual-score}) over ten evaluation seeds (\texttt{20260719}--\texttt{20260728}); earlier five-seed pilot summaries are noted where applicable.
     Matched-$5$k outer-loop means use three primary search seeds (Table~\ref{tab:meta-approaches}), supplemented by two extra search seeds and a three-seed $5$k branch ablation (Section~\ref{sec:results}).
@@ -32,20 +32,20 @@ These constraints bound claim strength; they are not optional honesty footnotes.
   \item \textbf{Domain shift on zero-shot exports.}
     Per-corpus domain search (\texttt{Ours (domain)}, Table~\ref{tab:n2n-vs-ours}) resolves the zero-shot gap on held-out Factory+FX and AKWF OA cycles, outperforming domain-trained \texttt{SeamN2N} ($p_{\mathrm{adj}}{\le}4.2{\times}10^{-15}$).
     However, when evaluated \emph{zero-shot} without domain re-search, the wavetable meta favorite can still trail no-bake or FIR on Factory+FX / Rust export tiles while beating Dual Cosine.
-    We do not claim universal zero-shot factory superiority.
+    I do not claim universal zero-shot factory superiority.
   \item \textbf{Search geometry.}
     Search scores Python generator draws.
     The Python multi-family matrix is primary. Rust export is secondary.
     Per-trial width is capped. Demucs-/diffusion-scale stacks were screened out.
   \item \textbf{No wrap-closure theorems / no formal TCB.}
     Endpoint-pin can zero wrap-jump while residual falls.
-    We claim tiled residual repair toward $r^{\star}$, not endpoint closure or search-convergence proofs.
+    I claim tiled residual repair toward $r^{\star}$, not endpoint closure or search-convergence proofs.
     Tooling checks are manual evidence alignment against frozen JSON (Section~\ref{sec:tooling}), not a trusted computing base or machine-checked verification.
   \item \textbf{Transfer scope.}
     Sci/eng wrap transfer is a classical-board stress test of the wrap protocol, not deep CWRU/ECG SOTA
     (Table~\ref{tab:transfer-sota-status}).
   \item \textbf{Small-$n$ search-seed and transfer statistics.}
-    While primary holdout ($n{=}10$ eval seeds, Holm $p_{\mathrm{adj}}{=}0.0039$), multi-family ($n{=}10$ eval seeds, Holm $p_{\mathrm{adj}}{=}0.0039$), and Factory+FX / AKWF OA ($N{=}256$ disjoint cycles, Holm $p_{\mathrm{adj}}{\le}4.2{\times}10^{-15}$) comparisons in Table~\ref{tab:n2n-vs-ours} are now powered with paired permutation tests, the matched outer-loop and E2 FitCell-to-plateau runs ($n{=}3$ search seeds at ${\approx}36$\,h/seed, exact sign-flip $p{=}0.25$) and Rust transfer ($n{=}20$ tiles) remain small-$n$ exploratory checks; we do not treat overlapping mean$\pm$std bands as proof of superiority without paired tests.
+    While primary holdout ($n{=}10$ eval seeds, Holm $p_{\mathrm{adj}}{=}0.0039$), multi-family ($n{=}10$ eval seeds, Holm $p_{\mathrm{adj}}{=}0.0039$), and Factory+FX / AKWF OA ($N{=}256$ disjoint cycles, Holm $p_{\mathrm{adj}}{\le}4.2{\times}10^{-15}$) comparisons in Table~\ref{tab:n2n-vs-ours} are now powered with paired permutation tests, the matched outer-loop and E2 FitCell-to-plateau runs ($n{=}3$ search seeds at ${\approx}36$\,h/seed, exact sign-flip $p{=}0.25$) and Rust transfer ($n{=}20$ tiles) remain small-$n$ exploratory checks; I do not treat overlapping mean$\pm$std bands as proof of superiority without paired tests.
   \item \textbf{Hyperparameter probe.}
     The $\pm 50\%$ one-at-a-time probe (Appendix~\ref{app:supplement}) is not a full re-search of Table~\ref{tab:hyperparams}.
 \end{itemize}

@@ -22,7 +22,7 @@ Monitoring plots below come from that older freeze and should be read as search-
 
 \subsection{Inference latency at matched score}
 \label{sec:inference-latency}
-Across the prior high-prolonged-$R$ fitted operators, we re-timed CUDA forward passes under locked $R_{\mathrm{blend}}$ (batch 64).
+Across the prior high-prolonged-$R$ fitted operators, I re-timed CUDA forward passes under locked $R_{\mathrm{blend}}$ (batch 64).
 Live $R_{\mathrm{blend}}$ spreads more than the old prolonged band: the max-$R_{\mathrm{blend}}$ model is
 \texttt{champion\_iter\_000265} ($R_{\mathrm{blend}}{\approx}0.9769$, $\approx 6.53$\,ms/batch, $\approx 94$k params).
 The compact historically favorite \texttt{iter\_000235} remains lowest-latency among the top-5 distinct topologies
@@ -32,7 +32,7 @@ Selection rule: maximize live $R_{\mathrm{blend}}$, then minimize latency inside
 \subsection{Top-5 architectures}
 \label{sec:top5-arch}
 Table~\ref{tab:top5} ranks five distinct fitted bake graphs from the CUDA inference bench
-(\href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/figures/inference_bench.json}{inference data}, batch 64), preferring live $R_{\mathrm{blend}}$ first and latency on ties,
+(\href{https://github.com/reeldemo/denoise-opt}{inference data}, batch 64), preferring live $R_{\mathrm{blend}}$ first and latency on ties,
 and skipping near-duplicate copies of the same topology signature.
 
 \begin{table}[htbp]
@@ -100,7 +100,7 @@ Noise2Noise on the multi-family matrix is Appendix Table~\ref{tab:sota-main}. Th
 
 Does the locked hybrid favorite beat the classical non-AI board (no-bake, DualCosine, FIR, fades),
 fixed MLP/CNN baselines, \emph{and} Noise2Noise across twenty generative families under $R_{\mathrm{blend}}$?
-Appendix Table~\ref{tab:sota-main} reports mean$\pm$std over the 20-waveform multi-family set (Section~\ref{sec:dataset}) from the \href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/figures/sota_matrix.json}{SOTA matrix}.
+Appendix Table~\ref{tab:sota-main} reports mean$\pm$std over the 20-waveform multi-family set (Section~\ref{sec:dataset}) from the \href{https://github.com/reeldemo/denoise-opt}{SOTA matrix}.
 Appendix Figures~\ref{fig:sota-heatmap}--\ref{fig:sota-method-bars} plot the same ranking.
 Primary reading is absolute $R_{\mathrm{blend}}$ rank:
 Ours $0.934$, corrupt$\to$corrupt N2N $0.931$, seq CNN $0.920$, no-bake $0.893$,
@@ -109,7 +109,7 @@ Ours $0.934$, corrupt$\to$corrupt N2N $0.931$, seq CNN $0.920$, no-bake $0.893$,
 Fixed MLP-on-$R$ and CNN/U-Net-lite-on-$R$ (no outer NAS) sit between DualCosine and the neural rows.
 Vs DualCosine on the same $n{=}20$ waveforms, a paired Wilcoxon signed-rank test (normal approx.) gives $W{=}0$, $p{\approx}8.9{\times}10^{-5}$, mean $\Delta R_{\mathrm{blend}}{=}{+}0.417$ (bootstrap 95\% CI $[0.398,0.435]$); treat this as a small-$n$ exploratory check, not a powered multi-study claim.
 Vs no-bake the multifamily mean gap is $\approx{+}0.038$.
-Vs corrupt$\to$corrupt N2N the mean-of-means gap is $\approx{+}0.003$ with sign-test parity (mean win fraction $0.47$ across five eval seeds; Section~\ref{sec:n2n-vs-ours-boards})---overlapping std bands must not be read as Ours superiority.
+Vs corrupt$\to$corrupt N2N the mean-of-means gap is $\approx{+}0.003$ with sign-test parity (mean win fraction $0.47$ across five eval seeds; Section~\ref{sec:n2n-vs-ours-boards}), overlapping std bands must not be read as Ours superiority.
 
 \paragraph{Cliff stratification (full).}
 Main-text summary: Section~\ref{sec:cliff-strata}.
@@ -173,9 +173,9 @@ Export gaps are listed in Section~\ref{sec:limitations}.
 \label{sec:poly-jump}
 
 Does a cheap classical poly fitter close the residual, and does endpoint pinning show the wrap-jump vs $R_{\mathrm{blend}}$ tradeoff?
-A seam-local degree-3 polynomial fitter (no learning) reaches canonical $R_{\mathrm{blend}}\approx 0.917$ (slightly above no-bake $0.914$) with wrap-jump essentially unchanged (\href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/figures/poly_baseline.json}{polynomial results}).
+A seam-local degree-3 polynomial fitter (no learning) reaches canonical $R_{\mathrm{blend}}\approx 0.917$ (slightly above no-bake $0.914$) with wrap-jump essentially unchanged (\href{https://github.com/reeldemo/denoise-opt}{polynomial results}).
 SSM seq models are deferred. The LSTM remains the supervised seq ceiling.
-An endpoint-pin control (\href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/figures/jump_control.json}{pinning results}) drives wrap-jump to $0$ on all / hard subsets while dropping $R_{\mathrm{blend}}$ (all $0.733$, hard $0.597$).
+An endpoint-pin control (\href{https://github.com/reeldemo/denoise-opt}{pinning results}) drives wrap-jump to $0$ on all / hard subsets while dropping $R_{\mathrm{blend}}$ (all $0.733$, hard $0.597$).
 Methods that zero wrap-jump are not the same objective as $R_{\mathrm{blend}}$ (Limitations).
 
 \subsection{Classical virtual-analog seam repairs}
@@ -189,20 +189,20 @@ Figure~\ref{fig:va-seam-techniques} shows the family on one high-wrap sine{+}cli
 It subtracts a band-limited step residual (here a raised-cosine BLEP-family lobe scaled by the measured wrap jump) so the tiled click spectrum is softened near the seam.
 \textbf{PolyBLEP} (Nam et al.) is a cheap polynomial surrogate of that step residual with fractional-delay support near phase wrap.
 It edits only a few samples on each side of the discontinuity.
-\textbf{BLAMP} (Esqueda et al.) corrects a slope or corner jump (discontinuity in the first derivative), which matters for triangles, rectification, and hard clipping.
+\textbf{BLAMP}~\cite{esqueda2016blamp} corrects a slope or corner jump (discontinuity in the first derivative), which matters for triangles, rectification, and hard clipping.
 On a pure value cliff the slope jump is small, so BLAMP is nearly a no-bake passthrough.
-\textbf{DualCosine} (our classical bake baseline) fades both ends of the stored period with raised-cosine windows.
+\textbf{DualCosine} (my classical bake baseline) fades both ends of the stored period with raised-cosine windows.
 It does not insert a BLEP-style residual.
 It trades wrap energy for a wide end-fade distortion that $R_{\mathrm{blend}}$ penalizes on hard cliffs.
 
 \paragraph{Scores.}
-Table~\ref{tab:va-seam-blep} reports batch means from the \href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/figures/va_seam_blep.json}{VA results} (seed \texttt{20260719}, batch 64) under $R_{\mathrm{blend}}$.
+Table~\ref{tab:va-seam-blep} reports batch means from the \href{https://github.com/reeldemo/denoise-opt}{VA results} (seed \texttt{20260719}, batch 64) under $R_{\mathrm{blend}}$.
 Code is in the \href{https://github.com/reeldemo/reelsynth}{ReelSynth repository}: PolyBLEP matches \texttt{osc::va::poly\_blep}, BLIT/BLEP uses a raised-cosine step residual, and BLAMP applies a polyBLAMP lobe to the wrap slope jump.
 PolyBLEP reaches mean $R_{\mathrm{blend}}\approx 0.795$ ($\Delta\approx{+}0.254$ vs DualCosine) but trails no-bake / \texttt{seam\_fir3}.
 BLIT/BLEP nearly zeros wrap-jump ($0.004$), yet mean $R_{\mathrm{blend}}$ falls to $0.632$ and hard cliffs collapse to $0.351$.
 BLAMP stays near no-bake on this value-cliff geometry (mean $0.914$).
 On the annotated severe tile in Figure~\ref{fig:va-seam-techniques}, tile $R_{\mathrm{blend}}$ is lower still (PolyBLEP $\approx 0.726$, BLIT/BLEP $\approx 0.385$, Dual Cosine $0.300$, BLAMP $\approx$ engine).
-We score these classical tools, not only cite them: they beat DualCosine on mean $R_{\mathrm{blend}}$ in places, and none matches the locked hybrid favorite on holdout $R_{\mathrm{blend}}$.
+I score these classical tools, not only cite them: they beat DualCosine on mean $R_{\mathrm{blend}}$ in places, and none matches the locked hybrid favorite on holdout $R_{\mathrm{blend}}$.
 
 \begin{figure}[t]
   \centering
@@ -244,7 +244,7 @@ We score these classical tools, not only cite them: they beat DualCosine on mean
 \label{sec:transfer}
 
 Per-cycle $\Delta R$ on export, AKWF, Rust \texttt{sound\_bench}, and sine{+}cliff holdout
-(\href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/figures/transfer_failures.json}{transfer results}):
+(\href{https://github.com/reeldemo/denoise-opt}{transfer results}):
 favorite win-rate vs Dual Cosine is high on sine cliffs ($1.00$) and AKWF ($0.88$), and moderate on export ($0.64$) / Rust ($0.75$).
 Win-rate vs no-bake is high only on sine cliffs ($0.92$) and collapses on export ($0.24$) / Rust ($0.20$).
 Search value is highest on hard cliffs and when compact bake graphs are needed without engine$\to$ideal labels at search time.
@@ -279,11 +279,11 @@ The primary SOTA claim remains the Python multi-family matrix.
 \end{table}
 
 \paragraph{Paired statistics on the five-seed holdout and multifamily boards.}
-Computed by \texttt{scripts/stats\_paired\_holdout.py} from \texttt{figures/multiseed\_summary.json} (output \texttt{figures/stats\_paired\_holdout.json}).
+Computed by the repository script in the released artifacts (output the repository script).
 Hybrid minus frozen Noise2Noise on the five-seed holdout: mean $\Delta R_{\mathrm{blend}}={-}0.0060$ (bootstrap 95\% CI $[{-}0.0066,{-}0.0053]$; 0/5 seed wins, Wilson 95\% CI $[0.00,0.43]$; exact sign-flip $p=0.0625$, the minimum attainable at $n{=}5$; Hedges $g_z={-}5.6$).
 Hybrid minus DualCosine: $\Delta={+}0.429$ ($[0.402,0.462]$; 5/5 wins, Wilson CI $[0.57,1.00]$; $p=0.0625$).
 On the 20 multifamily boards, hybrid minus Noise2Noise is $\Delta={+}0.0030$ ($[{-}0.006,0.013]$; 10/20 wins, Wilson CI $[0.30,0.70]$; exact permutation $p=0.55$; $g_z=0.13$): no detectable difference (CIs overlap zero).
-These tests are exploratory; $n{=}5$ seeds cannot reach $p<0.05$ under an exact two-sided paired test, so a powered claim needs $\ge 6$ holdout seeds (see \texttt{EXPERIMENT\_PLAN.md}).
+These tests are exploratory; $n{=}5$ seeds cannot reach $p<0.05$ under an exact two-sided paired test, so a powered claim needs $\ge 6$ holdout seeds.
 
 \begin{figure*}[t]
   \centering
@@ -296,7 +296,15 @@ These tests are exploratory; $n{=}5$ seeds cannot reach $p<0.05$ under an exact 
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.95\textwidth]{figures/fig_domain_search_curves.pdf}
-  \caption{Per-board DenoiseOpt (\texttt{hybrid\_lstm}) domain-search learning curves corresponding to Table~\ref{tab:n2n-vs-ours} (\texttt{results/table10\_domain\_search.json}).
+  \caption{Per-board DenoiseOpt (\texttt{hybrid\_lstm}) domain-search learning curves corresponding to Table~\ref{tab:n2n-vs-ours}.
     Left: Multi-family ($120$ evals, $120$ FitCell steps). Center: Factory+FX ($1{,}024$-cycle train split, $80$ evals, $100$ FitCell steps; held-out $256$-cycle $R_{\mathrm{blend}}{=}0.911$). Right: AKWF OA ($1{,}024$-cycle train split, $80$ evals, $100$ FitCell steps; held-out $256$-cycle $R_{\mathrm{blend}}{=}0.874$). Dotted/dashed lines show zero-shot \texttt{SeamN2N} and Dual Cosine on the same held-out splits.}
   \label{fig:domain-search-curves}
+\end{figure*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figures/fig_cross_domain_quantum_samples.pdf}
+  \caption{Held-out wrap-repair sample visualizations beyond audio across quantum mechanics and engineering domains: 1D periodic ring TDSE ($\mathrm{Re}\,\psi$, top), PMU power-grid synchrophasor (middle), and CNC machining G01 trajectory (bottom).
+    Left: three tiled periods comparing ideal reference, \texttt{no-bake}, and FitCell-tuned \texttt{Ours}. Right: $48$-sample zoom around the first wrap boundary ($n{=}256$), where \texttt{DualCosine} introduces seam oscillations while \texttt{Ours} tracks the ideal boundary smoothly.}
+  \label{fig:cross-domain-quantum-samples}
 \end{figure*}

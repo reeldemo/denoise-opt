@@ -120,7 +120,7 @@
   "plateau_adapt_every": 0,
   "ga_every": 40,
   "algo_tag": "paper-e4:hybrid_pbt_only",
-  "log_path": "/home/s4il0r/reelsynth/brand/artifacts/overnight_gpu_rl_arch_paper-e4-hybrid_pbt_only-dry-1902771841.log",
+  "log_path": "/home/s4il0r/reelsynth/brand/artifacts/gpu_rl_arch_paper-e4-hybrid_pbt_only-dry-1902771841.log",
   "run_dir": "/home/s4il0r/reelsynth/brand/artifacts/models/paper-e4-hybrid_pbt_only-dry-1902771841",
   "unfitted_dir": "/home/s4il0r/reelsynth/brand/artifacts/models/paper-e4-hybrid_pbt_only-dry-1902771841/unfitted",
   "fitted_dir": "/home/s4il0r/reelsynth/brand/artifacts/models/paper-e4-hybrid_pbt_only-dry-1902771841/fitted"

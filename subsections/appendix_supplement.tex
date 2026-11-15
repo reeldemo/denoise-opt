@@ -30,7 +30,7 @@ They are large multi-panel artifacts, so they sit here rather than opening empty
   \centering
   \includegraphics[width=\columnwidth]{figures/fig_hear_samples_panel.png}
   \caption{Hear-sample panel from the online WAV pack
-    (\href{https://github.com/reeldemo/reelsynth/tree/main/brand/artifacts/meta_approach_compare/hear_samples}{hear-sample WAVs},
+    (\href{https://github.com/reeldemo/denoise-opt}{hear-sample WAVs},
     five holdout tiles, no-bake / DualCosine / Ours).
     Waveforms show the first $\approx 25$\,ms of each clip. $R$ annotations are cycle-local prolonged residuals vs the ideal sibling.
     Not a formal listening study.}
@@ -54,7 +54,7 @@ Figure~\ref{fig:sota-heatmap} breaks the same board down by generative family.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/fig_sota_method_bars.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/fig_sota_method_bars.png}
   \caption{Multi-family mean $R_{\mathrm{blend}}$ by method
   (same $20$-waveform board as Table~\ref{tab:sota-main}).}
   \label{fig:sota-method-bars}
@@ -62,7 +62,7 @@ Figure~\ref{fig:sota-heatmap} breaks the same board down by generative family.
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/fig_sota_heatmap.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/fig_sota_heatmap.png}
   \caption{Colorblind-safe (\texttt{cividis}) heatmap of mean $R_{\mathrm{blend}}$
   for selected methods $\times$ generative families (2 seeds each). Higher is better.}
   \label{fig:sota-heatmap}
@@ -197,12 +197,12 @@ Appendix~\ref{app:secondary-results} and Section~\ref{sec:cliff-strata}.
 \subsection{Matched-budget outer-loop comparison}
 \label{sec:meta-approaches-results}
 
-Under a $5{,}000$ evaluation budget with LSTM and xLSTM in the searchable bake vocabulary, Table~\ref{tab:meta-approaches} compares Random NAS, Cont.\ CMA-ES, Arch REINFORCE, Aging evolution, TPE Bayes NAS, and our hybrid GA+PPO approach (Ours).
+Under a $5{,}000$ evaluation budget with LSTM and xLSTM in the searchable bake vocabulary, Table~\ref{tab:meta-approaches} compares Random NAS, Cont.\ CMA-ES, Arch REINFORCE, Aging evolution, TPE Bayes NAS, and my hybrid GA+PPO approach (Ours).
 The table reports a matched Deferred D1 re-search under locked $R_{\mathrm{blend}}{+}J$ (mean$\pm$std over three search seeds; artifacts \texttt{meta\_approach\_compare\_v13\_rblend/}).
-Our hybrid GA+PPO has the top descriptive mean $R_{\mathrm{blend}}$ ($0.9748{\pm}0.0018$; ${\approx}8.4$\,h mean wall).
+My hybrid GA+PPO has the top descriptive mean $R_{\mathrm{blend}}$ ($0.9748{\pm}0.0018$; ${\approx}8.4$\,h mean wall).
 Aging evolution ranks second ($0.9635{\pm}0.0049$); Arch REINFORCE shows the largest cross-seed variance ($0.9599{\pm}0.0116$).
-With only $n{=}3$ matched seeds we do \emph{not} claim formal superiority from non-overlapping uncertainty bands or ANOVA; we use the bake-off to \emph{select} which outer-loop family receives the FitCell-to-plateau budget.
-Paired per-search-seed champion deltas (hybrid minus each family) are in \texttt{figures/stats\_meta\_approach\_5k.json} from \texttt{scripts/stats\_meta\_approach\_5k.py}.
+With only $n{=}3$ matched seeds I do \emph{not} claim formal superiority from non-overlapping uncertainty bands or ANOVA; I use the bake-off to \emph{select} which outer-loop family receives the FitCell-to-plateau budget.
+Paired per-search-seed champion deltas (hybrid minus each family) are in the released artifacts in the released artifacts.
 Hybrid leads the runner-up (Aging evolution) on all three seeds (mean $\Delta R_{\mathrm{blend}}{=}{+}0.0114$; bootstrap 95\% CI $[0.0064,0.0144]$; Wilson 95\% CI on 3/3 wins $[0.44,1.00]$), but the exact sign-flip test gives $p{=}0.25$ at $n{=}3$ (minimum attainable when all deltas share sign).
 Hybrid vs Arch REINFORCE is $2/3$ seed wins ($p{=}0.5$; Wilson 95\% CI $[0.21,0.94]$).
 These tests support descriptive selection only.
@@ -216,7 +216,7 @@ Learning-curve and bar figures use seed \texttt{1902771841} trajectories under t
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/meta_approach_bars.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/meta_approach_bars.png}
   \caption{Matched 5,000-evaluation search methods under locked $R_{\mathrm{blend}}{+}J$ (seed \texttt{1902771841}).
   Table~\ref{tab:meta-approaches} reports mean$\pm$std across three search seeds.
   Dashed line: Dual Cosine on the same runner.}
@@ -225,7 +225,7 @@ Learning-curve and bar figures use seed \texttt{1902771841} trajectories under t
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/fig_meta_approach_compare.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/fig_meta_approach_compare.png}
   \caption{Champion $R_{\mathrm{blend}}$ over a matched 5,000-evaluation budget (Deferred D1 complete; seed \texttt{1902771841}).
   Dashed line: Dual Cosine.}
   \label{fig:meta-approach-compare}
@@ -240,17 +240,17 @@ These are branch labels in a single run, not separately fitted champions, so the
 \textbf{Right column:} isolated $150$-iteration \texttt{ablate-*} restarts (seed \texttt{1902771841}) whose final cells are re-scored under locked $R_{\mathrm{blend}}$.
 They probe whether dropping GA or PPO collapses residual under a short budget; they are \emph{not} matched-$5$k competitors and must not overwrite Table~\ref{tab:meta-approaches}.
 \paragraph{How to read Table~\ref{tab:ablation}.}
-Left-column values are close to each other (${\approx}0.987$--$0.991$ prolonged $R$): in that single history, branch tags do not identify a unique winner, so we do not treat ``GA-only freeze'' as proof that GA alone suffices under locked $R_{\mathrm{blend}}$.
-Right-column short restarts under $R_{\mathrm{blend}}$ stay far below the matched-$5$k hybrid mean ($0.9748$) and the converge seed ($0.9912$) because the budget is only $150$ iterations with short FitCell---they are sensitivity checks, not leaderboard rows.
+Left-column values are close to each other (${\approx}0.987$--$0.991$ prolonged $R$): in that single history, branch tags do not identify a unique winner, so I do not treat ``GA-only freeze'' as proof that GA alone suffices under locked $R_{\mathrm{blend}}$.
+Right-column short restarts under $R_{\mathrm{blend}}$ stay far below the matched-$5$k hybrid mean ($0.9748$) and the converge seed ($0.9912$) because the budget is only $150$ iterations with short FitCell, they are sensitivity checks, not leaderboard rows.
 The matched comparison that drives method choice remains Table~\ref{tab:meta-approaches}.
-Table~\ref{tab:compute} summarizes campaign compute (historical prolonged-$R$ overnight).
+Table~\ref{tab:compute} summarizes campaign compute (historical prolonged-$R$ search).
 
 \begin{table}[htbp]
   \centering
   \caption{Ablations (interpret narrowly).
     Left: best prolonged $R$ by branch label in one hybrid history (final iteration ${\approx}6{,}922$; superseded search metric; not separate fits).
     Right: isolated 150-iteration \texttt{ablate-*} final champions re-scored under $R_{\mathrm{blend}}$ ($\alpha{=}0.7$; seed \texttt{1902771841}).
-    Full $5{,}000$-evaluation $R_{\mathrm{blend}}$ branch re-search is reported in Section~\ref{sec:ablation-def} (\texttt{results/e4\_branch\_ablation\_5k.json}); use Table~\ref{tab:meta-approaches} for matched outer-loop comparison.}
+    Full $5{,}000$-evaluation $R_{\mathrm{blend}}$ branch re-search is reported in Section~\ref{sec:ablation-def}; use Table~\ref{tab:meta-approaches} for matched outer-loop comparison.}
   \label{tab:ablation}
   \setlength{\tabcolsep}{3pt}
   \begin{adjustbox}{max width=\columnwidth}
@@ -299,13 +299,13 @@ Table~\ref{tab:compute} summarizes campaign compute (historical prolonged-$R$ ov
 One-at-a-time $\pm 50\%$ probe of Table~\ref{tab:hyperparams} knobs at $500$ outer iterations (seed \texttt{1902771841}).
 \textbf{Pilot / diagnostic only} (not a $5$k re-search).
 Default champion $R{\approx}0.9888$. The largest $|\Delta R|$ among OAT arms is ${\approx}0.0123$ (50\% lower learning rate).
-All eleven configurations completed ($1$ default plus ten $\pm 50\%$ one-at-a-time perturbations), each running $500/500$ outer iterations---``$11/11$'' counts finished configs, not an $11/11$ win rate at 50\%.
+All eleven configurations completed ($1$ default plus ten $\pm 50\%$ one-at-a-time perturbations), each running $500/500$ outer iterations, ``$11/11$'' counts finished configs, not an $11/11$ win rate at 50\%.
 
 \input{figures/tab_meta_hp_sensitivity}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\linewidth,height=0.42\textheight,keepaspectratio]{figures/fig_meta_hp_sensitivity.png}
+  \includegraphics[width=\linewidth,height=0.28\textheight,keepaspectratio]{figures/fig_meta_hp_sensitivity.png}
   \caption{One-at-a-time $\pm 50\%$ HP sensitivity of hybrid champion $R$ at 500 iterations. Blue bar: Table~\ref{tab:hyperparams} default.}
   \label{fig:hp-sensitivity}
 \end{figure}
@@ -336,7 +336,7 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/fig_signal_heal_transfer_latency.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/fig_signal_heal_transfer_latency.png}
   \caption{Transfer-domain inference latency (ms/batch). N2N is wavetable-trained zero-shot when available.}
   \label{fig:signal-heal-transfer-latency}
 \end{figure}
@@ -346,7 +346,7 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/champ_residual_vs_iter.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/champ_residual_vs_iter.png}
   \caption{FitCell-to-plateau champion $R_{\mathrm{blend}}$ vs.\ outer-loop evaluation
   (seed \texttt{1902771841}; y-axis zoomed to the high-$R$ regime with Noise2Noise gate marked).}
   \label{fig:champ-residual}
@@ -354,29 +354,29 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/branch_bests_vs_iter.png}
-  \caption{Best residual by search branch (older overnight monitor freeze; search-trace artifact).}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/branch_bests_vs_iter.png}
+  \caption{Best residual by search branch (earlier search monitor freeze; search-trace artifact).}
   \label{fig:branch-bests}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/search_panel.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/search_panel.png}
   \caption{Search progress: champion $R$ (top) and branch bests (bottom).}
   \label{fig:search-panel}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/residual_by_branch.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/residual_by_branch.png}
   \caption{Per-trial residual by branch with champion trajectory overlaid.}
   \label{fig:residual-branch}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/champion_timeline.png}
-  \caption{Champion updates (older overnight monitor freeze; search-trace artifact).}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/champion_timeline.png}
+  \caption{Champion updates (earlier search monitor freeze; search-trace artifact).}
   \label{fig:champ-timeline}
 \end{figure}
 
@@ -385,28 +385,28 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/fig_inference_vs_residual.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/fig_inference_vs_residual.png}
   \caption{High-$R$ fitted operators: residual vs CUDA latency. Star: favorite.}
   \label{fig:inference-pareto}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/fig_inference_latency_bars.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/fig_inference_latency_bars.png}
   \caption{Inference latency for high-$R$ fitted models (CUDA, batch 64).}
   \label{fig:inference-bars}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/fig_classical_vs_ai_scatter.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/fig_classical_vs_ai_scatter.png}
   \caption{Canonical holdout: classical methods and favorite in the $R$ vs ms/batch plane.}
   \label{fig:classical-vs-ai-scatter}
 \end{figure}
 
 \begin{figure}[htbp]
   \centering
-  \includegraphics[width=\columnwidth,height=0.42\textheight,keepaspectratio]{figures/fig_classical_vs_ai_bars.png}
+  \includegraphics[width=\columnwidth,height=0.28\textheight,keepaspectratio]{figures/fig_classical_vs_ai_bars.png}
   \caption{Canonical holdout ranking on $R_{\mathrm{blend}}$ (left) and latency (right).}
   \label{fig:classical-vs-ai-bars}
 \end{figure}

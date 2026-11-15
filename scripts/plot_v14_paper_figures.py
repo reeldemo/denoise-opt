@@ -24,7 +24,7 @@ import numpy as np
 PAPER = Path(__file__).resolve().parents[1]
 # Optional sibling reelsynth for champ artifacts
 ROOT = PAPER.parent / "reelsynth"
-if not (ROOT / "scripts" / "overnight_gpu_rl_arch.py").is_file():
+if not (ROOT / "scripts" / "gpu_rl_arch.py").is_file():
     ROOT = Path(r"C:/Users/Julian/Documents/Programming/github/reeldemo/reelsynth")
 
 V14_FIG = Path(__file__).resolve().parents[1] / "figures"
@@ -79,7 +79,7 @@ def load_v14_cell(device):
     import torch
 
     sys.path.insert(0, str(ROOT / "scripts"))
-    import overnight_gpu_rl_arch as og  # noqa: E402
+    import gpu_rl_arch as og  # noqa: E402
 
     blob = torch.load(CONVERGE / "champ_cell.pt", map_location=device, weights_only=False)
     cfg = og.ArchConfig.from_dict(blob["architecture"])

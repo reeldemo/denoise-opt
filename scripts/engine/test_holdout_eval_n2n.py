@@ -60,7 +60,7 @@ class TestLoadN2nFromState(unittest.TestCase):
             with patch.dict(
                 sys.modules,
                 {
-                    "overnight_gpu_rl_arch": fake_og,
+                    "gpu_rl_arch": fake_og,
                     "baselines": baselines_mod,
                     "baselines.n2n_seam": fake_n2n,
                 },

@@ -42,7 +42,7 @@ def find_champ_pt(run_dir: Path) -> Path | None:
     return None
 
 
-def run_overnight_arm(
+def run_search_arm(
     *,
     arm: str,
     branches: str,
@@ -53,7 +53,7 @@ def run_overnight_arm(
 ) -> dict:
     root = reelsynth_root()
     py = engine_python()
-    og = root / "scripts/overnight_gpu_rl_arch.py"
+    og = root / "scripts/gpu_rl_arch.py"
     run_id = f"paper-e4-{arm}-{iters}it-{seed}"
     run_dir = root / "brand/artifacts/models" / run_id
     if og_last_iter(run_dir) >= iters:
@@ -87,7 +87,7 @@ def run_overnight_arm(
         ]
         rc = subprocess.run(cmd, cwd=str(root)).returncode
         if rc != 0:
-            raise RuntimeError(f"overnight_gpu failed rc={rc} arm={arm} seed={seed}")
+            raise RuntimeError(f"gpu_rl_arch failed rc={rc} arm={arm} seed={seed}")
 
     hist = run_dir / "history.jsonl"
     last = {}
@@ -179,7 +179,7 @@ def main() -> int:
                 if arm == "hybrid_lstm":
                     row = run_meta_hybrid(seed, args.iters, meta_root, args.dry_run)
                 else:
-                    row = run_overnight_arm(
+                    row = run_search_arm(
                         arm=arm,
                         branches=branches,
                         seed=seed,
@@ -216,7 +216,7 @@ def main() -> int:
         "holdout_evals": holdouts,
         "wall_s": time.time() - t0,
         "note": (
-            "GA/PPO/PBT arms use overnight_gpu_rl_arch.py with isolated --branches; "
+            "GA/PPO/PBT arms use gpu_rl_arch.py with isolated --branches; "
             "hybrid_lstm arm uses bench_meta_approaches_5k.py (matched outer loop). "
             "Resume: re-run launcher; completed runs skipped via history/checkpoint."
         ),

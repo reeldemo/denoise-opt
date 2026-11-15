@@ -57,7 +57,7 @@ Rough scale **×1.35** from published 3090 meta-search walls (`hybrid_lstm` ≈ 
 |----|-------------------|--------|
 | E1 | **~3 h** | Rescore frozen champs; 10 eval seeds × 4 methods |
 | E5 | **~15 min** | CPU parse of `history.jsonl` |
-| E4 | **~135 h** | 4 arms × 3 search seeds @ ~5k evals (GA/PPO/PBT via `overnight_gpu_rl_arch`; full hybrid via `bench_meta_approaches_5k`) + holdout JSON |
+| E4 | **~135 h** | 4 arms × 3 search seeds @ ~5k evals (GA/PPO/PBT via `gpu_rl_arch`; full hybrid via `bench_meta_approaches_5k`) + holdout JSON |
 | E2 | **~190 h** | 750-iter hybrid converge × 3 search seeds + holdout |
 | E3 | **~135 h** | 2 new search seeds × six approaches @ 5k + holdout |
 | **Queue total** | **~463 h** | ~19 days continuous on one 3060 |

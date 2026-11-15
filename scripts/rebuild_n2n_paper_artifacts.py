@@ -123,7 +123,7 @@ def rescore_sota_n2n_rows(*, device: str = "cuda") -> None:
 
     root = bootstrap_reelsynth_scripts()
     import bench_sota_matrix as bsm  # noqa: E402
-    import overnight_gpu_rl_arch as og  # noqa: E402
+    import gpu_rl_arch as og  # noqa: E402
     from baselines import n2n_seam  # noqa: E402
 
     sota_path = FIGURES / "sota_matrix.json"

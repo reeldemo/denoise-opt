@@ -37,7 +37,7 @@ Search never trains on paired studio-clean audio.
 The ideal sibling $r^{\star}$ is a procedural cliff-withheld twin of the cracked engine (self-supervised geometry for scoring), not a human-labeled clean recording.
 Operators are ranked under $R_{\mathrm{blend}}$ without requiring labeled clean targets at search time.
 
-We treat the task as \emph{cycle-local seam restoration}: edit a neighborhood of the wrap join (the seam), and optionally a small residual operator over the period, so multi-period playback matches an ideal reference that never opens the wrap cliff.
+I treat the task as \emph{cycle-local seam restoration}: edit a neighborhood of the wrap join (the seam), and optionally a small residual operator over the period, so multi-period playback matches an ideal reference that never opens the wrap cliff.
 Agreement uses a discontinuity-weighted blend $R_{\mathrm{blend}}$ (seam fidelity vs the ideal, plus mid-cycle identity vs the cracked engine) under a latency-aware objective $J$ (Section~\ref{sec:residual-score}).
 
 \paragraph{Four roles.}
@@ -66,9 +66,9 @@ It is not shown in Figure~\ref{fig:intro-sine}, which illustrates roles on one h
 
 Classical virtual-analog tools already address wrap energy locally
 (BLIT/BLEP~\cite{stilson1996}, PolyBLEP~\cite{nam2009polyblep}, BLAMP~\cite{esqueda2016blamp}).
-We score cycle-local bake versions of those operators beside Dual Cosine (Section~\ref{sec:va-seam-baselines}).
+I score cycle-local bake versions of those operators beside Dual Cosine (Section~\ref{sec:va-seam-baselines}).
 Label-free restoration such as Noise2Noise shows that useful reconstructors can be ranked without paired clean targets when the evaluation geometry is explicit~\cite{lehtinen2018,kashyap2021n2n}.
-On the search side, we \emph{reuse} known NAS, aging evolution, PBT, CMA-ES, and PPO tools~\cite{elsken2019,real2019,jaderberg2017,schulman2017,khadka2018}: GA for diversity, PPO for discrete architecture edits, PBT-style exploit--mutate on elites.
+On the search side, I \emph{reuse} known NAS, aging evolution, PBT, CMA-ES, and PPO tools~\cite{elsken2019,real2019,jaderberg2017,schulman2017,khadka2018}: GA for diversity, PPO for discrete architecture edits, PBT-style exploit--mutate on elites.
 The engineering choice is to combine them as an outer loop over compact seam-repair graphs; that combination is not claimed as an algorithmic contribution.
 
 \paragraph{Key findings.}
@@ -79,9 +79,9 @@ Under the locked v10.1 $R_{\mathrm{blend}}$ protocol (objective wrap-discontinui
   \item \textbf{Exploratory $n{=}3$ search-seed pilots:} Matched-$5$k outer-loop ($0.9748{\pm}0.0018$; vs Aging $\Delta{=}{+}0.0114$, $p{=}0.25$) and E2 FitCell-to-plateau ($0.9881{\pm}0.0029$ vs $0.9766$, $p{=}0.25$) are pilot allocation/feasibility checks (exact two-sided sign-flip requires $n{\ge}6$ seeds for $\alpha{=}0.05$); non-hybrid families were not re-run to plateau.
   \item \textbf{Hard cliffs \& objective proxies:} On top-$10\%$ wrap cliffs, Dual Cosine collapses ($0.9913$ edge RMSE) while E2 plateau champions drop to $0.0086$--$0.0129$ vs $0.0203$ for \texttt{SeamN2N} (Table~\ref{tab:cliff-edge-rmse}), and $R_{\mathrm{blend}}$ tracks seam-local Edge RMSE ($\rho{=}{-}0.9737$, $p{<}10^{-300}$; Section~\ref{sec:proxy-and-lambda}).
 \end{itemize}
-We do not claim a new NAS/RL algorithm.
+I do not claim a new NAS/RL algorithm.
 Existing NAS, aging evolution, PBT, CMA-ES, and PPO primitives are reused~\cite{elsken2019,real2019,jaderberg2017,schulman2017}.
-Any novelty is in the wrap-discontinuity problem framing, the compact repair-operator vocabulary, and the unsupervised sibling/$R_{\mathrm{blend}}$ evaluation---not in inventing search algorithms.
+Any novelty is in the wrap-discontinuity problem framing, the compact repair-operator vocabulary, and the unsupervised sibling/$R_{\mathrm{blend}}$ evaluation, not in inventing search algorithms.
 The engineering story is applying a hybrid GA+PPO(+PBT) outer loop to those operators, then selecting hybrid from a matched six-way bake-off before deepening FitCell.
 Compact searchable repair operators remain competitive when classical fades fail and need no paired clean targets at search time.
 Whole-curve prolonged $R$ near $0.991$ is a superseded debug score, not a current holdout result under $R_{\mathrm{blend}}$.

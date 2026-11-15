@@ -32,12 +32,12 @@
       "max": 0.9947156310081482
     },
     "family_labels": null,
-    "note": "Single synthetic family: make_batch sine+cliff (not Rust sound_bench families). No train/eval split of labeled clean audio: overnight search draws i.i.d. batches from the same generator; this freeze is the paper holdout for method tables.",
+    "note": "Single synthetic family: make_batch sine+cliff (not Rust sound_bench families). No train/eval split of labeled clean audio: meta-search search draws i.i.d. batches from the same generator; this freeze is the paper holdout for method tables.",
     "generator": {
-      "fn": "overnight_gpu_rl_arch.make_batch",
+      "fn": "gpu_rl_arch.make_batch",
       "procedure": "Per sample: two-harmonic sine (freq~U(1,4), phase~U(0,2pi)), seam cliff amplitude ~\u00b1U(0.08,0.43) applied over SEAM_W samples at both ends, plus seam-boosted Gaussian noise (0.02 at ends, 0.15\u00d7 mid).",
       "eval_seed": 20260719,
-      "overnight_search_seed": 1902771841,
+      "search_seed": 1902771841,
       "cycle_length": 256,
       "prolong_tiles": 16,
       "seam_width": 8,
@@ -46,10 +46,10 @@
     }
   },
   "generator": {
-    "fn": "overnight_gpu_rl_arch.make_batch",
+    "fn": "gpu_rl_arch.make_batch",
     "procedure": "Per sample: two-harmonic sine (freq~U(1,4), phase~U(0,2pi)), seam cliff amplitude ~\u00b1U(0.08,0.43) applied over SEAM_W samples at both ends, plus seam-boosted Gaussian noise (0.02 at ends, 0.15\u00d7 mid).",
     "eval_seed": 20260719,
-    "overnight_search_seed": 1902771841,
+    "search_seed": 1902771841,
     "cycle_length": 256,
     "prolong_tiles": 16,
     "seam_width": 8,

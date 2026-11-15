@@ -28,14 +28,14 @@ Matched-$5$k outer-loop bake-offs under locked $R_{\mathrm{blend}}{+}J$ place hy
 On the primary five-seed holdout under short FitCell, frozen corrupt$\to$corrupt SeamN2N \emph{leads} hybrid on every seed (Table~\ref{tab:n2n-vs-ours}).
 A practitioner who only needs maximum holdout $R_{\mathrm{blend}}$ with the locked protocol should start from that frozen gate (${\approx}53.5$k params, ${\approx}1.1$\,ms/batch) rather than rerun meta-search.
 Hybrid search still matters when the goal is not a single fixed CNN: interpretable seam-operator graphs (classical fades, FIR, VA residuals, tiny nets) co-evolve under latency-aware $J$; the outer loop can swap operator vocabulary and reward shaping without re-deriving a monolithic trainer; multi-family means stay statistically tied to N2N while classical fades fail on hard cliffs; and FitCell-to-plateau replicated across three search seeds reaches $0.9881{\pm}0.0029$ on independent five-seed holdouts, clearing the frozen N2N gate ($0.9766$) on $3/3$ seeds (mean $\Delta{=}{+}0.0115$, $p{=}0.25$ at $n{=}3$).
-We therefore frame DenoiseOpt as an engineering path for searchable, latency-aware seam repair, not as a drop-in replacement that already beats frozen N2N under short FitCell budgets.
+I therefore frame DenoiseOpt as an engineering path for searchable, latency-aware seam repair, not as a drop-in replacement that already beats frozen N2N under short FitCell budgets.
 Training candidates to residual plateau (rather than a $16$--$48$-step FitCell cap) raises in-loop $R_{\mathrm{blend}}$ on search seed \texttt{1902771841} to ${\approx}0.9912$ and replicates on independent holdout batches across all three tested search seeds (Section~\ref{sec:v14-converge}).
 Future search work can target family-specialist graphs, cliff-conditioned FitCell schedules, and FX-aware seam-derivative losses motivated by the wavefolder ($2.7$--$2.8{\times}$ error amplification) and HF-presence sensitivity observed in Table~\ref{tab:fx-suite} and Figure~\ref{fig:fx-suite-repair}.
 
 \paragraph{Evidence beyond static tiles.}
 Vibrato spectrograms and downloadable hear WAVs are informal file checks only
 (Sections~\ref{sec:vibrato-eval}--\ref{sec:hear-samples}; technical investigation only, not a human trial).
-They do \emph{not} support perceptual claims of any kind---not preference, not ``sounds better,'' not MOS/MUSHRA proxies.
+They do \emph{not} support perceptual claims of any kind, not preference, not ``sounds better,'' not MOS/MUSHRA proxies.
 Sci/eng wrap transfer reports locked $R_{\mathrm{blend}}$ on seven boards as a wrap-protocol stress test
 (Appendix~\ref{app:transfer-bundle}), not audio$\to$fault/ECG diagnosis SOTA.
 Scope limits are collected in Section~\ref{sec:limitations}.

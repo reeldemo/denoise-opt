@@ -49,10 +49,10 @@ See also `NOMENCLATURE.md`.
 
 ## Holdout / leakage
 
-Train / search draws fresh i.i.d. batches; frozen holdout seed `20260719` never enters outer search. N2N train seed `424242` disjoint from holdout and overnight search seed.
+Train / search draws fresh i.i.d. batches; frozen holdout seed `20260719` never enters outer search. N2N train seed `424242` disjoint from holdout and meta-search search seed.
 
 ## Implementation pointers
 
 - Python: `scripts/metrics_snr_sdr.py` (`residual_score_blend`, `BLEND_ALPHA=0.7`)
-- Search wiring: `scripts/overnight_gpu_rl_arch.py` (`fit_cell` / `eval_cell` / `objective_j`)
+- Search wiring: `scripts/gpu_rl_arch.py` (`fit_cell` / `eval_cell` / `objective_j`)
 - Rust twin: `src/denoise_opt.rs` (`residual_score_blend`, `BLEND_ALPHA`)

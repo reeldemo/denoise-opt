@@ -67,28 +67,18 @@ Hybrid GA--PPO Meta-Search}
 \twocolumn[{%
   \maketitle
   \begin{center}\footnotesize
-    Code (ReelSynth engine + DenoiseOpt meta-search):
-    \url{https://github.com/reeldemo/reelsynth},
-    \url{https://github.com/reeldemo/denoise-opt-meta},
-    \url{https://github.com/reeldemo/denoiseopt-paper}
+    Code and artifacts: \url{https://github.com/reeldemo/denoise-opt}
   \end{center}
   \begin{abstract}
     Wavetable synthesis suffers cycle-boundary wrap discontinuities when stored periods do not join smoothly.
-    We treat this discontinuity as a local seam-repair problem and score repairs with a locked objective residual
-    $R_{\mathrm{blend}}$ (seam match to a cliff-withheld sibling, plus mid-cycle identity to the cracked engine).
-    DenoiseOpt searches compact repair operators with a hybrid of genetic search, PPO, and population-based training;
-    we reuse those search tools and do not propose a new NAS or RL algorithm.
-    Primary evidence is strictly objective ($N_{\mathrm{listeners}}{=}0$; no MOS/MUSHRA or perceptual audibility claim).
+    I frame this discontinuity as a local seam-repair problem scored by a locked objective residual $R_{\mathrm{blend}}$ combining seam agreement with a clean sibling and mid-cycle fidelity to the input.
+    DenoiseOpt searches compact repair operators via a hybrid of genetic search, PPO, and population-based training without claiming a new NAS or RL algorithm.
+    All primary evidence is strictly objective ($N_{\mathrm{listeners}}{=}0$, with no MOS/MUSHRA claim).
 
-    \textbf{Confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected).}
-    Converged DenoiseOpt beats matched \texttt{SeamN2N} across all four evaluation boards: $10$-seed Holdout ($0.9903$ vs $0.9764$, $p_{\mathrm{adj}}{=}0.0039$), $10$-seed Multi-family ($0.9324$ vs $0.9260$, $p_{\mathrm{adj}}{=}0.0039$), and domain-searched vs domain-trained \texttt{SeamN2N} on disjoint $256$-cycle held-out splits for Factory+FX ($0.9108$ vs $0.8772$, $p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$) and AKWF OA ($0.8740$ vs $0.8009$, $p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$).
-    Under an undertrained short-FitCell cap ($16$--$48$ steps), the hybrid trails frozen Noise2Noise on $10$-seed holdout ($0.9710$ vs $0.9764$, $0/10$ wins, $p{=}0.0020$) while beating Dual Cosine ($0.5469$); training to plateau reverses this gap.
-    On top-$10\%$ hard wrap cliffs, Dual Cosine reaches $0.9913$ edge RMSE while E2 plateau champions drop to $0.0086$--$0.0112$ (Table~\ref{tab:cliff-edge-rmse}).
-
-    \textbf{Exploratory $n{=}3$ search-seed pilots.}
-    A matched $5{,}000$-evaluation pilot ($n{=}3$ search seeds; Table~\ref{tab:meta-approaches}) ranks hybrid first descriptively ($0.9748{\pm}0.0018$; vs Aging $\Delta{=}{+}0.0114$, sign-flip $p{=}0.25$ at $n{=}3$) and serves solely as a compute-allocation rule; non-hybrid families were not re-run to plateau.
-    FitCell-to-plateau across $n{=}3$ pilot search seeds reaches five-seed holdout means of $0.9849$, $0.9893$, and $0.9902$ (mean $0.9881{\pm}0.0029$, vs frozen Noise2Noise $0.9766$; exact sign-flip $p{=}0.25$, requiring $n{\ge}6$ search seeds for $\alpha{=}0.05$).
-    Cross-domain transfer stress tests appear in Appendix~\ref{app:transfer-bundle}.
+    In confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected), converged DenoiseOpt beats matched \texttt{SeamN2N} across all four wavetable boards, reaching $0.9903$ vs $0.9764$ on $10$-seed Holdout ($p_{\mathrm{adj}}{=}0.0039$), $0.9324$ vs $0.9260$ on $10$-seed Multi-family ($p_{\mathrm{adj}}{=}0.0039$), $0.9108$ vs $0.8772$ on Factory+FX ($p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$), and $0.8740$ vs $0.8009$ on AKWF OA ($p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$).
+    On top-$10\%$ hard wrap cliffs, Dual Cosine leaves $0.9913$ edge RMSE whereas E2 plateau champions drop to $0.0086$--$0.0112$ (Table~\ref{tab:cliff-edge-rmse}).
+    An exploratory $n{=}3$ search-seed pilot ranks hybrid search first descriptively ($0.9748{\pm}0.0018$, $p{=}0.25$) for compute allocation, and FitCell-to-plateau reaches $0.9881{\pm}0.0029$ five-seed mean ($p{=}0.25$, requiring $n{\ge}6$ seeds for $\alpha{=}0.05$).
+    Beyond audio, the framework transfers to seven scientific and engineering domains ($0.937$--$0.992$ vs $0.553$--$0.959$ $R_{\mathrm{blend}}$, Table~\ref{tab:transfer-summary-main}) and to 1D periodic Quantum Ring TDSE wavefunctions, where $400$-step fine-tuning reaches $0.9939$ $R_{\mathrm{blend}}$, cuts Fourier kinetic-energy error by $97.8\%$ ($9.4309\to 0.2030$), and achieves $0.9993$ TDSE fidelity.
   \end{abstract}
   \keywords{wavetable synthesis; wrap discontinuity; unsupervised repair; DenoiseOpt; seam restoration; Noise2Noise; neural architecture search; reinforcement learning; genetic algorithms; proximal policy optimization; hybrid meta-search; population-based training; audio signal processing}
   \vspace{0.6em}
@@ -343,11 +333,19 @@ S.~Pascual, A.~Bonafonte, and J.~Serr\`a.
 
 \clearpage
 \appendix
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+\renewcommand{\dbltopfraction}{0.95}
+\renewcommand{\dblfloatpagefraction}{0.85}
+\setcounter{topnumber}{6}
+\setcounter{bottomnumber}{6}
+\setcounter{totalnumber}{10}
+\setcounter{dbltopnumber}{4}
 \input{subsections/appendix_algorithms}
-\clearpage
 \input{subsections/appendix_supplement}
 \input{subsections/appendix_extra_results}
 \input{subsections/appendix_transfer_bundle}
-\input{subsections/appendix_transfer_pilot}
 
 \end{document}

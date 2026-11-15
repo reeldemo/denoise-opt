@@ -8,7 +8,7 @@ from Section~\ref{sec:transfer-protocol} ($n{=}256$ periods, $L{=}256$).
 No PESQ/STOI/MOS appears on these boards: periods are non-speech wrap tiles, and the claim is wrap-protocol residual repair only.
 Columns are: CWRU/MFPT/Paderborn bearing revolutions, MIT-BIH/PTB-XL ECG beats, and synthetic CNC/PMU pilots.
 Numbers come from the released
-\href{https://github.com/reeldemo/reelsynth/blob/main/brand/artifacts/signal_heal_transfer/results_table.json}{results\_table.json}
+\href{https://github.com/reeldemo/denoise-opt}{cross-domain transfer summary}
 (\texttt{primary\_metric=r\_blend}).
 Domain-trained Noise2Noise-style SeamN2N (corrupt$\to$corrupt, $4000$ Adam steps, train seed \texttt{424242}, holdout seed \texttt{20260719})
 is scored on the same seven boards under the \emph{same} $R_{\mathrm{blend}}$.
@@ -16,7 +16,7 @@ Author ECG Cycle-GAN and BeatDiff remain OOD wrap probes on ECG only
 (clinical restore $\neq$ wrap residual; status notes in Appendix~\ref{app:supplement}, Table~\ref{tab:transfer-sota-status}).
 These rows do \emph{not} transfer an audio-trained bake as fault/ECG diagnosis SOTA; they only stress the wrap geometry.
 Artifacts:
-\href{https://github.com/reeldemo/reelsynth/tree/main/brand/artifacts/signal_heal_transfer}{signal\_heal\_transfer}.
+\href{https://github.com/reeldemo/denoise-opt}{signal\_heal\_transfer}.
 
 \begin{table}[t]
   \centering
@@ -56,8 +56,8 @@ Artifacts:
     endpoint-pin & 0.865 & 0.870 & 0.410 & 0.944 \\
     \texttt{seam\_fir3} & 0.766 & 0.760 & 0.534 & 0.912 \\
     DualCosine & 0.414 & 0.512 & 0.494 & 0.827 \\
-    BeatDiff (OOD) & 0.491 & 0.493 & --- & --- \\
-    Cycle-GAN (OOD) & 0.106 & 0.211 & --- & --- \\
+    BeatDiff (OOD) & 0.491 & 0.493 &, &, \\
+    Cycle-GAN (OOD) & 0.106 & 0.211 &, &, \\
     \bottomrule
   \end{tabular}
 \end{table}
@@ -68,11 +68,11 @@ SeamN2N exceeds Dual Cosine on every column and sits near no-bake on several bea
 on ECG and synth CNC.
 On MIT-BIH and PTB-XL, endpoint-pin remains a strong classical ECG row above SeamN2N. Ours still leads both.
 Author Operational Cycle-GAN and BeatDiff collapse under OOD wrap scoring relative to Ours / SeamN2N / no-bake.
-We do not treat clinical morph metrics as wrap residual.
+I do not treat clinical morph metrics as wrap residual.
 Synthetic CNC shows the largest classical collapse with Ours near $0.991$.
 Synth PMU is the strongest SeamN2N row ($0.9589$) but still below Ours ($0.9919$).
 Paderborn wrap board shows Ours $0.9369$ vs SeamN2N $0.8421$ and DualCosine $0.4710$.
-Separately, we train Al~Firdausi CNN as a 4-class fault classifier and do not rename classification as wrap residual
+Separately, I train Al~Firdausi CNN as a 4-class fault classifier and do not rename classification as wrap residual
 (Appendix Table~\ref{tab:transfer-sota-status}).
 Figure~\ref{fig:signal-heal-transfer-main} summarizes the same boards as grouped bars.
 Latency timings in Appendix~\ref{app:supplement} remain wavetable-checkpoint zero-shot.
@@ -94,10 +94,10 @@ Primary claim remains cycle-local wavetable seam restoration.
 \label{sec:listening-protocol}
 
 Downloadable WAVs
-(\href{https://github.com/reeldemo/reelsynth/tree/main/brand/artifacts/meta_approach_compare/hear_samples}{hear-sample WAVs})
+(\href{https://github.com/reeldemo/denoise-opt}{hear-sample WAVs})
 and vibrato spectrograms are released for informal file inspection
 (Sections~\ref{sec:vibrato-eval}--\ref{sec:hear-samples}).
-They are regenerated from the same public procedural / holdout tiles used in the residual tables---not private studio stems.
-Formal MOS / MUSHRA / forced-choice A/B was not run ($N_{\mathrm{listeners}}{=}0$), so we report no preference rates or significance tests.
-Until a powered listening study runs, we make \emph{no} perceptual quality claim; residual $R_{\mathrm{blend}}$ is the sole primary evidence.
+They are regenerated from the same public procedural / holdout tiles used in the residual tables, not private studio stems.
+Formal MOS / MUSHRA / forced-choice A/B was not run ($N_{\mathrm{listeners}}{=}0$), so I report no preference rates or significance tests.
+Until a powered listening study runs, I make \emph{no} perceptual quality claim; residual $R_{\mathrm{blend}}$ is the sole primary evidence.
 See Section~\ref{sec:limitations}.

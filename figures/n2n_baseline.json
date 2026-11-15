@@ -2,8 +2,8 @@
   "meta": {
     "train_seed": 424242,
     "holdout_seed": 20260719,
-    "overnight_search_seed": 1902771841,
-    "note": "no holdout tile leakage; no overnight champion init; v10.1 primary=R_blend",
+    "search_seed": 1902771841,
+    "note": "no holdout tile leakage; no meta-search champion init; v10.1 primary=R_blend",
     "primary": "n2n_corrupt_corrupt",
     "secondary": "n2n_sibling_supervised",
     "primary_metric": "r_blend",

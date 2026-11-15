@@ -8,19 +8,19 @@ Do wrap-seam differences stay visible under slow vibrato, beyond static tiled pe
 Appendix Figure~\ref{fig:vibrato-spectrogram} renders the same holdout cracked period, DualCosine bake, and refit \textbf{Ours (hybrid GA--PPO)} champion under shared sinusoidal vibrato ($\pm 3\%$ depth at $5$\,Hz around $220$\,Hz).
 Panels (a--c) show magnitude spectrograms; (d--e) show DualCosine$-$no-bake and Ours$-$no-bake differences; (g) reports cycle-local prolonged $R$ and a modulated-playback residual under the same pitch envelope.
 On the annotated high-wrap tile, Ours retains high cycle $R$ and high modulated $R$, while DualCosine remains the weakest classical comparator.
-This is objective spectrogram / residual evidence only---not a formal listening study.
+This is objective spectrogram / residual evidence only, not a formal listening study.
 Protocol:
-\href{https://github.com/reeldemo/reelsynth/blob/main/scripts/bench_vibrato_spectrogram.py}{\texttt{bench\_vibrato\_spectrogram.py}};
+\href{https://github.com/reeldemo/denoise-opt}{the repository script};
 artifacts:
-\href{https://github.com/reeldemo/reelsynth/tree/main/brand/artifacts/vibrato_spectrogram}{vibrato folder}.
+\href{https://github.com/reeldemo/denoise-opt}{vibrato folder}.
 
 \subsection{Downloadable audio samples}
 \label{sec:hear-samples}
 
-As an audible companion to Figure~\ref{fig:meta-heal-samples}, we release five fixed-pitch (A4, $3$\,s, $44.1$\,kHz mono) wavetable clips for no-bake, DualCosine, and Ours-healed periods from the matched-suite holdout
-(\href{https://github.com/reeldemo/reelsynth/tree/main/brand/artifacts/meta_approach_compare/hear_samples}{hear-sample WAVs},
+As an audible companion to Figure~\ref{fig:meta-heal-samples}, I release five fixed-pitch (A4, $3$\,s, $44.1$\,kHz mono) wavetable clips for no-bake, DualCosine, and Ours-healed periods from the matched-suite holdout
+(\href{https://github.com/reeldemo/denoise-opt}{hear-sample WAVs},
 rebuild:
-\href{https://github.com/reeldemo/reelsynth/blob/main/scripts/export_meta_hear_samples.py}{\texttt{export\_meta\_hear\_samples.py}}).
+\href{https://github.com/reeldemo/denoise-opt}{the repository script}).
 Appendix Figure~\ref{fig:hear-samples-panel} shows short waveform excerpts from those WAVs with per-clip absolute $R$.
 
 \paragraph{Technical scope (not a human trial).}
@@ -31,5 +31,5 @@ The $15$ released WAVs ($5$ tiles $\times$ $3$ methods) are provided solely as a
 \label{sec:wt-gallery}
 
 Beyond the synthetic sine{+}cliff narrative, Appendix Figure~\ref{fig:wt-diversity-gallery} shows a compact gallery of true ReelSynth-exported factory periods (one mid-morph frame per bank) and Adventure Kid Waveforms (AKWF) CC0 single-cycle files already used by the wrap protocol.
-Scored means remain in Table~\ref{tab:real-wt} and the \href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/figures/real_wt_matrix.json}{wavetable results}.
+Scored means remain in Table~\ref{tab:real-wt} and the \href{https://github.com/reeldemo/denoise-opt}{wavetable results}.
 This panel is diversity evidence only; no new NAS was run for the gallery.

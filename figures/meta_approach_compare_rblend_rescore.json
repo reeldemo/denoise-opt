@@ -3,7 +3,7 @@
   "protocol": "EVAL_PROTOCOL v10.1 / frozen champ arch re-fit under R_blend",
   "primary_metric": "r_blend",
   "blend_alpha": 0.7,
-  "note": "Champion architectures and HPs come from the historical matched-5k search that maximized prolonged R. Each champ is re-fit once under R_blend (not a full 5k re-search). Full overnight re-search remains Deferred D1 (bench_meta_approaches_5k.py --iters 5000).",
+  "note": "Champion architectures and HPs come from the historical matched-5k search that maximized prolonged R. Each champ is re-fit once under R_blend (not a full 5k re-search). Full meta-search re-search remains Deferred D1 (bench_meta_approaches_5k.py --iters 5000).",
   "seed": 1902771841,
   "baseline_dual_cosine": 0.5386458039283752,
   "approaches": {

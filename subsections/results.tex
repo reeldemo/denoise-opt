@@ -13,7 +13,7 @@ The evaluation protocol is stated in Section~\ref{sec:experiments}.
   \item \textbf{Holdout vs Noise2Noise and Dual Cosine} (Table~\ref{tab:n2n-vs-ours}):
     short-FitCell hybrid is close to, but below, Noise2Noise, and far above Dual Cosine.
   \item \textbf{Which outer loop to keep} (Table~\ref{tab:meta-approaches}):
-    hybrid has the top descriptive mean in a matched $5$k bake-off ($n{=}3$ search seeds; vs runner-up mean $\Delta{=}{+}0.0114$, bootstrap CI $[0.0064,0.0144]$, $p{=}0.25$; Appendix~\ref{sec:meta-approaches-results})---compute allocation only, not outer-loop superiority.
+    hybrid has the top descriptive mean in a matched $5$k bake-off ($n{=}3$ search seeds; vs runner-up mean $\Delta{=}{+}0.0114$, bootstrap CI $[0.0064,0.0144]$, $p{=}0.25$; Appendix~\ref{sec:meta-approaches-results}), compute allocation only, not outer-loop superiority.
   \item \textbf{Longer FitCell} (Table~\ref{tab:v14-hybrid-converge}):
     seed \texttt{1902771841} logs in-loop $R_{\mathrm{blend}}{\approx}0.9912$, and three-seed holdout replication reaches $0.9881{\pm}0.0029$ vs Noise2Noise gate $0.9766$ ($3/3$ wins, $p{=}0.25$ at $n{=}3$).
   \item \textbf{Where classical fails} (Section~\ref{sec:cliff-strata}):
@@ -30,14 +30,14 @@ The evaluation protocol is stated in Section~\ref{sec:experiments}.
 \subsection{A short hybrid search under $R_{\mathrm{blend}}$}
 \label{sec:v10-freeze}
 
-We first ask whether a hybrid GA+PPO search can beat frozen Noise2Noise under $R_{\mathrm{blend}}$ and $J$.
+I first ask whether a hybrid GA+PPO search can beat frozen Noise2Noise under $R_{\mathrm{blend}}$ and $J$.
 A $1{,}200$-iteration run (seed \texttt{1902771841}, ${\approx}1.65$\,h) selects on $J$~\eqref{eq:outer-obj} with $\lambda{=}0.02$.
 The champion reaches $R_{\mathrm{blend}}{\approx}0.9695$ ($J{\approx}0.9603$, $t{\approx}5.08$\,ms).
 Dual Cosine on the same runner scores ${\approx}0.504$.
 The frozen Noise2Noise holdout gate is ${\approx}0.9750$.
 So this short search clears Dual Cosine but not Noise2Noise.
 Artifacts:
-\href{https://github.com/reeldemo/denoise-opt-meta/blob/master/paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v12/figures/meta_approach_compare_v10.json}{hybrid search data}.
+\href{https://github.com/reeldemo/denoise-opt}{hybrid search data}.
 
 \subsection{Noise2Noise vs Ours on four boards}
 \label{sec:n2n-vs-ours-boards}
@@ -47,20 +47,20 @@ Dual Cosine is the classical fade on every board.
 Noise2Noise is the primary neural gate for this protocol (not a DenoiseOpt variant).
 
 \paragraph{Holdout.}
-Over five evaluation seeds (\texttt{20260719}--\texttt{20260723}), table means are
+In the earlier five-seed pilot (\texttt{20260719}--\texttt{20260723}), table means are
 $0.9767{\pm}0.0015$ (Noise2Noise) vs $0.9708{\pm}0.0014$ (short-FitCell hybrid).
 Those $\pm$ values are sample std over seeds, not confidence intervals; the bands can overlap even when one method leads on every draw.
 Paired per-seed holdout scores give mean $\Delta R_{\mathrm{blend}}$ (Ours$-$N2N) $={-}0.0059$ with Noise2Noise strictly higher on all five seeds (two-sided sign test $p{=}0.062$, $n{=}5$).
 Dual Cosine sits at $0.542{\pm}0.038$.
-Extending to ten evaluation seeds (\texttt{20260719}--\texttt{20260728}; \texttt{results/e1\_holdout\_10seed.json}) yields consistent results: Noise2Noise $0.9764{\pm}0.0020$ vs short-FitCell hybrid $0.9710{\pm}0.0029$, Dual Cosine $0.5469{\pm}0.0370$, and no-bake baseline $0.9182{\pm}0.0083$.
+Extending to ten evaluation seeds yields consistent results: Noise2Noise $0.9764{\pm}0.0020$ vs short-FitCell hybrid $0.9710{\pm}0.0029$, Dual Cosine $0.5469{\pm}0.0370$, and no-bake baseline $0.9182{\pm}0.0083$.
 The hybrid is close to Noise2Noise and far above a classical fade, but it does not beat the frozen holdout gate under short FitCell; Table~\ref{tab:n2n-vs-ours} reports the updated v14 E2 plateau champions across all four boards, where both \texttt{2026072701} ($0.989$) and \texttt{2026072702} ($0.990$) surpass Noise2Noise on Holdout and Multi-family.
 
 \paragraph{Loss-component decomposition and search-space capacity.}
-Table~\ref{tab:loss-decomposition} decomposes $R_{\mathrm{blend}}{=}0.7\,R_{\mathrm{seam}}{+}0.3\,R_{\mathrm{body}}$ across all ten holdout seeds (\texttt{results/loss\_decomposition\_10seed.json}).
+Table~\ref{tab:loss-decomposition} decomposes $R_{\mathrm{blend}}{=}0.7\,R_{\mathrm{seam}}{+}0.3\,R_{\mathrm{body}}$ across all ten holdout seeds.
 Dual Cosine collapses on $R_{\mathrm{seam}}$ ($0.3528$, Edge RMSE $0.4978$) because fading both ends creates a notch relative to $r^{\star}$ while leaving $R_{\mathrm{body}}{=}1.0000$.
 Among learned models, \texttt{SeamN2N} ($53{,}506$ params) achieves strong $R_{\mathrm{seam}}$ ($0.9682$) but records the lowest $R_{\mathrm{body}}$ ($0.9956$) because its full-cycle U-Net slightly perturbs mid-cycle samples.
 Notice that the \texttt{n2n\_unet} (\texttt{SeamN2NParity}) block \emph{is} in the search vocabulary; under short FitCell ($16$--$48$ steps), candidates underfit relative to $20{,}000$-step \texttt{SeamN2N}.
-When FitCell runs to plateau (E2), two of the three champions combine \texttt{n2n\_unet} with other blocks (seeds \texttt{1902771841} and \texttt{2026072702}), and seed \texttt{2026072701} (\texttt{lstm+tf\_split+moe\_mix}, $52{,}318$ params---smaller than \texttt{SeamN2N}) beats \texttt{SeamN2N} on both $R_{\mathrm{seam}}$ ($0.9849$ vs $0.9682$) and $R_{\mathrm{body}}$ ($0.9993$ vs $0.9956$), halving Edge RMSE ($0.0100$ vs $0.0212$).
+When FitCell runs to plateau (E2), two of the three champions combine \texttt{n2n\_unet} with other blocks (seeds \texttt{1902771841} and \texttt{2026072702}), and seed \texttt{2026072701} (\texttt{lstm+tf\_split+moe\_mix}, $52{,}318$ params, smaller than \texttt{SeamN2N}) beats \texttt{SeamN2N} on both $R_{\mathrm{seam}}$ ($0.9849$ vs $0.9682$) and $R_{\mathrm{body}}$ ($0.9993$ vs $0.9956$), halving Edge RMSE ($0.0100$ vs $0.0212$).
 Figure~\ref{fig:real-click-repair} visualizes this repair on a looped waveform where the wrap click ($\Delta{=}0.534$) vanishes to $0.022$ with E2 (\texttt{2026072701}).
 
 \begin{table*}[t]
@@ -74,8 +74,8 @@ Figure~\ref{fig:real-click-repair} visualizes this repair on a looped waveform w
     \toprule
     Method & Params & $t$\,(ms) & $R_{\mathrm{blend}}$ & $R_{\mathrm{seam}}$ & $R_{\mathrm{body}}$ & Edge RMSE \\
     \midrule
-    No-bake & --- & $0.00$ & $0.9182$ & $0.8832$ & $1.0000$ & $0.0777$ \\
-    Dual Cosine & --- & $0.30$ & $0.5469$ & $0.3528$ & $1.0000$ & $0.4978$ \\
+    No-bake &, & $0.00$ & $0.9182$ & $0.8832$ & $1.0000$ & $0.0777$ \\
+    Dual Cosine &, & $0.30$ & $0.5469$ & $0.3528$ & $1.0000$ & $0.4978$ \\
     Short-FitCell hybrid (v10.1) & ${\approx}121{,}000$ & $1.78$ & $0.9710$ & $0.9600$ & $0.9968$ & $0.0263$ \\
     SeamN2N (corrupt$\to$corrupt) & $53{,}506$ & $0.97$ & $0.9764$ & $0.9682$ & $0.9956$ & $0.0212$ \\
     E2 plateau (\texttt{1902771841}, \texttt{n2n\_unet} combo) & $228{,}867$ & $2.84$ & $0.9847$ & $0.9787$ & $0.9986$ & $0.0142$ \\
@@ -97,7 +97,7 @@ Figure~\ref{fig:real-click-repair} visualizes this repair on a looped waveform w
 
 \paragraph{Nonlinear overdrive amplification.}
 In synthesis chains, wrap artifacts often feed nonlinear distortion where small seam errors are amplified.
-Passing the ten-seed holdout outputs through five circular-period FX chains (\texttt{results/fx\_suite\_10seed.json}; Table~\ref{tab:fx-suite})---$6{\times}$ asymmetric overdrive ($\tanh(6y + 0.15\,\mathrm{clip}(6y)^2)$), $8{\times}$ hard clipping, a $\sin(4.5y)$ wavefolder, a high-frequency presence filter ($y[n]{-}0.85y[n{-}1]$), and a resonant comb---amplifies seam gaps dramatically.
+Passing the ten-seed holdout outputs through five circular-period FX chains, $6{\times}$ asymmetric overdrive ($\tanh(6y + 0.15\,\mathrm{clip}(6y)^2)$), $8{\times}$ hard clipping, a $\sin(4.5y)$ wavefolder, a high-frequency presence filter ($y[n]{-}0.85y[n{-}1]$), and a resonant comb, amplifies seam gaps dramatically.
 Dual Cosine collapses across all five FX chains (e.g.\ wavefolder $R_{\mathrm{seam}}{=}0.1719$, Edge RMSE $0.7378$).
 Both E2 champions cut post-FX Edge RMSE by $1.9$--$2.5{\times}$ relative to frozen \texttt{SeamN2N} across every effect, with E2 (\texttt{2026072701}, $52.3$k) achieving $R_{\mathrm{seam}}{=}0.9600$--$0.9908$ despite having fewer parameters than \texttt{SeamN2N}.
 Figure~\ref{fig:fx-suite-repair} visualizes seam zooms and post-FX error across all five effects for E2 (\texttt{2026072701}).
@@ -130,7 +130,7 @@ Both beat Dual Cosine (Appendix~\ref{app:secondary-results}).
 
 \paragraph{Factory and AKWF.}
 Evaluated zero-shot from synthetic training, Noise2Noise leads both Factory+FX ($0.754$ vs E2 $0.690$ on the $256$-cycle held-out split; Dual Cosine $0.606$) and AKWF OA ($0.744$ vs E2 $0.669$; Dual Cosine $0.414$).
-When both methods are trained/searched directly on the same disjoint $1{,}024$-cycle training splits (\texttt{results/table10\_rigorous\_stats.json}; learning curves in Appendix Figure~\ref{fig:domain-search-curves}), domain-trained \texttt{SeamN2N} ($4{,}000$ Adam steps) rises to $0.8772$ on Factory+FX and $0.8009$ on AKWF OA, while domain-searched DenoiseOpt ($80$ evaluations) reaches $\mathbf{0.9108}$ on Factory+FX ($+0.0336$, $193/256$ wins, Holm $p_{\mathrm{adj}}{=}4.19{\times}10^{-15}$) and $\mathbf{0.8740}$ on AKWF OA ($+0.0731$, $198/256$ wins, Holm $p_{\mathrm{adj}}{=}9.54{\times}10^{-21}$).
+When both methods are trained/searched directly on the same disjoint $1{,}024$-cycle training splits, domain-trained \texttt{SeamN2N} ($4{,}000$ Adam steps) rises to $0.8772$ on Factory+FX and $0.8009$ on AKWF OA, while domain-searched DenoiseOpt ($80$ evaluations) reaches $\mathbf{0.9108}$ on Factory+FX ($+0.0336$, $193/256$ wins, Holm $p_{\mathrm{adj}}{=}4.19{\times}10^{-15}$) and $\mathbf{0.8740}$ on AKWF OA ($+0.0731$, $198/256$ wins, Holm $p_{\mathrm{adj}}{=}9.54{\times}10^{-21}$).
 
 \begin{table}[htbp]
   \centering
@@ -148,7 +148,7 @@ When both methods are trained/searched directly on the same disjoint $1{,}024$-c
     \midrule
     Favorite $\Theta$ (v10.1 hybrid) & ${\approx}121$k & $0.9708{\pm}0.0014$ & $8.20$ \\
     SeamN2N (corrupt$\to$corrupt) & ${\approx}53.5$k & $0.9767{\pm}0.0015$ & $1.12$ \\
-    Dual Cosine & $0$ & $0.542{\pm}0.038$ & --- \\
+    Dual Cosine & $0$ & $0.542{\pm}0.038$ &, \\
     \bottomrule
   \end{tabular}
 \end{adjustbox}
@@ -158,7 +158,7 @@ Table~\ref{tab:param-fairness} shows size and speed.
 The hybrid favorite is larger and about $7.4\times$ slower per holdout batch than SeamN2N.
 That is partly by design: selection maximizes $J=R_{\mathrm{blend}}-\lambda\cdot\mathrm{latency\_norm}$,
 so a slower cell can win when residual gains outweigh the $\lambda$ penalty.
-We do not claim architectural superiority over Noise2Noise on this freeze.
+I do not claim architectural superiority over Noise2Noise on this freeze.
 Search seeds, the N2N train seed \texttt{424242}, and holdout seeds remain disjoint.
 
 \paragraph{Seed protocol.}
@@ -166,14 +166,14 @@ Holdout and multi-family rows in Table~\ref{tab:n2n-vs-ours} use ten evaluation 
 The matched $5$k outer-loop bake-off uses three search seeds
 (Table~\ref{tab:meta-approaches}: hybrid $0.9748{\pm}0.0018$, Aging $0.9635{\pm}0.0049$).
 Hybrid ranks first \emph{descriptively} among six families; paired sign-flip tests on three search seeds give $p{\ge}0.25$ for hybrid vs the runner-up (Aging evolution) because $n{=}3$ is underpowered (Appendix~\ref{sec:meta-approaches-results}).
-We use the ranking only to allocate FitCell-to-plateau compute, not to claim ANOVA-level outer-loop superiority.
+I use the ranking only to allocate FitCell-to-plateau compute, not to claim ANOVA-level outer-loop superiority.
 
 \subsection{Hybrid-only FitCell-to-convergence}
 \label{sec:v14-converge}
 \label{sec:v14-hybrid-converge}
 
 The matched bake-off (Table~\ref{tab:meta-approaches}) already ranked hybrid first under a short FitCell budget (${\approx}16$--$48$ steps).
-We therefore stop spending matched budget on Random, CMA-ES, TPE, Aging, and REINFORCE.
+I therefore stop spending matched budget on Random, CMA-ES, TPE, Aging, and REINFORCE.
 The follow-up is hybrid-only FitCell-to-plateau: every candidate trains until residual plateau
 (or a searchable hard cap $T_{\max}\!\in\!\{512,\ldots,2048\}$),
 with searchable patience, relative $\varepsilon$, batch size, and $\lambda$
@@ -183,7 +183,7 @@ The outer budget is $750$ evaluations with two sequential proposals per iteratio
 On \textbf{search seed} \texttt{1902771841} only, the champion logs in-loop $R_{\mathrm{blend}}{\approx}0.9912$
 ($J{\approx}0.9854$, $t{\approx}8.70$\,ms) after ${\approx}46.9$\,h wall on fresh procedural evaluation batches during the converge campaign.
 That score is \emph{not} the five-seed holdout mean (Table~\ref{tab:n2n-vs-ours}); it is compared against the frozen holdout Noise2Noise gate (${\approx}0.9750$; train seed \texttt{424242}, eval seed \texttt{20260719}).
-Multi-search-seed replication across three search seeds (\texttt{1902771841}, \texttt{2026072701}, and \texttt{2026072702}; $750$ evaluations each) confirms this effect on independent five-seed holdout batches (\texttt{results/e2\_v14\_converge\_multiseed.json}): holdout means are $0.9849$, $0.9893$, and $0.9902$ (mean $0.9881{\pm}0.0029$), clearing the frozen Noise2Noise holdout gate ($0.9766$) on $3/3$ seeds (mean $\Delta R_{\mathrm{blend}}{=}{+}0.0115$, Wilson 95\% CI $[0.44,1.00]$, exact sign-flip $p{=}0.25$ at $n{=}3$).
+Multi-search-seed replication across three search seeds (\texttt{1902771841}, \texttt{2026072701}, and \texttt{2026072702}; $750$ evaluations each) confirms this effect on independent five-seed holdout batches: holdout means are $0.9849$, $0.9893$, and $0.9902$ (mean $0.9881{\pm}0.0029$), clearing the frozen Noise2Noise holdout gate ($0.9766$) on $3/3$ seeds (mean $\Delta R_{\mathrm{blend}}{=}{+}0.0115$, Wilson 95\% CI $[0.44,1.00]$, exact sign-flip $p{=}0.25$ at $n{=}3$).
 Figure~\ref{fig:v14-converge-curve} shows the learning curve; Table~\ref{tab:v14-hybrid-converge} summarizes the freeze.
 
 \begin{figure}[t]
@@ -212,8 +212,8 @@ Figure~\ref{fig:v14-converge-curve} shows the learning curve; Table~\ref{tab:v14
     E2 plateau (\texttt{1902771841}, \texttt{n2n\_unet} combo) & $228{,}867$ & $0.9847$ & $2.84$ & above \\
     Frozen SeamN2N gate & $53{,}506$ & $0.9764$ & $0.97$ & gate \\
     Short-FitCell hybrid (v10.1) & ${\approx}121{,}000$ & $0.9710$ & $1.78$ & below \\
-    Dual Cosine (classical) & --- & $0.5469$ & $0.30$ & below \\
-    No-bake (cracked) & --- & $0.9182$ & $0.00$ & below \\
+    Dual Cosine (classical) &, & $0.5469$ & $0.30$ & below \\
+    No-bake (cracked) &, & $0.9182$ & $0.00$ & below \\
     \bottomrule
   \end{tabular}
   \end{adjustbox}
@@ -226,14 +226,14 @@ Figure~\ref{fig:v14-converge-curve} shows the learning curve; Table~\ref{tab:v14
 Two narrow checks sit in Appendix~\ref{app:supplement}; they do not replace Table~\ref{tab:meta-approaches}.
 
 \textbf{Ablations and extra $5$k seeds.}
-We either (A)~read branch tags inside one recorded hybrid history, or
+I either (A)~read branch tags inside one recorded hybrid history, or
 (B)~restart a short $150$-iteration search with GA-only, PPO-only, GA+PPO, or full hybrid
 (Table~\ref{tab:ablation}; seed \texttt{1902771841}).
 Type~B does not collapse short-budget $R_{\mathrm{blend}}$ when GA or PPO is dropped on that probe,
 but those scores stay well below the matched-$5$k hybrid mean.
-A full $5{,}000$-evaluation $R_{\mathrm{blend}}$ branch ablation across three search seeds (\texttt{results/e4\_branch\_ablation\_5k.json}) yields comparable holdout means for single-branch variants---\texttt{hybrid\_ga\_only} ($0.9614{\pm}0.0125$), \texttt{hybrid\_ppo\_only} ($0.9613{\pm}0.0179$), and \texttt{hybrid\_pbt\_only} ($0.9620{\pm}0.0140$)---while full \texttt{hybrid\_lstm} averages $0.8532{\pm}0.2036$ due to one seed collapsing to $0.6181$ (other two seeds: $0.9732$, $0.9683$).
-Two additional $5{,}000$-evaluation outer-loop search seeds (\texttt{2026072703}, \texttt{2026072704}; \texttt{results/e3\_meta\_extra\_seeds.json}) further confirm high outer-loop variance: \texttt{hybrid\_lstm} logs $0.8450$ and $0.8311$, whereas \texttt{tpe} reaches $0.8311$ and $0.9137$, reinforcing that the $n{=}3$ bake-off is a selection rule rather than a universal ranking.
-The $R_{\mathrm{blend}}$-vs-$J$ Pareto front and champion selection rule are exported in \texttt{results/e5\_pareto\_export.json}.
+A full $5{,}000$-evaluation $R_{\mathrm{blend}}$ branch ablation across three search seeds yields comparable holdout means for single-branch variants, \texttt{hybrid\_ga\_only} ($0.9614{\pm}0.0125$), \texttt{hybrid\_ppo\_only} ($0.9613{\pm}0.0179$), and \texttt{hybrid\_pbt\_only} ($0.9620{\pm}0.0140$), while full \texttt{hybrid\_lstm} averages $0.8532{\pm}0.2036$ due to one seed collapsing to $0.6181$ (other two seeds: $0.9732$, $0.9683$).
+Two additional $5{,}000$-evaluation outer-loop search seeds further confirm high outer-loop variance: \texttt{hybrid\_lstm} logs $0.8450$ and $0.8311$, whereas \texttt{tpe} reaches $0.8311$ and $0.9137$, reinforcing that the $n{=}3$ bake-off is a selection rule rather than a universal ranking.
+The $R_{\mathrm{blend}}$-vs-$J$ Pareto front and champion selection rule are in the released artifacts.
 
 \textbf{Hyperparameters.}
 A one-at-a-time $\pm 50\%$ probe at $500$ iterations moves champion $R$ by at most ${\approx}0.012$
@@ -249,7 +249,7 @@ At the default batch $B{=}64$, Ours is about $7\times$ slower than Noise2Noise o
 A holdout batch sweep ($B\in\{1,8,64,256\}$) keeps the ratio near $5$--$7\times$.
 Larger batches help both methods, but Noise2Noise stays faster.
 This matches the parameter gap (${\approx}121$k vs ${\approx}53.5$k) and the $J$ latency term in~\eqref{eq:outer-obj}.
-Artifacts: \texttt{v13\_ours\_vs\_n2n\_latency/latency\_compare.json}.
+Artifacts are in the released repository.
 
 \begin{table}[t]
   \centering
@@ -296,7 +296,7 @@ Live hybrid champions stay compact (${\approx}24$k$\pm$2k params across short-Fi
 
 \begin{table*}[t]
   \centering
-  \caption{Four-board comparison under $R_{\mathrm{blend}}$ ($\alpha{=}0.7$; \texttt{results/table10\_rigorous\_stats.json}).
+  \caption{Four-board comparison under $R_{\mathrm{blend}}$.
     Holdout and Multi-family: mean$\pm$std over $10$ eval seeds (\texttt{20260719}--\texttt{20260728}); E2\,(\texttt{2026072702}) beats \texttt{SeamN2N} on $10/10$ seeds on both boards (Holm-Bonferroni $p_{\mathrm{adj}}{=}0.0039$).
     Factory+FX and AKWF OA ($256$ held-out cycles, $1{,}024$ train): domain-searched DenoiseOpt vs.\ domain-trained \texttt{SeamN2N} ($4{,}000$ steps) on identical splits (Wilcoxon Holm $p_{\mathrm{adj}}{=}4.19{\times}10^{-15}$ and $9.54{\times}10^{-21}$).}
   \label{tab:n2n-vs-ours}
@@ -355,8 +355,31 @@ Replacing the asymmetric denominator $\mathrm{RMS}_{\mathcal{M}}(a)$ in~\eqref{e
 Across all E2 search evaluations ($1{,}500$, $1{,}537$, and $1{,}500$ trials on seeds \texttt{1902771841}, \texttt{2026072701}, and \texttt{2026072702}), normalized latency spans $[0.1188,0.8769]$ (medians $0.3463$, $0.3298$, $0.3525$; $t_{\mathrm{ms}}$ medians $2.66$--$3.00$\,ms).
 Re-ranking every evaluated trial under $\lambda\in\{0,0.01,0.02,0.05\}$ shows that $\lambda{=}0.02$ acts as a mild latency tie-breaker rather than dominating selection: on seed \texttt{1902771841}, $\lambda\in\{0,0.01,0.02\}$ select the exact same champion ($R_{\mathrm{blend}}{=}0.9870$, $2.71$\,ms); on \texttt{2026072701} and \texttt{2026072702}, $\lambda{=}0.02$ trades $0.0006$ and $0.0013$ $R_{\mathrm{blend}}$ ($0.9909\to0.9904$ and $0.9916\to0.9903$) for $30\%$ and $39\%$ lower latency ($1.41\to0.98$\,ms and $1.69\to1.03$\,ms), and every selected champion across $\lambda\in[0,0.05]$ stays in $[0.9852,0.9916]$, well above the frozen \texttt{SeamN2N} gate ($0.9766$).
 
-\textbf{Power analysis for $n{=}3$ pilots and cross-domain transfer summary.}
+\textbf{Power analysis for $n{=}3$ pilots and cross-domain scientific/engineering transfer.}
 For a two-sided exact sign-flip permutation test at $\alpha{=}0.05$, the minimum sample size is $n{=}6$ ($2\cdot 2^{-6}{=}0.03125<0.05$); thus the $n{=}3$ matched-$5$k ($\Delta{=}{+}0.0114$) and E2 plateau ($\Delta{=}{+}0.0115$, Cohen's $d{\approx}3.97$) pilots cannot reach $p{<}0.05$ regardless of effect size and would require $n{\ge}6$ search seeds (${\approx}216$\,GPU-h) for confirmatory testing.
-Finally, Appendix~\ref{app:transfer-bundle} (Table~\ref{tab:transfer-main}) stress-tests the wrap protocol on seven external periodic/quasi-periodic boards (bearings, ECG, power, CNC, PMU), where domain-searched DenoiseOpt outperforms domain-trained \texttt{SeamN2N} on every column under $R_{\mathrm{blend}}$.
+To test whether cycle-local wrap-discontinuity repair generalizes beyond audio wavetables to adjacent scientific and engineering domains, Table~\ref{tab:transfer-summary-main} summarizes the seven external periodic/quasi-periodic boards from Appendix~\ref{app:transfer-bundle} (Tables~\ref{tab:transfer-main}--\ref{tab:transfer-main-b}): industrial rotating-machinery bearings (CWRU, MFPT, Paderborn), cardiac electrophysiology ECG (MIT-BIH, PTB-XL), CNC servo toolpaths, and power-grid PMU synchrophasors ($n{=}256$ periods each). Under matched $n{=}256$-period held-out splits with identical $R_{\mathrm{blend}}$ evaluation, domain-searched DenoiseOpt achieves higher $R_{\mathrm{blend}}$ than domain-trained \texttt{SeamN2N} on all $7/7$ scientific/engineering boards ($0.937$--$0.992$ vs $0.553$--$0.959$, exact two-sided sign test $p{=}0.0156$).
+
+\begin{table*}[t]
+  \centering
+  \small
+  \caption{Cross-domain scientific and engineering wrap-repair transfer ($R_{\mathrm{blend}}$, $n{=}256$ periods/board; full baselines in Appendix Tables~\ref{tab:transfer-main}--\ref{tab:transfer-main-b}).}
+  \label{tab:transfer-summary-main}
+  \setlength{\tabcolsep}{5pt}
+  \begin{tabular}{@{}lccccccc@{}}
+    \toprule
+    Method & CWRU & MFPT & Paderborn & MIT-BIH (ECG) & PTB-XL (ECG) & CNC Servo & PMU Grid \\
+    \midrule
+    \textbf{DenoiseOpt (Ours)} & \textbf{0.960} & \textbf{0.943} & \textbf{0.937} & \textbf{0.975} & \textbf{0.945} & \textbf{0.991} & \textbf{0.992} \\
+    SeamN2N (domain-trained) & 0.866 & 0.866 & 0.842 & 0.750 & 0.754 & 0.553 & 0.959 \\
+    no-bake & 0.845 & 0.866 & 0.838 & 0.750 & 0.762 & 0.450 & 0.936 \\
+    DualCosine & 0.461 & 0.483 & 0.471 & 0.414 & 0.512 & 0.494 & 0.827 \\
+    \bottomrule
+  \end{tabular}
+\end{table*}
+
+\textbf{Quantum-mechanics benchmark (1D periodic ring TDSE; zero-shot and fine-tuned).}
+To test whether wrap-discontinuity repair transfers to computational quantum mechanics, I evaluate both \emph{zero-shot} and \emph{domain-fine-tuned} operators on $256$ held-out complex 1D periodic ring wavefunctions $\psi(x){=}\mathrm{Re}\,\psi+i\,\mathrm{Im}\,\psi$ on $[0,2\pi)$ ($L{=}256$, optical lattice $V(x){=}0.5\cos 2x$, seed \texttt{20260801}) perturbed by localized boundary wrap mismatches $\psi(0)\neq\psi(2\pi^-)$ that induce Fourier kinetic-energy spikes.
+Evaluated \emph{zero-shot}, the audio-searched E2 champion (\texttt{2026072702}) raises $R_{\mathrm{blend}}$ from $0.5558$ (\texttt{no-bake}), $0.5744$ (\texttt{DualCosine}), and $0.6447$ (wavetable \texttt{SeamN2N}) to $0.7084$, cutting relative Fourier kinetic-energy error $|\Delta\langle\hat{T}\rangle|/\langle\hat{T}\rangle$ from $9.4309$ (\texttt{no-bake}) and $3.1694$ (\texttt{SeamN2N}) down to $1.4500$, and raising $10$-step Split-Operator FFT TDSE state fidelity $|\langle\psi_{\mathrm{rep}}(T)|\psi_{\mathrm{id}}(T)\rangle|^2$ ($\Delta t{=}0.02$) from $0.9839$ to $0.9950$.
+Explicitly fine-tuning the E2 champion for $400$ FitCell Adam steps on a strictly disjoint $512$-wavefunction training split (seed \texttt{20260799}) pushes held-out $R_{\mathrm{blend}}$ to \textbf{0.9939}, cuts kinetic-energy error by $97.8\%$ to \textbf{0.2030}, and reaches \textbf{0.9993} TDSE fidelity—outperforming domain-trained \texttt{SeamN2N} ($4{,}000$ steps on the same disjoint split: $R_{\mathrm{blend}}{=}0.5538$, kinetic-energy error $8.8786$, TDSE fidelity $0.9842$). Representative held-out waveform visualizations across the quantum ring TDSE, power-grid PMU, and CNC machining domains are shown in Appendix Figure~\ref{fig:cross-domain-quantum-samples}.
 
 % Secondary tables (canonical classical board, VA seam, factory export, Rust bench) moved to Appendix~\ref{app:secondary-results}. Cross-domain transfer boards moved to Appendix~\ref{app:transfer-bundle}.

@@ -527,5 +527,5 @@
       "blend_alpha": 0.7
     }
   ],
-  "note": "residual_live is R_blend (\u03b1=0.7). residual_saved may still be a prolonged-R hint from older overnight checkpoints."
+  "note": "residual_live is R_blend (\u03b1=0.7). residual_saved may still be a prolonged-R hint from older meta-search checkpoints."
 }
