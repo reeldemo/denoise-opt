@@ -1,0 +1,109 @@
+{
+  "multi_family": {
+    "board": "multi_family",
+    "wall_s": 0.68,
+    "champ_ops": [
+      "mlp_seam",
+      "median3"
+    ],
+    "champ_blocks": [
+      "mlp",
+      "soft_mix",
+      "residual"
+    ],
+    "champ_params": 29842,
+    "scores": {
+      "mean": 0.9018571799993514,
+      "std": 0.0026327655556364817
+    },
+    "baselines": {
+      "e2_zeroshot": {
+        "mean": 0.9264596998691559,
+        "std": 0.0008467626342024396
+      },
+      "n2n_zeroshot": {
+        "mean": 0.9257917350530624,
+        "std": 0.0011680884965661906
+      },
+      "dual_cosine": {
+        "mean": 0.5262245953083038,
+        "std": 0.012718048239728037
+      }
+    }
+  },
+  "factory_fx": {
+    "board": "factory_fx",
+    "wall_s": 331.23,
+    "champ_ops": [
+      "median3",
+      "cycle_net",
+      "fir5",
+      "polish",
+      "asym_wet"
+    ],
+    "champ_blocks": [
+      "noise_cond",
+      "residual",
+      "dense",
+      "n2n_unet",
+      "moe_mix",
+      "xlstm"
+    ],
+    "champ_params": 343086,
+    "scores": {
+      "mean": 0.9107928276062012,
+      "n": 256
+    },
+    "baselines": {
+      "e2_zeroshot": {
+        "mean": 0.6900641918182373,
+        "n": 256
+      },
+      "n2n_zeroshot": {
+        "mean": 0.7535900473594666,
+        "n": 256
+      },
+      "dual_cosine": {
+        "mean": 0.606261134147644,
+        "n": 256
+      }
+    }
+  },
+  "akwf_oa": {
+    "board": "akwf_oa",
+    "wall_s": 332.47,
+    "champ_ops": [
+      "fade_pull",
+      "hann_blend",
+      "edge_pin",
+      "median3",
+      "skip_blend"
+    ],
+    "champ_blocks": [
+      "tf_split",
+      "attn",
+      "lstm",
+      "n2n_unet",
+      "moe_mix"
+    ],
+    "champ_params": 175169,
+    "scores": {
+      "mean": 0.8739736080169678,
+      "n": 256
+    },
+    "baselines": {
+      "e2_zeroshot": {
+        "mean": 0.6694966554641724,
+        "n": 256
+      },
+      "n2n_zeroshot": {
+        "mean": 0.7444498538970947,
+        "n": 256
+      },
+      "dual_cosine": {
+        "mean": 0.41356146335601807,
+        "n": 256
+      }
+    }
+  }
+}

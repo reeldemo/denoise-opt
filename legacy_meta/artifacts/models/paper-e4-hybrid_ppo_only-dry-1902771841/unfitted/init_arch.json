@@ -1,0 +1,57 @@
+{
+  "architecture": {
+    "depth": 6,
+    "width": 24,
+    "act": "gelu",
+    "ops": [
+      "mlp_seam",
+      "dual_cosine",
+      "fir3",
+      "cycle_net"
+    ],
+    "wet": 0.45,
+    "fir": [
+      0.2,
+      0.5,
+      0.2,
+      0.05,
+      0.05
+    ],
+    "cell_kind": "n2n_unet",
+    "soft_logits": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "blocks": [
+      "n2n_unet",
+      "attn",
+      "dilated",
+      "residual"
+    ],
+    "use_adv_aux": false,
+    "moe_mode": "moe_parallel"
+  },
+  "tag": "init",
+  "hyperparams": {
+    "lr": 0.005272975826898984,
+    "fit_steps": 16,
+    "batch": 64,
+    "entropy_coef": 0.05660067936884204,
+    "ppo_clip": 0.1,
+    "adv_coef": 0.1,
+    "reward_mode": "abs_r"
+  }
+}

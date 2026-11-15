@@ -73,20 +73,22 @@ Hybrid GA--PPO Meta-Search}
     \url{https://github.com/reeldemo/denoiseopt-paper}
   \end{center}
   \begin{abstract}
-    Wavetable oscillators click when the stored period does not join cleanly at the wrap.
-    We treat that click as a local seam-repair problem and score repairs with a locked residual
-    $R_{\mathrm{blend}}$ (seam match to a cliff-withheld ideal sibling, plus mid-cycle identity to the cracked engine).
-    DenoiseOpt searches compact repair operators with a hybrid of genetic search, PPO, and population-based training.
-    We reuse those search tools; we do not propose a new NAS or RL algorithm.
-    Primary evidence is objective $R_{\mathrm{blend}}$, not listening scores (no MOS/MUSHRA; $N_{\mathrm{listeners}}{=}0$).
+    Wavetable synthesis suffers cycle-boundary wrap discontinuities when stored periods do not join smoothly.
+    We treat this discontinuity as a local seam-repair problem and score repairs with a locked objective residual
+    $R_{\mathrm{blend}}$ (seam match to a cliff-withheld sibling, plus mid-cycle identity to the cracked engine).
+    DenoiseOpt searches compact repair operators with a hybrid of genetic search, PPO, and population-based training;
+    we reuse those search tools and do not propose a new NAS or RL algorithm.
+    Primary evidence is strictly objective ($N_{\mathrm{listeners}}{=}0$; no MOS/MUSHRA or perceptual audibility claim).
 
-    On a five-seed holdout, a short-FitCell hybrid freeze reaches $0.9708{\pm}0.0014$,
-    below frozen Noise2Noise ($0.9767{\pm}0.0015$) but far above Dual Cosine ($0.542{\pm}0.038$; Table~\ref{tab:n2n-vs-ours}).
-    A matched $5{,}000$-evaluation bake-off ($n{=}3$ search seeds) ranks hybrid first \emph{descriptively} among six outer-loop families
-    ($0.9748{\pm}0.0018$; Table~\ref{tab:meta-approaches}): vs runner-up Aging evolution, mean $\Delta R_{\mathrm{blend}}{=}{+}0.0114$ with bootstrap 95\% CI $[0.0064,0.0144]$ and exact sign-flip $p{=}0.25$ (not inferential superiority; selection only).
-    \textbf{Provisional (single search seed, in-loop only):} FitCell-to-plateau on seed \texttt{1902771841} logs $R_{\mathrm{blend}}{\approx}0.9912$ during search (Table~\ref{tab:v14-hybrid-converge}), not a five-seed holdout mean; replication pending.
-    On hard wrap cliffs, classical fades collapse while searched operators hold.
-    Cross-domain transfer stress tests are in Appendix~\ref{app:transfer-bundle}.
+    \textbf{Confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected).}
+    Converged DenoiseOpt beats matched \texttt{SeamN2N} across all four evaluation boards: $10$-seed Holdout ($0.9903$ vs $0.9764$, $p_{\mathrm{adj}}{=}0.0039$), $10$-seed Multi-family ($0.9324$ vs $0.9260$, $p_{\mathrm{adj}}{=}0.0039$), and domain-searched vs domain-trained \texttt{SeamN2N} on disjoint $256$-cycle held-out splits for Factory+FX ($0.9108$ vs $0.8772$, $p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$) and AKWF OA ($0.8740$ vs $0.8009$, $p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$).
+    Under an undertrained short-FitCell cap ($16$--$48$ steps), the hybrid trails frozen Noise2Noise on $10$-seed holdout ($0.9710$ vs $0.9764$, $0/10$ wins, $p{=}0.0020$) while beating Dual Cosine ($0.5469$); training to plateau reverses this gap.
+    On top-$10\%$ hard wrap cliffs, Dual Cosine reaches $0.9913$ edge RMSE while E2 plateau champions drop to $0.0086$--$0.0112$ (Table~\ref{tab:cliff-edge-rmse}).
+
+    \textbf{Exploratory $n{=}3$ search-seed pilots.}
+    A matched $5{,}000$-evaluation pilot ($n{=}3$ search seeds; Table~\ref{tab:meta-approaches}) ranks hybrid first descriptively ($0.9748{\pm}0.0018$; vs Aging $\Delta{=}{+}0.0114$, sign-flip $p{=}0.25$ at $n{=}3$) and serves solely as a compute-allocation rule; non-hybrid families were not re-run to plateau.
+    FitCell-to-plateau across $n{=}3$ pilot search seeds reaches five-seed holdout means of $0.9849$, $0.9893$, and $0.9902$ (mean $0.9881{\pm}0.0029$, vs frozen Noise2Noise $0.9766$; exact sign-flip $p{=}0.25$, requiring $n{\ge}6$ search seeds for $\alpha{=}0.05$).
+    Cross-domain transfer stress tests appear in Appendix~\ref{app:transfer-bundle}.
   \end{abstract}
   \keywords{wavetable synthesis; wrap discontinuity; unsupervised repair; DenoiseOpt; seam restoration; Noise2Noise; neural architecture search; reinforcement learning; genetic algorithms; proximal policy optimization; hybrid meta-search; population-based training; audio signal processing}
   \vspace{0.6em}

@@ -29,8 +29,14 @@ if not (ROOT / "scripts" / "overnight_gpu_rl_arch.py").is_file():
 
 V14_FIG = Path(__file__).resolve().parents[1] / "figures"
 COMPARE_V10 = ROOT / "brand" / "artifacts" / "meta_approach_compare_v10"
+_REAL_E2_CONVERGE = Path(
+    "/home/s4il0r/reel_runs/src/reeldemo-reelsynth-0a8567b"
+    "/brand/artifacts/meta_approach_compare_v14_converge/1902771841/hybrid_lstm"
+)
 CONVERGE = (
-    ROOT
+    _REAL_E2_CONVERGE
+    if (_REAL_E2_CONVERGE / "history.jsonl").is_file()
+    else ROOT
     / "brand"
     / "artifacts"
     / "meta_approach_compare_v14_converge"
@@ -99,12 +105,12 @@ def plot_learning_curves(out_dir: Path) -> dict:
     v14 = load_history(CONVERGE / "history.jsonl")
 
     vx, vr = series(v10, "champ_raw")
-    dc_v10 = float(v10[0].get("baseline_dual_cosine", 0.504))
-    n2n = float(v10[0].get("n2n_gate_r", v14[0].get("n2n_gate_r", 0.975)))
+    dc_v10 = float(v10[0].get("baseline_dual_cosine") or 0.504)
+    n2n = float(v10[0].get("n2n_gate_r") or v14[0].get("n2n_gate_r") or 0.975)
 
     cx, cr = series(v14, "champ_raw")
-    dc_v14 = float(v14[0].get("baseline_dual_cosine", 0.504))
-    n2n_v14 = float(v14[0].get("n2n_gate_r", n2n))
+    dc_v14 = float(v14[0].get("baseline_dual_cosine") or 0.504)
+    n2n_v14 = float(v14[0].get("n2n_gate_r") or n2n)
 
     # Compact column figure: zoom each panel's y-range to the data (no empty air).
     fig, axes = plt.subplots(
@@ -116,56 +122,55 @@ def plot_learning_curves(out_dir: Path) -> dict:
     fig.subplots_adjust(left=0.18, right=0.98, top=0.92, bottom=0.10)
 
     ax = axes[0]
-    ax.plot(vx, vr, color=C_RAW, lw=1.6, label=r"Champ $R_{\mathrm{blend}}$")
-    ax.axhline(dc_v10, color="#999999", ls="--", lw=1.1, label=f"Dual Cosine ({dc_v10:.3f})")
-    ax.axhline(n2n, color=C_N2N, ls=":", lw=1.2, label=f"N2N gate ({n2n:.3f})")
-    ax.set_title("Short FitCell ($1{,}200$ evals)", fontsize=9, pad=2)
-    ax.set_ylabel(r"$R_{\mathrm{blend}}$", fontsize=8)
+    ax.plot(vx, vr, color="#0072B2", lw=2.0, ls="-", label=r"Champ $R_{\mathrm{blend}}$")
+    ax.axhline(dc_v10, color="#E69F00", ls="--", lw=1.4, label=f"Dual Cosine ({dc_v10:.3f})")
+    ax.axhline(n2n, color="#009E73", ls=":", lw=1.6, label=f"N2N gate ({n2n:.3f})")
+    ax.set_title("Short FitCell ($1{,}200$ evals)", fontsize=10, pad=3)
+    ax.set_ylabel(r"$R_{\mathrm{blend}}$", fontsize=9)
     ax.set_xlim(1, int(vx[-1]))
     y0 = float(min(vr.min(), dc_v10))
     y1 = float(max(vr.max(), n2n))
     pad = 0.04 * (y1 - y0 + 1e-6)
     ax.set_ylim(y0 - pad, min(1.0, y1 + pad))
-    ax.tick_params(labelsize=7)
+    ax.tick_params(labelsize=8)
     ax.grid(True, alpha=0.25)
-    ax.legend(loc="lower right", fontsize=6.5, framealpha=0.92, borderpad=0.3)
+    ax.legend(loc="lower right", fontsize=7.5, framealpha=0.95, borderpad=0.35)
 
     ax = axes[1]
-    ax.plot(cx, cr, color=C_RAW, lw=1.6, label=r"Champ $R_{\mathrm{blend}}$")
-    ax.axhline(n2n_v14, color=C_N2N, ls=":", lw=1.2, label=f"N2N gate ({n2n_v14:.3f})")
+    ax.plot(cx, cr, color="#0072B2", lw=2.0, ls="-", label=r"Champ $R_{\mathrm{blend}}$")
+    ax.axhline(n2n_v14, color="#009E73", ls=":", lw=1.6, label=f"N2N gate ({n2n_v14:.3f})")
     gate_it = first_above(cx, cr, n2n_v14)
     if gate_it is not None:
-        ax.axvline(gate_it, color=C_N2N, ls=":", lw=0.9, alpha=0.7)
+        ax.axvline(gate_it, color="#009E73", ls="-.", lw=1.0, alpha=0.75)
         ax.text(
-            0.02,
-            0.96,
-            rf"$>$N2N @ {gate_it}; final {cr[-1]:.4f}",
+            0.04,
+            0.36,
+            rf"$>$N2N @ eval {gate_it}; final {cr[-1]:.4f}",
             transform=ax.transAxes,
-            va="top",
-            fontsize=7,
+            va="center",
+            fontsize=7.5,
+            bbox={"boxstyle": "round,pad=0.2", "fc": "white", "ec": "#cccccc", "alpha": 0.92},
         )
-    ax.set_title("FitCell-to-plateau ($750$ evals)", fontsize=9, pad=2)
-    ax.set_xlabel("Outer-loop evaluation", fontsize=8)
-    ax.set_ylabel(r"$R_{\mathrm{blend}}$", fontsize=8)
+    ax.set_title("FitCell-to-plateau ($750$ evals)", fontsize=10, pad=3)
+    ax.set_xlabel("Outer-loop evaluation", fontsize=9)
+    ax.set_ylabel(r"$R_{\mathrm{blend}}$", fontsize=9)
     ax.set_xlim(1, int(cx[-1]))
-    # Plateau run sits near the ceiling — zoom so the curve fills the panel.
-    # Dual Cosine (~0.5) is omitted here; it sits far below this zoom.
     y0 = float(min(cr.min(), n2n_v14))
     y1 = float(cr.max())
     pad = max(0.002, 0.12 * (y1 - y0 + 1e-6))
     ax.set_ylim(y0 - pad, min(1.0, y1 + pad))
-    ax.tick_params(labelsize=7)
+    ax.tick_params(labelsize=8)
     ax.grid(True, alpha=0.25)
-    ax.legend(loc="lower right", fontsize=6.5, framealpha=0.92, borderpad=0.3)
+    ax.legend(loc="lower right", fontsize=7.5, framealpha=0.95, borderpad=0.35)
 
     stem = out_dir / "fig_search_learning_curve"
-    fig.savefig(stem.with_suffix(".png"), dpi=220)
-    fig.savefig(stem.with_suffix(".pdf"))
+    fig.savefig(stem.with_suffix(".png"), dpi=220, bbox_inches="tight", pad_inches=0.04)
+    fig.savefig(stem.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.04)
     plt.close(fig)
 
     # Dedicated single-panel for the plateau section (tight y-zoom).
     fig, ax = plt.subplots(figsize=(3.25, 1.85))
-    fig.subplots_adjust(left=0.18, right=0.98, top=0.88, bottom=0.20)
+    fig.subplots_adjust(left=0.18, right=0.96, top=0.88, bottom=0.22)
     ax.plot(cx, cr, color=C_RAW, lw=1.6, label=r"Champ $R_{\mathrm{blend}}$")
     ax.axhline(n2n_v14, color=C_N2N, ls=":", lw=1.2, label=f"N2N gate ({n2n_v14:.3f})")
     if gate_it is not None:
@@ -182,13 +187,13 @@ def plot_learning_curves(out_dir: Path) -> dict:
     ax.grid(True, alpha=0.25)
     ax.legend(loc="lower right", fontsize=6.5, framealpha=0.92, borderpad=0.3)
     stem2 = out_dir / "fig_v14_converge_learning_curve"
-    fig.savefig(stem2.with_suffix(".png"), dpi=220)
-    fig.savefig(stem2.with_suffix(".pdf"))
+    fig.savefig(stem2.with_suffix(".png"), dpi=220, bbox_inches="tight", pad_inches=0.04)
+    fig.savefig(stem2.with_suffix(".pdf"), bbox_inches="tight", pad_inches=0.04)
     plt.close(fig)
 
     # Appendix champ residual (raw R_blend) — same zoom as plateau panel.
     fig, ax = plt.subplots(figsize=(3.25, 1.85))
-    fig.subplots_adjust(left=0.18, right=0.98, top=0.88, bottom=0.20)
+    fig.subplots_adjust(left=0.18, right=0.96, top=0.88, bottom=0.22)
     ax.plot(cx, cr, color="#000000", lw=1.5, marker="o", markevery=max(1, len(cx) // 25), markersize=3.0)
     ax.axhline(n2n_v14, color=C_N2N, ls=":", lw=1.2, label=f"N2N gate ({n2n_v14:.3f})")
     ax.set_xlabel("Outer-loop evaluation", fontsize=8)
@@ -202,7 +207,7 @@ def plot_learning_curves(out_dir: Path) -> dict:
     ax.tick_params(labelsize=7)
     ax.grid(True, alpha=0.25)
     ax.legend(loc="lower right", fontsize=6.5, framealpha=0.92, borderpad=0.3)
-    fig.savefig(out_dir / "champ_residual_vs_iter.png", dpi=220)
+    fig.savefig(out_dir / "champ_residual_vs_iter.png", dpi=220, bbox_inches="tight", pad_inches=0.04)
     plt.close(fig)
 
     summary = {

@@ -21,7 +21,7 @@ $R_{\mathrm{blend}}$ is the primary locked metric in~\eqref{eq:R-blend}.
 \textbf{Prolonged $R$} tiles the whole cycle once (debug / superseded search key only; not used for Table~\ref{tab:n2n-vs-ours} or matched bake-off reporting).
 These symbols follow a different convention from Noise2Noise clean/noisy pairs.
 
-\begin{table}[htbp]
+\begin{table}[t]
   \centering
   \caption{Core symbols used in Methods.}
   \label{tab:symbols}
@@ -83,9 +83,17 @@ $r^{\star}$ is a procedural self-supervised scoring twin, not a perceptual groun
 \label{sec:residual-score}
 
 \textbf{Primary metric.}
-After tiling each cycle $N$ times, let $y$ be the repaired output, $r^{\star}$ the ideal sibling, and $x$ the cracked engine.
-Define the wrap-neighborhood mask $\mathcal{S}$ of width $W{=}8$ at each period head/tail and the complementary mid-cycle body mask $\mathcal{B}$.
-For masked sample set $\mathcal{M}$ (seam or body windows after tiling $N$ periods), let $|\mathcal{M}|$ be the number of scored samples and
+After tiling each period of length $L$ ($L{=}256$) $N$ times ($N{=}16$, total length $T{=}N L{=}4{,}096$), let $y$ be the repaired output, $r^{\star}$ the ideal sibling, and $x$ the cracked engine.
+With seam half-width $W{=}8$, the wrap-neighborhood mask $\mathcal{S}$ and complementary mid-cycle body mask $\mathcal{B}$ are defined per tiled period $k\in\{0,\dots,N{-}1\}$ as
+\begin{equation}
+\label{eq:mask-SB}
+\begin{aligned}
+\mathcal{S} &= \bigcup_{k=0}^{N-1}\bigl([kL,\,kL{+}W)\cup[kL{+}L{-}W,\,(k{+}1)L)\bigr),\\
+\mathcal{B} &= \bigcup_{k=0}^{N-1}[kL{+}W,\,kL{+}L{-}W) = \{0,\dots,T{-}1\}\setminus\mathcal{S}.
+\end{aligned}
+\end{equation}
+By construction $\mathcal{S}\cap\mathcal{B}=\emptyset$ (zero overlap at every period boundary, $|\mathcal{S}|=2NW=256$ and $|\mathcal{B}|=N(L-2W)=3{,}840$), so $R_{\mathrm{body}}=R(x,y;\mathcal{B})$ never rewards leaving seam-adjacent samples unrepaired.
+For masked sample set $\mathcal{M}\in\{\mathcal{S},\mathcal{B}\}$, let $|\mathcal{M}|$ be the number of scored samples and
 \begin{equation}
 \mathrm{RMS}_{\mathcal{M}}(u)=\sqrt{\frac{1}{|\mathcal{M}|}\sum_{i\in\mathcal{M}} u_i^2}.
 \end{equation}
@@ -111,7 +119,8 @@ R_{\mathrm{blend}}
 \alpha&=0.7.
 \end{aligned}
 \end{equation}
-Whole-curve prolonged $R$ remains a debug / superseded key only.
+Whole-curve prolonged $R$ is defined over the full tiled domain $\Omega{=}\{0,\dots,T{-}1\}$ as $R_{\mathrm{prol}}(r^{\star},y)=R(r^{\star},y;\Omega)$, which mixes seam repair with global waveform error; it is retained only as a superseded legacy key and never replaces $R_{\mathrm{blend}}$.
+For real-world wavetable corpora without a procedural generator (Factory+FX and AKWF OA in Table~\ref{tab:n2n-vs-ours}), the self-supervised protocol instantiates $r^{\star}$ directly from unperturbed real cycles on a disjoint training split and injects a controlled wrap-cliff perturbation to form $x$, evaluating on held-out real cycles.
 
 \textbf{Roles of the three quantities.}
 \begin{center}
@@ -270,7 +279,7 @@ Table~\ref{tab:hyperparams} lists the CUDA search defaults used for the $5$k-gat
 Under the near-ceiling residual regime (Section~\ref{sec:reward-shaping}), these outer-loop and fit hyperparameters are co-tuned with architecture. PBT and plateau adaptation continue to mutate several of them online.
 Companion listings: Algorithms~\ref{alg:residual}--\ref{alg:hybrid} (Appendix~\ref{app:algorithms}).
 
-\begin{table}[htbp]
+\begin{table}[t]
   \centering
   \small
   \caption{Hybrid search hyperparameters (RTX~3090 DenoiseOpt CUDA search-runner defaults). Co-tuned with reward shaping under near-ceiling $R$ (Section~\ref{sec:reward-shaping}).}

@@ -1,0 +1,72 @@
+{
+  "architecture": {
+    "depth": 6,
+    "width": 24,
+    "act": "gelu",
+    "ops": [
+      "mlp_seam",
+      "dual_cosine",
+      "fir3",
+      "cycle_net"
+    ],
+    "wet": 0.45,
+    "fir": [
+      0.2,
+      0.5,
+      0.2,
+      0.05,
+      0.05
+    ],
+    "cell_kind": "dual_path",
+    "soft_logits": [
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "blocks": [
+      "dual_path",
+      "n2n_unet",
+      "attn",
+      "dilated",
+      "residual"
+    ],
+    "use_adv_aux": false,
+    "moe_mode": "moe_parallel"
+  },
+  "hyperparams": {
+    "lr": 0.006158719674027076,
+    "fit_steps": 20,
+    "batch": 32,
+    "entropy_coef": 0.05594455308786493,
+    "ppo_clip": 0.1,
+    "adv_coef": 0.10977967424555507,
+    "reward_mode": "abs_r"
+  },
+  "residual": 0.780423104763031,
+  "weights_path": "/home/s4il0r/denoise-opt-meta/artifacts/models/paper-e4-hybrid_ppo_only-dry-1902771841/fitted/champion_iter_000001_fitted.pt",
+  "algorithms": [
+    "PPO",
+    "GA_crossover_mutate",
+    "ERL_inspired_interleave",
+    "PBT",
+    "discrete_NAS",
+    "depth_bias",
+    "MoE_softgate_parallel",
+    "composed_arch_graph",
+    "lit_blocks_unet_dilated_attn_dualpath",
+    "plateau_adapt_deepen"
+  ],
+  "tag": "champion_iter_000001"
+}

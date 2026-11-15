@@ -72,14 +72,12 @@ On the search side, we \emph{reuse} known NAS, aging evolution, PBT, CMA-ES, and
 The engineering choice is to combine them as an outer loop over compact seam-repair graphs; that combination is not claimed as an algorithmic contribution.
 
 \paragraph{Key findings.}
-Under the locked v10.1 $R_{\mathrm{blend}}$ protocol with multi-seed evaluation (primary story: Table~\ref{tab:n2n-vs-ours}):
+Under the locked v10.1 $R_{\mathrm{blend}}$ protocol (objective wrap-discontinuity metrics only; no perceptual or listening claim, $N_{\mathrm{listeners}}{=}0$):
 \begin{itemize}
-  \item On the primary holdout, the short-FitCell hybrid sits below frozen Noise2Noise on every evaluation seed ($0.9708{\pm}0.0014$ vs $0.9767{\pm}0.0015$; paired mean $\Delta{\approx}{-}0.006$; sign test $p{=}0.062$) and well above Dual Cosine ($0.542{\pm}0.038$).
-  \item On twenty multi-family boards, Ours and Noise2Noise are statistically indistinguishable on board-mean deltas ($0.9337{\pm}0.0028$ vs $0.9308{\pm}0.0045$; 10/20 board wins, Wilson 95\% CI $[0.30,0.70]$; sign-test $p{=}1.0$).
-  \item Matched-$5$k outer-loop comparison ($n{=}3$ search seeds): hybrid has the top \emph{descriptive} mean $R_{\mathrm{blend}}$ ($0.9748{\pm}0.0018$); vs runner-up Aging, mean $\Delta{=}{+}0.0114$, bootstrap CI $[0.0064,0.0144]$, sign-flip $p{=}0.25$ (3/3 seed wins, Wilson CI $[0.44,1.00]$)---allocation rule only, not superiority.
-  \item \textbf{Provisional:} on search seed \texttt{1902771841} only, FitCell-to-plateau logs an in-loop $R_{\mathrm{blend}}{\approx}0.9912$ (Section~\ref{sec:v14-converge}); this is not the five-seed holdout mean and is not replicated on other search seeds yet.
-  \item On hard wrap cliffs, classical fades collapse while searched operators and Noise2Noise hold (Section~\ref{sec:cliff-strata}).
-  \item On Factory+FX and AKWF corpora under $R_{\mathrm{blend}}$, Noise2Noise leads Ours; both still beat Dual Cosine.
+  \item \textbf{Confirmatory (Holm--Bonferroni corrected, Table~\ref{tab:n2n-vs-ours}):} Converged DenoiseOpt beats matched \texttt{SeamN2N} on $10$-seed Holdout ($0.9903{\pm}0.0010$ vs $0.9764{\pm}0.0020$, $p_{\mathrm{adj}}{=}0.0039$), $10$-seed Multi-family ($0.9324{\pm}0.0038$ vs $0.9260{\pm}0.0031$, $p_{\mathrm{adj}}{=}0.0039$), and domain-searched vs domain-trained \texttt{SeamN2N} on disjoint $256$-cycle held-out splits for Factory+FX ($0.9108{\pm}0.0845$ vs $0.8772{\pm}0.1218$, $p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$) and AKWF OA ($0.8740{\pm}0.1044$ vs $0.8009{\pm}0.1720$, $p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$).
+  \item \textbf{Short-FitCell pilot vs plateau:} Under a $16$--$48$-step FitCell cap, the hybrid trails frozen Noise2Noise on $10$-seed holdout ($0.9710{\pm}0.0029$ vs $0.9764{\pm}0.0020$, $0/10$ wins, exact sign-flip $p{=}0.0020$) while beating Dual Cosine ($0.5469{\pm}0.0370$); training to plateau (E2) reverses this gap.
+  \item \textbf{Exploratory $n{=}3$ search-seed pilots:} Matched-$5$k outer-loop ($0.9748{\pm}0.0018$; vs Aging $\Delta{=}{+}0.0114$, $p{=}0.25$) and E2 FitCell-to-plateau ($0.9881{\pm}0.0029$ vs $0.9766$, $p{=}0.25$) are pilot allocation/feasibility checks (exact two-sided sign-flip requires $n{\ge}6$ seeds for $\alpha{=}0.05$); non-hybrid families were not re-run to plateau.
+  \item \textbf{Hard cliffs \& objective proxies:} On top-$10\%$ wrap cliffs, Dual Cosine collapses ($0.9913$ edge RMSE) while E2 plateau champions drop to $0.0086$--$0.0129$ vs $0.0203$ for \texttt{SeamN2N} (Table~\ref{tab:cliff-edge-rmse}), and $R_{\mathrm{blend}}$ tracks seam-local Edge RMSE ($\rho{=}{-}0.9737$, $p{<}10^{-300}$; Section~\ref{sec:proxy-and-lambda}).
 \end{itemize}
 We do not claim a new NAS/RL algorithm.
 Existing NAS, aging evolution, PBT, CMA-ES, and PPO primitives are reused~\cite{elsken2019,real2019,jaderberg2017,schulman2017}.

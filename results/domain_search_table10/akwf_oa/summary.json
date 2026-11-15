@@ -1,0 +1,84 @@
+{
+  "approach": "hybrid_lstm",
+  "iters": 80,
+  "iters_done": 80,
+  "seed": 2026072701,
+  "champ_raw": 0.8721485733985901,
+  "champ_r": 0.8658209090893355,
+  "champ_r_seam": 0.8721485733985901,
+  "champ_j": 0.8631542424226688,
+  "champ_t_ms": 4.860336669177438,
+  "lambda_latency": 0.02,
+  "baseline_dual_cosine": 0.4006161689758301,
+  "nobake": 0.6789072751998901,
+  "delta_r_vs_dual_cosine": 0.47153240442276,
+  "champ_arch": {
+    "depth": 6,
+    "width": 44,
+    "act": "silu",
+    "ops": [
+      "fade_pull",
+      "hann_blend",
+      "edge_pin",
+      "median3",
+      "skip_blend"
+    ],
+    "wet": 0.40064942025120637,
+    "fir": [
+      0.3187185257069413,
+      0.13692671136751738,
+      0.44280967791993636,
+      0.13134129557137325,
+      0.3414963878233318
+    ],
+    "cell_kind": "tf_split",
+    "soft_logits": [
+      -0.3420812695608768,
+      -1.4430180377381463,
+      0.746470237153906,
+      -0.3563935776889029,
+      -0.6490218155083047,
+      -0.12805296825942797,
+      0.4775321202878344,
+      1.071161570751861,
+      -0.5616094157984026,
+      -0.08425848202913358,
+      0.14115100718899032,
+      0.24723606056936254,
+      1.0750751531897136,
+      -0.4063211387792148,
+      0.12450403423600798
+    ],
+    "blocks": [
+      "tf_split",
+      "attn",
+      "lstm",
+      "n2n_unet",
+      "moe_mix"
+    ],
+    "use_adv_aux": true,
+    "moe_mode": "moe_parallel"
+  },
+  "champ_hp": {
+    "lr": 0.011586331186048982,
+    "fit_steps": 56,
+    "batch": 48,
+    "entropy_coef": 0.026873641647028094,
+    "ppo_clip": 0.35000000000000003,
+    "adv_coef": 0.03584267921730864,
+    "reward_mode": "vs_dualcosine"
+  },
+  "branch_best": {
+    "ppo": 0.8490458726882935,
+    "ga": 0.8721485733985901,
+    "pbt": 0.8551828265190125,
+    "nas": 0.8191986382007599,
+    "combo": 0.8722085058689117
+  },
+  "wall_s": 332.21245527267456,
+  "finished_at": "20261115T093123Z",
+  "partial": false,
+  "metric": "v10.1 R_blend=\u03b1\u00b7R_seam+(1-\u03b1)\u00b7R_body (\u03b1=0.7); search objective J = R_blend - \u03bb\u00b7latency_norm (\u03bb=0.02)",
+  "primary_metric": "r_blend",
+  "search_objective": "J=R_blend-lambda*latency_norm"
+}

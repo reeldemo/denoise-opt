@@ -284,3 +284,19 @@ Hybrid minus frozen Noise2Noise on the five-seed holdout: mean $\Delta R_{\mathr
 Hybrid minus DualCosine: $\Delta={+}0.429$ ($[0.402,0.462]$; 5/5 wins, Wilson CI $[0.57,1.00]$; $p=0.0625$).
 On the 20 multifamily boards, hybrid minus Noise2Noise is $\Delta={+}0.0030$ ($[{-}0.006,0.013]$; 10/20 wins, Wilson CI $[0.30,0.70]$; exact permutation $p=0.55$; $g_z=0.13$): no detectable difference (CIs overlap zero).
 These tests are exploratory; $n{=}5$ seeds cannot reach $p<0.05$ under an exact two-sided paired test, so a powered claim needs $\ge 6$ holdout seeds (see \texttt{EXPERIMENT\_PLAN.md}).
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.92\textwidth]{figures/fig_fx_suite_repair.pdf}
+  \caption{Downstream FX stress-test visualization on holdout tile~62 (seed~\texttt{20260719}) across five effects: $6{\times}$ overdrive, $8{\times}$ hard clipping, $\sin(4.5y)$ wavefolder, HF presence ($1{-}0.85z^{-1}$), and resonant comb.
+    Left: seam zoom around $n{=}256$. Right: post-FX waveform error $|\mathrm{FX}(y){-}\mathrm{FX}(r^{\star})|$ over three looped periods. Dual Cosine and SeamN2N leave seam error bursts under downstream FX, while Ours E2 (\texttt{2026072701}, $52.3$k) remains flat.}
+  \label{fig:fx-suite-repair}
+\end{figure*}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.95\textwidth]{figures/fig_domain_search_curves.pdf}
+  \caption{Per-board DenoiseOpt (\texttt{hybrid\_lstm}) domain-search learning curves corresponding to Table~\ref{tab:n2n-vs-ours} (\texttt{results/table10\_domain\_search.json}).
+    Left: Multi-family ($120$ evals, $120$ FitCell steps). Center: Factory+FX ($1{,}024$-cycle train split, $80$ evals, $100$ FitCell steps; held-out $256$-cycle $R_{\mathrm{blend}}{=}0.911$). Right: AKWF OA ($1{,}024$-cycle train split, $80$ evals, $100$ FitCell steps; held-out $256$-cycle $R_{\mathrm{blend}}{=}0.874$). Dotted/dashed lines show zero-shot \texttt{SeamN2N} and Dual Cosine on the same held-out splits.}
+  \label{fig:domain-search-curves}
+\end{figure*}

@@ -14,9 +14,9 @@
     \midrule
     SeamN2N (corrupt$\to$corrupt) & One training run; holdout eval & $20{,}000$ steps & ${\approx}0.043$ \\
     Hybrid (matched D1) & Outer loop; 3 search seeds & $5{,}000$/seed & ${\approx}8.4$ mean \\
-    Hybrid FitCell-to-plateau & Outer loop; search seed \texttt{1902771841} & $750/750$ & ${\approx}46.9$ \\
-    Multi-seed plateau (planned) & Seeds \texttt{2026072701}/\texttt{02} & TBD & TBD \\
-    Five-seed holdout re-score (planned) & Eval seeds \texttt{20260719}--\texttt{23} & TBD & TBD \\
+    Hybrid FitCell-to-plateau (Seed 1) & Outer loop; search seed \texttt{1902771841} & $750/750$ & ${\approx}46.9$ \\
+    Multi-seed plateau (Seeds 2 \& 3) & Seeds \texttt{2026072701}/\texttt{02} & $750$/seed & ${\approx}36.0$ / ${\approx}47.9$ \\
+    Ten-seed holdout re-score & Eval seeds \texttt{20260719}--\texttt{28} ($n{=}10$) & 10 seeds $\times$ 4 methods & ${\approx}0.05$ \\
     \bottomrule
   \end{tabular}
   \end{adjustbox}\\[0.35em]

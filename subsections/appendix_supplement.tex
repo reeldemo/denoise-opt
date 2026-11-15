@@ -25,7 +25,6 @@ They are large multi-panel artifacts, so they sit here rather than opening empty
     Formal human A/B scores are out of scope.}
   \label{fig:vibrato-spectrogram}
 \end{figure}
-\FloatBarrier
 
 \begin{figure}[htbp]
   \centering
@@ -37,7 +36,6 @@ They are large multi-panel artifacts, so they sit here rather than opening empty
     Not a formal listening study.}
   \label{fig:hear-samples-panel}
 \end{figure}
-\FloatBarrier
 
 \begin{figure}[htbp]
   \centering
@@ -47,7 +45,6 @@ They are large multi-panel artifacts, so they sit here rather than opening empty
     No new NAS for this panel. Quantitative wrap scores: Table~\ref{tab:real-wt}.}
   \label{fig:wt-diversity-gallery}
 \end{figure}
-\FloatBarrier
 
 \subsection{Multi-family ranking plots}
 \label{sec:app-sota-plots}
@@ -62,8 +59,6 @@ Figure~\ref{fig:sota-heatmap} breaks the same board down by generative family.
   (same $20$-waveform board as Table~\ref{tab:sota-main}).}
   \label{fig:sota-method-bars}
 \end{figure}
-\FloatBarrier
-\clearpage
 
 \begin{figure}[htbp]
   \centering
@@ -72,7 +67,6 @@ Figure~\ref{fig:sota-heatmap} breaks the same board down by generative family.
   for selected methods $\times$ generative families (2 seeds each). Higher is better.}
   \label{fig:sota-heatmap}
 \end{figure}
-\FloatBarrier
 
 
 \subsection{Multi-family and cliff boards}
@@ -108,7 +102,6 @@ Appendix~\ref{app:secondary-results} and Section~\ref{sec:cliff-strata}.
     \bottomrule
   \end{tabular}
 \end{table}
-\FloatBarrier
 
 \begin{table}[htbp]
   \centering
@@ -131,7 +124,6 @@ Appendix~\ref{app:secondary-results} and Section~\ref{sec:cliff-strata}.
     \bottomrule
   \end{tabular}
 \end{table}
-\FloatBarrier
 
 
 
@@ -159,7 +151,6 @@ Appendix~\ref{app:secondary-results} and Section~\ref{sec:cliff-strata}.
     \bottomrule
   \end{tabular}
 \end{table}
-\FloatBarrier
 
 
 
@@ -202,7 +193,6 @@ Appendix~\ref{app:secondary-results} and Section~\ref{sec:cliff-strata}.
 \end{adjustbox}%
   }
 \end{table}
-\FloatBarrier
 
 \subsection{Matched-budget outer-loop comparison}
 \label{sec:meta-approaches-results}
@@ -232,7 +222,6 @@ Learning-curve and bar figures use seed \texttt{1902771841} trajectories under t
   Dashed line: Dual Cosine on the same runner.}
   \label{fig:meta-approach-bars}
 \end{figure}
-\FloatBarrier\clearpage
 
 \begin{figure}[htbp]
   \centering
@@ -241,7 +230,6 @@ Learning-curve and bar figures use seed \texttt{1902771841} trajectories under t
   Dashed line: Dual Cosine.}
   \label{fig:meta-approach-compare}
 \end{figure}
-\FloatBarrier
 
 \subsection{Ablations and compute}
 \label{sec:ablation-compute}
@@ -262,7 +250,7 @@ Table~\ref{tab:compute} summarizes campaign compute (historical prolonged-$R$ ov
   \caption{Ablations (interpret narrowly).
     Left: best prolonged $R$ by branch label in one hybrid history (final iteration ${\approx}6{,}922$; superseded search metric; not separate fits).
     Right: isolated 150-iteration \texttt{ablate-*} final champions re-scored under $R_{\mathrm{blend}}$ ($\alpha{=}0.7$; seed \texttt{1902771841}).
-    Full $R_{\mathrm{blend}}$ branch re-search remains deferred; use Table~\ref{tab:meta-approaches} for matched outer-loop comparison.}
+    Full $5{,}000$-evaluation $R_{\mathrm{blend}}$ branch re-search is reported in Section~\ref{sec:ablation-def} (\texttt{results/e4\_branch\_ablation\_5k.json}); use Table~\ref{tab:meta-approaches} for matched outer-loop comparison.}
   \label{tab:ablation}
   \setlength{\tabcolsep}{3pt}
   \begin{adjustbox}{max width=\columnwidth}
@@ -282,7 +270,6 @@ Table~\ref{tab:compute} summarizes campaign compute (historical prolonged-$R$ ov
   \end{tabular}
 \end{adjustbox}
 \end{table}
-\FloatBarrier
 
 \begin{table}[htbp]
   \centering
@@ -306,7 +293,6 @@ Table~\ref{tab:compute} summarizes campaign compute (historical prolonged-$R$ ov
   \end{tabular}
 \end{adjustbox}
 \end{table}
-\FloatBarrier
 
 \subsection{Hyperparameter sensitivity}
 \label{para:hp-sensitivity}
@@ -323,7 +309,6 @@ All eleven configurations completed ($1$ default plus ten $\pm 50\%$ one-at-a-ti
   \caption{One-at-a-time $\pm 50\%$ HP sensitivity of hybrid champion $R$ at 500 iterations. Blue bar: Table~\ref{tab:hyperparams} default.}
   \label{fig:hp-sensitivity}
 \end{figure}
-\FloatBarrier
 
 \subsection{Transfer inference latency}
 \label{sec:transfer-latency-app}
@@ -348,7 +333,6 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   \end{tabular}
 \end{adjustbox}
 \end{table}
-\FloatBarrier
 
 \begin{figure}[htbp]
   \centering
@@ -356,7 +340,6 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   \caption{Transfer-domain inference latency (ms/batch). N2N is wavetable-trained zero-shot when available.}
   \label{fig:signal-heal-transfer-latency}
 \end{figure}
-\FloatBarrier
 
 \subsection{Search-monitor figures}
 \label{sec:search-monitor-figs}
@@ -368,7 +351,6 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   (seed \texttt{1902771841}; y-axis zoomed to the high-$R$ regime with Noise2Noise gate marked).}
   \label{fig:champ-residual}
 \end{figure}
-\FloatBarrier
 
 \begin{figure}[htbp]
   \centering
@@ -376,7 +358,6 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   \caption{Best residual by search branch (older overnight monitor freeze; search-trace artifact).}
   \label{fig:branch-bests}
 \end{figure}
-\FloatBarrier
 
 \begin{figure}[htbp]
   \centering
@@ -384,7 +365,6 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   \caption{Search progress: champion $R$ (top) and branch bests (bottom).}
   \label{fig:search-panel}
 \end{figure}
-\FloatBarrier
 
 \begin{figure}[htbp]
   \centering
@@ -392,7 +372,6 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   \caption{Per-trial residual by branch with champion trajectory overlaid.}
   \label{fig:residual-branch}
 \end{figure}
-\FloatBarrier
 
 \begin{figure}[htbp]
   \centering
@@ -400,7 +379,6 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   \caption{Champion updates (older overnight monitor freeze; search-trace artifact).}
   \label{fig:champ-timeline}
 \end{figure}
-\FloatBarrier
 
 \subsection{Inference and classical diagnostic plots}
 \label{sec:app-inference-diags}
@@ -411,7 +389,6 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   \caption{High-$R$ fitted operators: residual vs CUDA latency. Star: favorite.}
   \label{fig:inference-pareto}
 \end{figure}
-\FloatBarrier
 
 \begin{figure}[htbp]
   \centering
@@ -419,7 +396,6 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   \caption{Inference latency for high-$R$ fitted models (CUDA, batch 64).}
   \label{fig:inference-bars}
 \end{figure}
-\FloatBarrier
 
 \begin{figure}[htbp]
   \centering
@@ -427,7 +403,6 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   \caption{Canonical holdout: classical methods and favorite in the $R$ vs ms/batch plane.}
   \label{fig:classical-vs-ai-scatter}
 \end{figure}
-\FloatBarrier
 
 \begin{figure}[htbp]
   \centering
@@ -435,4 +410,3 @@ N2N latency uses the wavetable checkpoint zero-shot. Domain-trained N2N quality 
   \caption{Canonical holdout ranking on $R_{\mathrm{blend}}$ (left) and latency (right).}
   \label{fig:classical-vs-ai-bars}
 \end{figure}
-\FloatBarrier

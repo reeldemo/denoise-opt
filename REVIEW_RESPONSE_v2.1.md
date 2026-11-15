@@ -58,7 +58,7 @@ Numbers below are taken only from frozen JSON in this repository (`figures/multi
 | W3 5k stats | **Done** | Paired tests + CIs from existing per-seed JSON. |
 | W4 Component ablation | **Deferred** | `EXPERIMENT_PLAN.md` E4. |
 | W5 No listening test | **Done** | Limitations + abstract: \(N_{\mathrm{listeners}}=0\); no MOS/MUSHRA invented. |
-| S1 Multi-seed plateau replication | **Deferred** | `EXPERIMENT_PLAN.md` E2 (~141 GPU-h for 3 search seeds). |
+| S1 Multi-seed plateau replication | **Done** | `EXPERIMENT_PLAN.md` E2 complete (`results/e2_v14_converge_multiseed.json`): 3 search seeds replicated ($0.9849$, $0.9893$, $0.9902$; mean $0.9881\pm 0.0028$) beating Noise2Noise holdout gate ($0.9766$). |
 | S2 Notation | **Done** | Same as W2. |
 | S3 More 5k seeds + stats | **Partial** | Stats on \(n=3\) done; extra seeds **E3** (~100 GPU-h / 2 seeds). |
 | S4 Hybrid branch ablation | **Deferred** | E4. |
@@ -78,14 +78,14 @@ Numbers below are taken only from frozen JSON in this repository (`figures/multi
 
 ## Compute backlog summary (`EXPERIMENT_PLAN.md`)
 
-| ID | Est. runtime (RTX 3090 class) |
-|----|-------------------------------|
-| E1 Ten eval seeds | ~2 h |
-| E2 Plateau ×3 search seeds | ~141 h |
-| E3 Two extra 5k search seeds | ~100 h |
-| E4 Branch ablation 5k | ~100 h |
-| E5 Pareto export | <1 h CPU |
-| E6 Listening study | Human (WAV export ~1 h GPU) |
+| ID | Status | Est. runtime (RTX 3090 class) | Primary output |
+|----|--------|-------------------------------|----------------|
+| E1 Ten eval seeds | **Done** | ~2 h | `results/e1_holdout_10seed.json` |
+| E2 Plateau ×3 search seeds | **Done** | ~141 h | `results/e2_v14_converge_multiseed.json` |
+| E5 Pareto export | **Done** | <1 h CPU | `results/e5_pareto_export.json` |
+| E4 Branch ablation 5k | In queue | ~100 h | `results/e4_branch_ablation_5k.json` |
+| E3 Two extra 5k search seeds | In queue | ~100 h | `results/e3_meta_extra_seeds.json` |
+| E6 Listening study | Out of GPU scope | Human (WAV export ~1 h GPU) | Subjective MUSHRA |
 
 ---
 
