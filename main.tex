@@ -70,15 +70,16 @@ Hybrid GA--PPO Meta-Search}
     Code and artifacts: \url{https://github.com/reeldemo/denoise-opt}
   \end{center}
   \begin{abstract}
-    Wavetable synthesis suffers cycle-boundary wrap discontinuities when stored periods do not join smoothly.
-    I frame this discontinuity as a local seam-repair problem scored by a locked objective residual $R_{\mathrm{blend}}$ combining seam agreement with a clean sibling and mid-cycle fidelity to the input.
-    DenoiseOpt searches compact repair operators via a hybrid of genetic search, PPO, and population-based training without claiming a new NAS or RL algorithm.
-    All primary evidence is strictly objective ($N_{\mathrm{listeners}}{=}0$, with no MOS/MUSHRA claim).
+    Wavetable synthesis exhibits cycle-boundary wrap discontinuities when stored periods do not join smoothly.
+    I treat wrap repair as a local seam-restoration problem scored by a locked residual $R_{\mathrm{blend}}$ that combines boundary agreement with a clean sibling and mid-cycle fidelity to the cracked input.
+    DenoiseOpt searches compact repair operators using genetic search, PPO, and population-based training without proposing a new NAS or RL algorithm.
+    Primary evidence is purely objective ($N_{\mathrm{listeners}}{=}0$, with no MOS/MUSHRA claim).
 
-    In confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected), converged DenoiseOpt beats matched \texttt{SeamN2N} across all four wavetable boards, reaching $0.9903$ vs $0.9764$ on $10$-seed Holdout ($p_{\mathrm{adj}}{=}0.0039$), $0.9324$ vs $0.9260$ on $10$-seed Multi-family ($p_{\mathrm{adj}}{=}0.0039$), $0.9108$ vs $0.8772$ on Factory+FX ($p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$), and $0.8740$ vs $0.8009$ on AKWF OA ($p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$).
+    In confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected), converged DenoiseOpt beats matched \texttt{SeamN2N} on all four wavetable boards, reaching $0.9903$ vs $0.9764$ on $10$-seed Holdout ($p_{\mathrm{adj}}{=}0.0039$), $0.9324$ vs $0.9260$ on $10$-seed Multi-family ($p_{\mathrm{adj}}{=}0.0039$), $0.9108$ vs $0.8772$ on Factory+FX ($p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$), and $0.8740$ vs $0.8009$ on AKWF OA ($p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$).
     On top-$10\%$ hard wrap cliffs, Dual Cosine leaves $0.9913$ edge RMSE whereas E2 plateau champions drop to $0.0086$--$0.0112$ (Table~\ref{tab:cliff-edge-rmse}).
     An exploratory $n{=}3$ search-seed pilot ranks hybrid search first descriptively ($0.9748{\pm}0.0018$, $p{=}0.25$) for compute allocation, and FitCell-to-plateau reaches $0.9881{\pm}0.0029$ five-seed mean ($p{=}0.25$, requiring $n{\ge}6$ seeds for $\alpha{=}0.05$).
-    Beyond audio, the framework transfers to seven scientific and engineering domains ($0.937$--$0.992$ vs $0.553$--$0.959$ $R_{\mathrm{blend}}$, Table~\ref{tab:transfer-summary-main}) and to 1D periodic Quantum Ring TDSE wavefunctions, where $400$-step fine-tuning reaches $0.9939$ $R_{\mathrm{blend}}$, cuts Fourier kinetic-energy error by $97.8\%$ ($9.4309\to 0.2030$), and achieves $0.9993$ TDSE fidelity.
+    On seven non-audio periodic benchmarks (bearings, ECG, CNC toolpaths, and PMU synchrophasors), domain-searched operators score $0.937$--$0.992$ vs $0.553$--$0.959$ $R_{\mathrm{blend}}$ for domain-trained \texttt{SeamN2N} ($p{=}0.0156$, Table~\ref{tab:transfer-summary-main}).
+    On $256$ held-out 1D periodic Quantum Ring TDSE wavefunctions, $400$-step fine-tuning raises $R_{\mathrm{blend}}$ to $0.9939$, cuts Fourier kinetic-energy error by $97.8\%$ ($9.4309\to 0.2030$), and yields $0.9993$ TDSE fidelity; separable axis-by-axis sweeps extend this repair to 2D ($256^2$, $0.9742$ $R_{\mathrm{blend}}$, $0.9989$ fidelity) and 3D ($256^3$, $0.9035$ $R_{\mathrm{blend}}$, $0.9985$ fidelity) periodic torus TDSE fields.
   \end{abstract}
   \keywords{wavetable synthesis; wrap discontinuity; unsupervised repair; DenoiseOpt; seam restoration; Noise2Noise; neural architecture search; reinforcement learning; genetic algorithms; proximal policy optimization; hybrid meta-search; population-based training; audio signal processing}
   \vspace{0.6em}
