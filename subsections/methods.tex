@@ -76,8 +76,25 @@ same mid-cycle waveform content; they differ only by whether the wrap cliff (and
 \end{itemize}
 For an arbitrary cracked period from this family, the sibling is obtained by replaying the same seed with the cliff withheld
 (that is the pair returned by \texttt{make\_batch}).
-Here \emph{unsupervised} means: no human-labeled clean audio and no studio-clean targets in the search loop;
-$r^{\star}$ is a procedural self-supervised scoring twin, not a perceptual ground truth~\cite{lehtinen2018,kashyap2021n2n}.
+Here \emph{self-supervised via a procedural sibling} means: no human-labeled clean audio and no studio-clean targets enter the search loop.
+Unlike Noise2Noise corrupt-to-corrupt training (\texttt{SeamN2N}, which sees only independent corrupted draws $x_1,x_2$), $r^{\star}$ provides exact cliff-free seam geometry for scoring without supplying perceptual ground truth~\cite{lehtinen2018,kashyap2021n2n}.
+
+\begin{table}[t]
+  \centering
+  \caption{Consolidated metric role mapping.}
+  \label{tab:metric-roles}
+  \setlength{\tabcolsep}{4pt}
+  \footnotesize
+  \begin{tabular}{@{}lll@{}}
+    \toprule
+    Symbol & Definition & Role \\
+    \midrule
+    $R_{\mathrm{blend}}$ & $\alpha R_{\mathrm{seam}}{+}(1{-}\alpha)R_{\mathrm{body}}$ ($\alpha{=}0.7$) & FitCell loss ($1{-}R_{\mathrm{blend}}$) \& reporting \\
+    $J$ & $R_{\mathrm{blend}}-\lambda\cdot\mathrm{latency\_norm}$ ($\lambda{=}0.02$) & Outer-loop champion selection \\
+    $R_{\mathrm{prol}}$ & $R(r^{\star},y;\Omega)$ over full tiled $\Omega$ & Legacy debug only (unused in selection) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
 
 \subsection{Blended residual score and latency-aware objective}
 \label{sec:residual-score}

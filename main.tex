@@ -50,8 +50,8 @@
 \theoremstyle{remark}
 \newtheorem{remark}{Remark}
 
-\title{Unsupervised Wrap-Discontinuity Repair in Wavetable Synthesis via\\
-Hybrid GA--PPO Meta-Search}
+\title{Seam-Local Repair of Wavetable Wrap Discontinuities with a\\
+Self-Supervised Blended Residual}
 \author{%
   Julian~M.~Kleber\,\orcidlink{0000-0001-5518-0932}\\[2pt]
   \textit{Independent Researcher}\\[2pt]
@@ -71,14 +71,14 @@ Hybrid GA--PPO Meta-Search}
   \end{center}
   \begin{abstract}
     Wavetable synthesis exhibits cycle-boundary wrap discontinuities when stored periods do not join smoothly.
-    I treat wrap repair as a local seam-restoration problem scored by a locked residual $R_{\mathrm{blend}}$ that combines boundary agreement with a clean sibling and mid-cycle fidelity to the cracked input.
+    I treat wrap repair as a cycle-local seam-restoration problem scored self-supervised via a procedural cliff-withheld sibling and a locked blended residual $R_{\mathrm{blend}}$ combining boundary agreement with mid-cycle fidelity to the cracked input.
     DenoiseOpt reuses standard genetic search, PPO, and population-based training as an engineering outer loop without claiming a new NAS or RL algorithm; all confirmatory inferential evidence is against neural and classical baselines (\texttt{SeamN2N}, \texttt{SeamResUNet}, \texttt{DualCosine}), not against other outer-loop search families.
-    Primary evidence is objective ($N_{\mathrm{listeners}}{=}0$; formal listening tests remain future work), supplemented by high-frequency click-splatter ($>2$\,kHz) and log-spectral distortion (LSD) proxies.
+    Primary evidence is objective ($N_{\mathrm{listeners}}{=}0$; formal listening tests remain future work), supplemented by high-frequency click-splatter and log-spectral distortion (LSD) proxies.
 
-    In confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected), converged DenoiseOpt beats matched \texttt{SeamN2N} on all four wavetable boards, reaching $0.9903$ vs $0.9764$ on $10$-seed Holdout ($p_{\mathrm{adj}}{=}0.0039$), $0.9324$ vs $0.9260$ on $10$-seed Multi-family ($p_{\mathrm{adj}}{=}0.0039$), $0.9108$ vs $0.8772$ on Factory+FX ($p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$), and $0.8740$ vs $0.8009$ on AKWF OA ($p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$), and remains rank-invariant across $\alpha\in[0.3,0.9]$ and against a circular Residual U-Net ($0.8216$) and a second sawtooth/pulse generator ($0.9864$ vs $0.6451$).
-    On $256$ held-out tiles ($48$\,kHz), E2 reduces $>2$\,kHz click splatter to $-46.62$\,dB (vs $-32.82$\,dB \texttt{no-bake}, $-18.59$\,dB \texttt{DualCosine}) and LSD to $0.60$\,dB (vs $1.82$\,dB), while on top-$10\%$ hard cliffs Dual Cosine leaves $0.9913$ edge RMSE vs $0.0086$--$0.0112$ for E2 (Table~\ref{tab:cliff-edge-rmse}).
+    In confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected), converged DenoiseOpt beats matched \texttt{SeamN2N} on all four wavetable boards, reaching $0.9903$ vs $0.9764$ on $10$-seed Holdout ($p_{\mathrm{adj}}{=}0.0039$), $0.9324$ vs $0.9260$ on $10$-seed Multi-family ($p_{\mathrm{adj}}{=}0.0039$), $0.9108$ vs $0.8772$ on Factory+FX ($p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$), and $0.8740$ vs $0.8009$ on AKWF OA ($p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$), and remains rank-invariant across $\alpha\in[0.3,0.9]$ and against circular Residual U-Nets ($44.5$k / $397.8$k) and a second sawtooth/pulse generator ($0.9864$ vs $0.6451$).
+    On top-$10\%$ hard wrap cliffs, Dual Cosine leaves $0.9913$ edge RMSE whereas E2 plateau champions drop to $0.0086$--$0.0112$ (Table~\ref{tab:cliff-edge-rmse}).
     An exploratory $n{=}3$ search-seed pilot ($0.9748{\pm}0.0018$, $p{=}0.25$) serves solely as a compute-allocation heuristic, and FitCell-to-plateau reaches $0.9881{\pm}0.0029$ five-seed mean ($p{=}0.25$, requiring $n{\ge}6$ seeds for $\alpha{=}0.05$).
-    In exploratory single-seed cross-domain demonstrations on seven non-audio boards ($0.937$--$0.992$ vs $0.553$--$0.959$ $R_{\mathrm{blend}}$, Table~\ref{tab:transfer-summary-main}) and 2D/3D periodic torus TDSE ($0.9742$ / $0.9035$ $R_{\mathrm{blend}}$), and a $6$-seed 1D Quantum Ring TDSE replication ($0.9955{\pm}0.0013$, $p{=}0.03125$, $0.9993$ fidelity), FitCell-tuned operators cut Fourier kinetic-energy error by ${\ge}97.8\%$.
+    In a $6$-seed 1D Quantum Ring TDSE replication, $400$-step FitCell fine-tuning reaches $0.9955{\pm}0.0013$ $R_{\mathrm{blend}}$ ($p{=}0.03125$, $0.9993$ fidelity, cutting Fourier kinetic-energy error by $97.8\%$); exploratory cross-domain transfer checks on seven non-audio boards and 2D/3D periodic torus TDSE are reported in Section~\ref{sec:results}.
   \end{abstract}
   \keywords{wavetable synthesis; wrap discontinuity; unsupervised repair; DenoiseOpt; seam restoration; Noise2Noise; neural architecture search; reinforcement learning; genetic algorithms; proximal policy optimization; hybrid meta-search; population-based training; audio signal processing}
   \vspace{0.6em}

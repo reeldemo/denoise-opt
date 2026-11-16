@@ -48,7 +48,7 @@
   Same-seed generator $G$ yields ideal sibling $r^{\star}$ (cliff off) and cracked engine $x$ (cliff on).
   Repair operator $\Theta(x;h)$ may include DualCosine/FIR and optional residual/MoE experts.
   No-bake is the identity control $x\mapsto x$.
-  Outer objective is maximize absolute prolonged $R(y,r^{\star})$.
+  Selection objective is $J = R_{\mathrm{blend}} - \lambda\cdot\mathrm{latency\_norm}$ ($\lambda{=}0.02$).
   DualCosine centering (not shown) is PPO advantage shaping only.
   Dashed feedback: architecture proposals update the operator. Pseudocode in Appendix~\protect\ref{app:algorithms}.}
   \label{fig:denoiseopt-arch}
