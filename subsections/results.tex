@@ -386,6 +386,11 @@ As an objective psychoacoustic proxy for audible wrap clicks (while formal liste
   \end{tabular}
 \end{table}
 
+\textbf{Operator-vocabulary ablation ($10$-seed holdout).}
+To isolate the role of the compact operator vocabulary from the outer-loop search machinery, I re-fit restricted subsets of the E2 operator graph for $400$ FitCell steps under identical training:
+fixed classical ops without FitCell stay at $0.5469$ (\texttt{DualCosine}) and $0.884$ (\texttt{seam\_fir3}), whereas FitCell-optimized \texttt{fade\_pull+fir5} (no neural net) reaches $0.9917{\pm}0.0009$, FitCell-optimized \texttt{cycle\_net} alone reaches $0.9922{\pm}0.0010$, and the frozen full E2 graph reaches $0.9903{\pm}0.0010$.
+Thus both differentiable seam-pulling and compact neural residual blocks inside FitCell drive the gain over fixed classical fades, while the outer loop selects latency-efficient combinations ($1.03$\,ms/batch).
+
 \textbf{Power analysis for $n{=}3$ pilots and single-seed cross-domain transfer.}
 For a two-sided exact sign-flip permutation test at $\alpha{=}0.05$, the minimum sample size is $n{=}6$ ($2\cdot 2^{-6}{=}0.03125<0.05$); thus the $n{=}3$ matched-$5$k ($\Delta{=}{+}0.0114$) and E2 plateau ($\Delta{=}{+}0.0115$, Cohen's $d{\approx}3.97$) pilots cannot reach $p{<}0.05$ regardless of effect size and would require $n{\ge}6$ search seeds (${\approx}216$\,GPU-h) for confirmatory testing.
 To test as a single-seed exploratory demonstration whether cycle-local wrap-discontinuity repair transfers beyond audio wavetables to adjacent scientific and engineering domains, Table~\ref{tab:transfer-summary-main} summarizes the seven external periodic/quasi-periodic boards from Appendix~\ref{app:transfer-bundle} (Tables~\ref{tab:transfer-main}--\ref{tab:transfer-main-b}): industrial rotating-machinery bearings (CWRU, MFPT, Paderborn), cardiac electrophysiology ECG (MIT-BIH, PTB-XL), CNC servo toolpaths, and power-grid PMU synchrophasors ($n{=}256$ periods each). Under matched $n{=}256$-period held-out splits with identical $R_{\mathrm{blend}}$ evaluation, the single-seed domain-searched DenoiseOpt achieves higher $R_{\mathrm{blend}}$ than domain-trained \texttt{SeamN2N} on all $7/7$ scientific/engineering boards ($0.937$--$0.992$ vs $0.553$--$0.959$, exact two-sided sign test $p{=}0.0156$).

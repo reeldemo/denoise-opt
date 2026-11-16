@@ -79,16 +79,9 @@ Under the locked v10.1 $R_{\mathrm{blend}}$ protocol (objective wrap-discontinui
   \item \textbf{Exploratory $n{=}3$ search-seed pilots:} Matched-$5$k outer-loop ($0.9748{\pm}0.0018$; vs Aging $\Delta{=}{+}0.0114$, $p{=}0.25$) and E2 FitCell-to-plateau ($0.9881{\pm}0.0029$ vs $0.9766$, $p{=}0.25$) are pilot allocation/feasibility checks (exact two-sided sign-flip requires $n{\ge}6$ seeds for $\alpha{=}0.05$); non-hybrid families were not re-run to plateau.
   \item \textbf{Hard cliffs \& objective proxies:} On top-$10\%$ wrap cliffs, Dual Cosine collapses ($0.9913$ edge RMSE) while E2 plateau champions drop to $0.0086$--$0.0129$ vs $0.0203$ for \texttt{SeamN2N} (Table~\ref{tab:cliff-edge-rmse}), and $R_{\mathrm{blend}}$ tracks seam-local Edge RMSE ($\rho{=}{-}0.9737$, $p{<}10^{-300}$; Section~\ref{sec:proxy-and-lambda}).
 \end{itemize}
-I do not claim a new NAS/RL algorithm.
-Existing NAS, aging evolution, PBT, CMA-ES, and PPO primitives are reused~\cite{elsken2019,real2019,jaderberg2017,schulman2017}.
-Any novelty is in the wrap-discontinuity problem framing, the compact repair-operator vocabulary, and the unsupervised sibling/$R_{\mathrm{blend}}$ evaluation, not in inventing search algorithms.
-The engineering instantiation applies a reused GA+PPO(+PBT) outer loop to those operators, using an exploratory $n{=}3$ bake-off solely as a compute-allocation heuristic before deepening FitCell.
-Compact searchable repair operators remain competitive when classical fades fail and need no paired clean targets at search time.
-Whole-curve prolonged $R$ near $0.991$ is a superseded debug score, not a current holdout result under $R_{\mathrm{blend}}$.
-
-\paragraph{Scope.}
-Cycle-local wavetable seam repair for DSP / synthesis venues (DAFx / AES / arXiv cs.SD).
-Formal wrap-closure proofs, search-convergence theorems, and speech/music enhancement SOTA are out of scope; caveats live in Section~\ref{sec:limitations}.
+\paragraph{Scope and roadmap.}
+Cycle-local wavetable seam repair for DSP and synthesis venues; formal wrap-closure proofs, search-convergence theorems, and human perceptual trials ($N_{\mathrm{listeners}}{=}0$) are out of scope (Section~\ref{sec:limitations}).
+Section~\ref{sec:method} defines $R_{\mathrm{blend}}$, $J$, and the operator space; Section~\ref{sec:experiments} details datasets and baselines; Section~\ref{sec:results} presents confirmatory, ablation, perceptual-proxy, and cross-domain/TDSE results.
 
 \subsection{Contributions}
 \label{sec:contributions}
