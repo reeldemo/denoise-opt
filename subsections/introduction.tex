@@ -69,7 +69,7 @@ Classical virtual-analog tools already address wrap energy locally
 I score cycle-local bake versions of those operators beside Dual Cosine (Section~\ref{sec:va-seam-baselines}).
 Label-free restoration such as Noise2Noise shows that useful reconstructors can be ranked without paired clean targets when the evaluation geometry is explicit~\cite{lehtinen2018,kashyap2021n2n}.
 On the search side, I \emph{reuse} known NAS, aging evolution, PBT, CMA-ES, and PPO tools~\cite{elsken2019,real2019,jaderberg2017,schulman2017,khadka2018}: GA for diversity, PPO for discrete architecture edits, PBT-style exploit--mutate on elites.
-The engineering choice is to combine them as an outer loop over compact seam-repair graphs; that combination is not claimed as an algorithmic contribution.
+The engineering choice is to combine them as an outer loop over compact seam-repair graphs; that combination is not claimed as an algorithmic contribution, and the $n{=}3$ outer-loop pilot serves solely as a compute-allocation heuristic rather than a confirmatory search-algorithm claim.
 
 \paragraph{Key findings.}
 Under the locked v10.1 $R_{\mathrm{blend}}$ protocol (objective wrap-discontinuity metrics only; no perceptual or listening claim, $N_{\mathrm{listeners}}{=}0$):
@@ -82,7 +82,7 @@ Under the locked v10.1 $R_{\mathrm{blend}}$ protocol (objective wrap-discontinui
 I do not claim a new NAS/RL algorithm.
 Existing NAS, aging evolution, PBT, CMA-ES, and PPO primitives are reused~\cite{elsken2019,real2019,jaderberg2017,schulman2017}.
 Any novelty is in the wrap-discontinuity problem framing, the compact repair-operator vocabulary, and the unsupervised sibling/$R_{\mathrm{blend}}$ evaluation, not in inventing search algorithms.
-The engineering story is applying a hybrid GA+PPO(+PBT) outer loop to those operators, then selecting hybrid from a matched six-way bake-off before deepening FitCell.
+The engineering instantiation applies a reused GA+PPO(+PBT) outer loop to those operators, using an exploratory $n{=}3$ bake-off solely as a compute-allocation heuristic before deepening FitCell.
 Compact searchable repair operators remain competitive when classical fades fail and need no paired clean targets at search time.
 Whole-curve prolonged $R$ near $0.991$ is a superseded debug score, not a current holdout result under $R_{\mathrm{blend}}$.
 
@@ -96,7 +96,7 @@ Formal wrap-closure proofs, search-convergence theorems, and speech/music enhanc
   \item \textbf{Problem framing.} Wrap discontinuity as cycle-local seam restoration under tiled evaluation, with explicit $R_{\mathrm{seam}}$, $R_{\mathrm{body}}$, and primary locked $R_{\mathrm{blend}}$ ($\alpha{=}0.7$) plus latency-aware $J$.
   \item \textbf{Ideal-sibling protocol.} Unsupervised scoring via a procedural cliff-withheld twin plus mid-cycle engine identity, without paired studio-clean targets at search time.
   \item \textbf{Compact repair-operator space.} Searchable graphs over classical seam ops (DualCosine, FIR, VA residuals) and tiny residual nets (MLP/FIR/U-Net-lite/LSTM-lite/MoE), not end-to-end Demucs-scale stacks (Section~\ref{sec:bake}, Appendix~\ref{app:algorithms}).
-  \item \textbf{Applied hybrid search + selection evidence.} DenoiseOpt applies GA--PPO(+PBT) to that operator space; a matched six-way $5$k bake-off under locked $R_{\mathrm{blend}}{+}J$ yields a descriptive first-place mean for hybrid ($n{=}3$ search seeds; paired stats in Appendix~\ref{sec:meta-approaches-results}), motivating hybrid-only FitCell-to-plateau (Tables~\ref{tab:meta-approaches},~\ref{tab:v14-hybrid-converge}).
-  \item \textbf{Open multi-seed evaluation.} Frozen Noise2Noise gate, five-seed holdout, multi-family and wavetable-native boards, hard-cliff strata, and released code/artifacts (Section~\ref{sec:ethics}); wrap-protocol transfer stress tests in Appendix~\ref{app:transfer-bundle}.
+  \item \textbf{Engineering instantiation (not an algorithmic claim).} DenoiseOpt reuses standard GA--PPO(+PBT) primitives as an outer loop over that operator space; an exploratory $n{=}3$ six-way $5$k pilot ($p{=}0.25$) serves solely as a compute-allocation heuristic for FitCell-to-plateau (Tables~\ref{tab:meta-approaches},~\ref{tab:v14-hybrid-converge}).
+  \item \textbf{Open multi-seed, multi-family, and cross-domain evaluation.} Frozen \texttt{SeamN2N} and circular \texttt{SeamResUNet} neural baselines, $10$-seed holdout, multi-family, sawtooth/pulse, and wavetable-native boards, hard-cliff strata, $6$-seed Quantum Ring TDSE, and exploratory 2D/3D TDSE and 7-domain engineering transfer checks (Section~\ref{sec:ethics}, Appendix~\ref{app:transfer-bundle}).
 \end{enumerate}
 What is \emph{not} claimed as a contribution: a new foundational NAS/RL algorithm, formal wrap-closure theorems, or perceptual MOS/MUSHRA superiority.
