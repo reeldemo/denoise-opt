@@ -9,7 +9,7 @@ They are not building blocks of DenoiseOpt.
 
 \paragraph{Wavetable / virtual-analog foundations and discontinuity control.}
 Foundational wavetable and virtual-analog (VA) oscillator work frames alias-free classic waveforms and wrap/corner discontinuities via BLIT/BLEP~\cite{stilson1996}, PolyBLEP~\cite{nam2009polyblep}, and BLAMP~\cite{esqueda2016blamp}.
-I treat those OA papers as the wavetable/VA lineage for this seam task and score cycle-local approximations beside Dual Cosine (Section~\ref{sec:va-seam-baselines}).
+Unlike runtime oversampled VA oscillators, cycle-local VA repair approximations (\texttt{PolyBLEP} $0.795$ $R_{\mathrm{blend}}$ at $0.87$\,ms, \texttt{BLAMP} $0.914$ at $20$\,ms, \texttt{BLIT/BLEP} $0.632$ at $71$\,ms on seed \texttt{20260719}; Table~\ref{tab:baselines-main}) either under-correct value jumps or incur high per-batch cost, whereas searched compact operators reach $0.9903$ at $1.03$\,ms/batch.
 DDSP frames DSP modules as composable blocks~\cite{engel2020}.
 I reuse that framing for small bake/FIR/MLP seam operators at cycle scale, rather than end-to-end vocoders.
 

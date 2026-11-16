@@ -167,6 +167,7 @@ J&=R_{\mathrm{blend}}-\lambda\cdot\mathrm{latency\_norm},\\
 \end{aligned}
 \end{equation}
 FitCell minimizes $1-R_{\mathrm{blend}}$. Selection and champion updates use $J$.
+Here $\log(1+50)$ normalizes batch-64 CUDA runtime smoothly to $[0,1]$ against a $50$\,ms real-time bake ceiling (mapping typical $0.5$--$3$\,ms candidates to $[0.10,0.35]$), and sensitivity sweeps over both $\alpha\in\{0.3,0.5,0.7,0.9\}$ and $\lambda\in\{0,0.01,0.02,0.05\}$ confirm rank invariance in Section~\ref{sec:proxy-and-lambda}.
 A champion must also strictly beat the frozen corrupt$\to$corrupt Noise2Noise holdout $R_{\mathrm{blend}}$ (primary baseline).
 
 \textbf{Every} scored row applies some $\Theta$ to $x$ and is evaluated under~\eqref{eq:R-blend}.
