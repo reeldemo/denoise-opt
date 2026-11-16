@@ -187,23 +187,29 @@ Manuscript prose uses \emph{no-bake}.
 
 \paragraph{Classical (non-AI) comparison board.}
 \label{sec:classical-board}
-Learned / searched methods are always ranked against the full classical board on absolute $R$ (same $r^{\star}$):
+Learned / searched methods are always ranked against the full classical board on $R_{\mathrm{blend}}$ (same $r^{\star}$):
 no-bake, DualCosine / cosine fade, \texttt{seam\_fir3}, classic quadratic, hann/crossfade/soft fades, detrend/ensemble, poly seam, and cycle-local BLIT/BLEP / PolyBLEP / BLAMP where scored.
 When tables show $\Delta R$ vs DualCosine, that is a reporting gap vs one classical bake, not the definition of reward.
 
 \begin{remark}[DualCosine centering is PPO advantage only]
 \label{rem:dualcosine-centering}
-The outer objective remains~\eqref{eq:outer-obj}: maximize absolute $R(y,r^{\star})$.
+The outer objective remains~\eqref{eq:outer-obj}: maximize $R_{\mathrm{blend}}(r^{\star},x,y)$.
 In the PPO branch only, I optionally form a centered advantage
 \begin{equation}
 \label{eq:dualcosine-centering}
-\rho = R - R_{\mathrm{DualCosine}},
+\rho = R_{\mathrm{blend}} - R_{\mathrm{blend},\mathrm{DualCosine}},
 \end{equation}
 so early-search advantages are roughly zero-mean.
 This does \emph{not} change selection, FitCell loss, champion ranking, or the matched $5$k meta-approach objective.
-All of those still maximize absolute $R$.
+All of those still maximize $R_{\mathrm{blend}}$ (or $J$).
 DualCosine centering is soft relative shaping for the actor--critic, not a hard absolute ranking target.
 \end{remark}
+
+\paragraph{Metric summary (search, selection, reporting, legacy).}
+(1)~\textbf{FitCell loss:} $1 - R_{\mathrm{blend}}(r^{\star},x,y)$ with $\alpha{=}0.7$ and disjoint $\mathcal{S}/\mathcal{B}$ masks~\eqref{eq:mask-SB};
+(2)~\textbf{Champion selection:} latency-aware $J = R_{\mathrm{blend}} - \lambda\cdot\mathrm{latency\_norm}$ ($\lambda{=}0.02$,~\eqref{eq:outer-obj});
+(3)~\textbf{Primary reporting:} $R_{\mathrm{blend}}(r^{\star},x,y)$ on held-out seeds;
+(4)~\textbf{Legacy debug score:} prolonged $R$~\eqref{eq:prolonged-r}, retained only in historical search-trace artifacts and never used for primary selection or leaderboard reporting.
 
 \subsection{Search pipeline}
 \label{sec:pipeline-overview}
