@@ -89,12 +89,17 @@ Unlike Noise2Noise corrupt-to-corrupt training (\texttt{SeamN2N}, which sees onl
     \toprule
     Symbol & Definition & Role \\
     \midrule
-    $R_{\mathrm{blend}}$ & $\alpha R_{\mathrm{seam}}{+}(1{-}\alpha)R_{\mathrm{body}}$ ($\alpha{=}0.7$) & FitCell loss ($1{-}R_{\mathrm{blend}}$) \& reporting \\
+    $1{-}R_{\mathrm{blend}}$ & $\alpha(1{-}R_{\mathrm{seam}}){+}(1{-}\alpha)(1{-}R_{\mathrm{body}})$ & Inner-loop FitCell training loss \\
+    $R_{\mathrm{blend}}$ & $\alpha R_{\mathrm{seam}}{+}(1{-}\alpha)R_{\mathrm{body}}$ ($\alpha{=}0.7$) & Primary evaluation \& reporting \\
     $J$ & $R_{\mathrm{blend}}-\lambda\cdot\mathrm{latency\_norm}$ ($\lambda{=}0.02$) & Outer-loop champion selection \\
     $R_{\mathrm{prol}}$ & $R(r^{\star},y;\Omega)$ over full tiled $\Omega$ & Legacy debug only (unused in selection) \\
     \bottomrule
   \end{tabular}
 \end{table}
+
+\textbf{Worked example (Tile~46, Figure~\ref{fig:intro-sine}) and low-RMS edge case.}
+On holdout Tile~46 (seed \texttt{20260719}), \texttt{no-bake} gives $(R_{\mathrm{seam}},R_{\mathrm{body}},R_{\mathrm{blend}})=(0.853,1.000,0.897)$, \texttt{DualCosine} collapses the seam $(0.000,1.000,0.300)$, \texttt{SeamN2N} reaches $(0.967,0.996,0.975)$, and \texttt{Ours E2} reaches $(0.989,0.999,0.992)$.
+If an input's mid-cycle RMS approaches zero ($\mathrm{RMS}_{\mathcal{B}}(x)\to 0$), the denominator clamp $\epsilon{=}10^{-8}$ prevents division by zero and the $\max(0,\cdot)$ clamp keeps $R_{\mathrm{body}}\in[0,1]$, while $\alpha{=}0.7$ ensures seam errors still dominate $R_{\mathrm{blend}}$.
 
 \subsection{Blended residual score and latency-aware objective}
 \label{sec:residual-score}
