@@ -77,7 +77,7 @@ same mid-cycle waveform content; they differ only by whether the wrap cliff (and
 For an arbitrary cracked period from this family, the sibling is obtained by replaying the same seed with the cliff withheld
 (that is the pair returned by \texttt{make\_batch}).
 Here \emph{self-supervised via a procedural sibling} means: no human-labeled clean audio and no studio-clean targets enter the search loop.
-Unlike Noise2Noise corrupt-to-corrupt training (\texttt{SeamN2N}, which sees only independent corrupted draws $x_1,x_2$), $r^{\star}$ provides exact cliff-free seam geometry for scoring without supplying perceptual ground truth~\citep{lehtinen2018,kashyap2021n2n}.
+Unlike Noise2Noise corrupt-to-corrupt training~\citep{lehtinen2018,kashyap2021n2n} (\texttt{SeamN2N}, which sees only independent corrupted draws $x_1,x_2$), $r^{\star}$ provides exact cliff-free seam geometry for scoring without supplying perceptual ground truth.
 
 \begin{table}[t]
   \centering
@@ -120,7 +120,7 @@ For masked sample set $\mathcal{M}\in\{\mathcal{S},\mathcal{B}\}$, let $|\mathca
 \mathrm{RMS}_{\mathcal{M}}(u)=\sqrt{\frac{1}{|\mathcal{M}|}\sum_{i\in\mathcal{M}} u_i^2}.
 \end{equation}
 The implementation fixes $\varepsilon>0$ with $\varepsilon=10^{-6}$.
-Component scores use the unit clamp (same normalized-error form as SNR-style objectives on a mask~\citep{purwins2019}):
+Component scores use the unit clamp of a reference-normalized RMS error on the mask (related to the sample-domain errors and SDR-type ratios common in audio deep learning~\citep{purwins2019}; the masking is task-specific):
 \begin{equation}
 \label{eq:R-component}
 R(a,b;\mathcal{M})
@@ -173,7 +173,7 @@ J&=R_{\mathrm{blend}}-\lambda\cdot\mathrm{latency\_norm},\\
 \end{equation}
 FitCell minimizes $1-R_{\mathrm{blend}}$. Selection and champion updates use $J$.
 Here $\log(1+50)$ normalizes batch-64 CUDA runtime smoothly to $[0,1]$ against a $50$\,ms real-time bake ceiling (validated by the $\lambda\in[0,0.05]$ selection-invariance sweep in Section~\ref{sec:proxy-and-lambda}).
-Using the fixed target $a$ ($r^{\star}$ for $R_{\mathrm{seam}}$, $x$ for $R_{\mathrm{body}}$) as the reference denominator in $R(a,b;\mathcal{M})$ follows standard normalized-error conventions~\citep{purwins2019} and agrees closely with symmetric normalization ($r{=}0.9988, \rho{=}0.9997$ in Section~\ref{sec:proxy-and-lambda}).
+Using the fixed target $a$ ($r^{\star}$ for $R_{\mathrm{seam}}$, $x$ for $R_{\mathrm{body}}$) as the reference denominator in $R(a,b;\mathcal{M})$ follows reference-based ratios such as SDR~\citep{purwins2019} and agrees closely with symmetric normalization ($r{=}0.9988, \rho{=}0.9997$ in Section~\ref{sec:proxy-and-lambda}).
 A champion must also strictly beat the frozen corrupt$\to$corrupt Noise2Noise holdout $R_{\mathrm{blend}}$ (primary baseline).
 
 \textbf{Every} scored row applies some $\Theta$ to $x$ and is evaluated under~\eqref{eq:R-blend}.
@@ -182,7 +182,7 @@ The ideal sibling is the seam scoring target. Body identity uses the engine.
 \begin{remark}[Noise2Noise primary baseline]
 \label{rem:n2n}
 \texttt{SeamN2N} (${\approx}53.5$k) is the primary neural comparator and champ gate.
-Search may discover \texttt{n2n\_unet} operators at the same scale. TinyUNet1D \texttt{unet} is a different, smaller block~\citep{lehtinen2018,kashyap2021n2n}.
+Search may discover \texttt{n2n\_unet} operators at the same scale (U-Net denoisers as used in Noise2Noise work~\citep{lehtinen2018,kashyap2021n2n}). TinyUNet1D \texttt{unet} is a different, smaller block.
 \end{remark}
 
 \subsection{Seam bake operator and classical baselines}

@@ -181,13 +181,13 @@ Methods that zero wrap-jump are not the same objective as $R_{\mathrm{blend}}$ (
 \subsection{Classical virtual-analog seam repairs}
 \label{sec:va-seam-baselines}
 
-Do the cited VA antialias tools~\cite{stilson1996,nam2009polyblep,esqueda2016blamp} beat DualCosine on $R_{\mathrm{blend}}$ when applied as cycle-local seam residuals?
+Do the cited VA antialias tools~\cite{stilson1996,valimaki2007polyblep,esqueda2016blamp} beat DualCosine on $R_{\mathrm{blend}}$ when applied as cycle-local seam residuals?
 
 \paragraph{What each operator changes.}
 Figure~\ref{fig:va-seam-techniques} shows the family on one high-wrap sine{+}cliff tile (same seed and tile as Figure~\ref{fig:intro-sine}).
 \textbf{BLIT/BLEP} (Stilson/Smith lineage) treats the wrap as a value step.
 It subtracts a band-limited step residual (here a raised-cosine BLEP-family lobe scaled by the measured wrap jump) so the tiled click spectrum is softened near the seam.
-\textbf{PolyBLEP} (Nam et al.) is a cheap polynomial surrogate of that step residual with fractional-delay support near phase wrap.
+\textbf{PolyBLEP}~\cite{valimaki2007polyblep} is a cheap polynomial surrogate of that step residual with fractional-delay support near phase wrap.
 It edits only a few samples on each side of the discontinuity.
 \textbf{BLAMP}~\cite{esqueda2016blamp} corrects a slope or corner jump (discontinuity in the first derivative), which matters for triangles, rectification, and hard clipping.
 On a pure value cliff the slope jump is small, so BLAMP is nearly a no-bake passthrough.
