@@ -1,0 +1,30 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the manuscript described in this file."
+title: "Unsupervised Wrap-Discontinuity Repair in Wavetable Synthesis via Hybrid GA-PPO Meta-Search"
+type: article
+version: v14
+authors:
+  - family-names: Kleber
+    given-names: Julian M.
+    orcid: "https://orcid.org/0000-0001-5518-0932"
+    email: julian.m.kleber@gmail.com
+    affiliation: Independent Researcher
+license:
+  - CC-BY-4.0
+  - MIT
+repository-code: "https://github.com/reeldemo/denoise-opt"
+identifiers:
+  - type: other
+    value: "aixiv.260719.000003"
+    description: "aiXiv preprint identifier"
+preferred-citation:
+  type: article
+  title: "Unsupervised Wrap-Discontinuity Repair in Wavetable Synthesis via Hybrid GA-PPO Meta-Search"
+  authors:
+    - family-names: Kleber
+      given-names: Julian M.
+      orcid: "https://orcid.org/0000-0001-5518-0932"
+  year: 2026
+  journal: "aiXiv"
+  url: "https://aixiv.science/abs/aixiv.260719.000003"
+  notes: "Preprint. Identifier: aixiv.260719.000003."

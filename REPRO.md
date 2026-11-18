@@ -64,10 +64,7 @@ No MOS/MUSHRA/A/B study was run (`N_listeners=0`). Released WAVs are for informa
 
 ## E) Rebuild this PDF
 
-```powershell
-cd paper/Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v14
-.\build.ps1
-```
+See the README: `latexmk -outdir=build main.tex` on any platform, or `.\build.ps1` on Windows. The manuscript sources are at the repository root.
 
 ## Honesty
 
