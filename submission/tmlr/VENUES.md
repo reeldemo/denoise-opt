@@ -43,4 +43,4 @@ Facts were read from the journals' own pages on 2026-11-18 (Europe/Berlin) unles
 
 - Julian creates the OpenReview profile himself; this package created no account.
 - Quota: TMLR limits submissions per author per year ("Generalized Harmonic Quota Rule, N_1 = 2 and N_9 = 9"). If the NCA paper goes to TMLR too, check the remaining budget with the tool linked on [the policies page](https://jmlr.org/tmlr/editorial-policies.html).
-- Anonymity: in the review build `make_tmlr.py` replaces the project name ReelSynth with "the host synthesizer", the review-service name with a neutral description, and drops the CRediT block and the repository sentence in the competing-interests paragraph. The method name DenoiseOpt is close to the repository name `denoise-opt` and stays in the text. Julian decides whether to rename it for review.
+- Anonymity: in the review build `make_tmlr.py` replaces the project name ReelSynth with "the host synthesizer", renames the method DenoiseOpt to HybridSeam, and drops the CRediT block and the repository sentence in the competing-interests paragraph.

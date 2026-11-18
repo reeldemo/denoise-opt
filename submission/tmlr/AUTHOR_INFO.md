@@ -12,6 +12,6 @@
 | Licence of the paper | CC BY 4.0 (TMLR applies this to every submission; the author keeps copyright). Repo `LICENSE`: code under MIT; `LICENSE-text`: manuscript text and figures under CC BY 4.0 |
 | Code | https://github.com/reeldemo/denoise-opt (public; manuscript, results, code). Present in the non-anonymous build; withheld in the anonymous review build because TMLR requires double-blind. Never "on request". Code licence: MIT (`LICENSE`). |
 | Funding | "no external funding" (manuscript) |
-| AI use | first-page footnote (TMLR FAQ, wording approved by Julian, 2026-11-18) naming Cursor, Grok Bot, Hermes Agent, Antigravity and SciSpace, and the section "Tooling and AI use" (the same five, plus NotebookLM and aixiv.science, which is named only in the non-anonymous build) |
+| AI use | first-page footnote (TMLR FAQ, wording approved by Julian, 2026-11-18) naming Cursor, Grok Bot, Hermes Agent, Antigravity and SciSpace, and the section "Tooling and AI use" (the same five tools, nothing else) |
 
 Not done by this package (needs Julian himself): OpenReview account and a complete profile, choice of action editor, the submit click.

@@ -12,7 +12,7 @@ TMLR has no separate cover-letter upload; this text is for the OpenReview submis
 
 Please consider the attached manuscript for TMLR.
 
-**Contribution.** The paper treats the click at the wrap point of a wavetable oscillator as a cycle-local seam-restoration problem and scores repairs self-supervised with a blended residual R_blend against a procedurally withheld ideal sibling. HybridSeam (called DenoiseOpt in the public repository) searches compact repair operators with an outer loop of genetic search, PPO and population-based training. The paper states plainly that these search tools are reused and that no new NAS or RL algorithm is proposed.
+**Contribution.** The paper treats the click at the wrap point of a wavetable oscillator as a cycle-local seam-restoration problem and scores repairs self-supervised with a blended residual R_blend against a procedurally withheld ideal sibling. HybridSeam searches compact repair operators with an outer loop of genetic search, PPO and population-based training. The paper states plainly that these search tools are reused and that no new NAS or RL algorithm is proposed.
 
 **Evidence and its limits.** Confirmatory comparisons against matched neural and classical baselines (SeamN2N, SeamResUNet, DualCosine) use Holm-Bonferroni correction; the 10-seed holdout result is 0.9903 vs 0.9764 for matched SeamN2N (adjusted p = 0.0039). The evidence is objective: N_listeners = 0, no MOS/MUSHRA was collected, and the manuscript says so in the abstract and limitations; proxies for click splatter and log-spectral distortion are reported alongside. Perceptual superiority is not claimed. [If the crowdsourced listening test planned in the listening-test PR is run before submission, replace this paragraph with its results.]
 

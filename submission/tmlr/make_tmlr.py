@@ -141,8 +141,6 @@ def anonymise(t):
                  ("ReelSynth export", "host-synthesizer export")):
         t = t.replace(a, b)
     t = t.replace("ReelSynth", "the host synthesizer")
-    # the review-service name points to the server that holds the named preprint
-    t = t.replace("\\textbf{aixiv.science} assisted", "\\textbf{An automated manuscript-review service} assisted")
     # CRediT block names the single author
     t = re.sub(r"\\subsection\{Author contributions \(CRediT\)\}\n\\label\{sec:credit\}\n[^\n]*\n", "", t)
     return t
