@@ -8,23 +8,28 @@ I cite those papers for positioning only.
 They are not building blocks of DenoiseOpt.
 
 \paragraph{Wavetable / virtual-analog foundations and discontinuity control.}
-Foundational wavetable and virtual-analog (VA) oscillator work frames alias-free classic waveforms and wrap/corner discontinuities via BLIT/BLEP~\cite{stilson1996}, PolyBLEP~\cite{nam2009polyblep}, and BLAMP~\cite{esqueda2016blamp}.
+Foundational wavetable and virtual-analog (VA) oscillator work frames alias-free classic waveforms and wrap/corner discontinuities via BLIT/BLEP~\cite{stilson1996,valimaki2007polyblep}, PolyBLEP~\cite{valimaki2007polyblep}, and BLAMP~\cite{esqueda2016blamp}.
 Unlike runtime oversampled VA oscillators, cycle-local VA repair approximations (\texttt{PolyBLEP} $0.795$ $R_{\mathrm{blend}}$ at $0.87$\,ms, \texttt{BLAMP} $0.914$ at $20$\,ms, \texttt{BLIT/BLEP} $0.632$ at $71$\,ms on seed \texttt{20260719}; Table~\ref{tab:baselines-main}) either under-correct value jumps or incur high per-batch cost, whereas searched compact operators reach $0.9903$ at $1.03$\,ms/batch.
 DDSP frames DSP modules as composable blocks~\cite{engel2020}.
 I reuse that framing for small bake/FIR/MLP seam operators at cycle scale, rather than end-to-end vocoders.
 
+\paragraph{Learned wavetable generation.}
+Learned models also generate or edit the stored cycles: an autoencoder that interpolates wavetables in latent space~\cite{hantrakul2018neuralwt}, a dictionary of one-period wavetables learned end to end for neural audio synthesis~\cite{shan2021dwts}, and variational models with factorised or label-conditioned latents for controllable wavetable generation~\cite{lee2024wavespace,yutani2024cvae}.
+These methods produce or change whole cycles.
+The operators searched here act on the seam neighbourhood of a given cycle, so wavetables from such generators are possible inputs to the repair.
+
 \paragraph{Normalized cycle metrics.}
-Audio restoration and synthesis surveys routinely rank models with SNR/SDR-style normalized errors on declared masks~\cite{purwins2019,stoller2018}.
+Audio deep-learning work commonly scores outputs with sample-domain errors and reference-normalized ratios such as SDR~\cite{purwins2019,stoller2018}.
 My locked $R_{\mathrm{blend}}$ applies the same one-minus-relative-RMS clamp (Section~\ref{sec:residual-score}, Eq.~\eqref{eq:R-component}) separately on seam and body masks after tiling; it is a task-specific objective, not a perceptual score.
 
 \paragraph{Label-free restoration.}
 Noise2Noise learns restorers from corrupted observations alone~\cite{lehtinen2018,kashyap2021n2n}.
-Mixture-invariant training ranks unsupervised systems without stem labels~\cite{wisdom2020}.
+Mixture invariant training learns separation models from mixtures alone, without reference sources~\cite{wisdom2020}.
 I train a corrupt-to-corrupt seam CNN on the same generator as the primary neural baseline (Section~\ref{sec:results}).
 Full Demucs / DiffWave stacks are screened: domain and bake-budget mismatch~\cite{dfossez2019,kong2021}.
 
 \paragraph{Compact waveform operators.}
-Wave-U-Net, Conv-TasNet, dual-path, and attention audio models supply block priors I shrink to bake width~\cite{stoller2018,luo2019,luo2020dprnn,subakan2021,ronneberger2015,he2016resnet,vaswani2017}.
+Wave-U-Net, Conv-TasNet, dual-path, and attention audio models supply block priors I shrink to bake width~\cite{stoller2018,macartney2018,jansson2017,luo2019,luo2020dprnn,subakan2021,gong2021ast,ronneberger2015,he2016resnet,vaswani2017}.
 They supply block priors rather than serving as frozen full-scale separators inside every meta trial.
 
 \paragraph{Search and hybrids.}
@@ -34,6 +39,6 @@ Matched outer-loop bake-offs (Random, CMA-ES, REINFORCE, aging evolution, TPE vs
 I do not claim a new foundational NAS/RL algorithm.
 
 \paragraph{Used vs screened (short).}
-Used anchors include VA discontinuity control~\cite{stilson1996,esqueda2016blamp,nam2009polyblep}, unsupervised restoration~\cite{lehtinen2018,kashyap2021n2n,wisdom2020}, DDSP~\cite{engel2020}, compact waveform operators as above, and NAS/RL/PPO/PBT/CMA-ES/ERL/MoE as above.
-Screened as contrast only: MAML~\cite{finn2017}, DARTS~\cite{liu2019}, Demucs-scale enhancers~\cite{dfossez2019,dfossez2021}, DiffWave~\cite{kong2021}, and SEGAN-style full GAN loops~\cite{pascual2017}.
+Used anchors include VA discontinuity control~\cite{stilson1996,esqueda2016blamp,valimaki2007polyblep}, unsupervised restoration~\cite{lehtinen2018,kashyap2021n2n,wisdom2020}, DDSP~\cite{engel2020}, compact waveform operators as above, and NAS/RL/PPO/PBT/CMA-ES/ERL/MoE as above.
+Screened as contrast only: MAML~\cite{finn2017}, DARTS~\cite{liu2019}, Demucs-scale enhancers~\cite{dfossez2019,dfossez2020,dfossez2021}, DiffWave~\cite{kong2021}, and SEGAN-style full GAN loops~\cite{pascual2017}.
 Claims stay inside cycle-local seam restoration under a declared compute budget.

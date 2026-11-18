@@ -23,7 +23,7 @@ export REELSYNTH_ROOT=/path/to/reelsynth
 git -C "$REELSYNTH_ROOT" fetch origin 0a8567b
 git -C "$REELSYNTH_ROOT" checkout 0a8567b   # or a fork tag that restores scripts/baselines/
 export PAPER_PYTHON=/path/to/.venv/bin/python   # required; must import torch
-cd /path/to/denoiseopt-paper
+cd /path/to/denoise-opt
 ./scripts/run_e1.sh --dry-run    # each launcher: smoke <2 min (needs N2N ckpt + baselines/)
 ./scripts/queue_all.sh           # full queue, one GPU job at a time, skips complete JSON
 ```
@@ -84,7 +84,7 @@ Holdout evaluation for new search champions: five seeds `20260719`–`20260723` 
 **Goal:** Reach \(p<0.05\) on hybrid vs N2N holdout paired test if effect persists.
 
 ```bash
-cd denoiseopt-paper
+cd denoise-opt
 export REELSYNTH_ROOT=../reelsynth
 ./scripts/run_e1.sh              # full
 ./scripts/run_e1.sh --dry-run      # smoke
