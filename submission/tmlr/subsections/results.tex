@@ -44,7 +44,7 @@ hybrid search data.
 
 Table~\ref{tab:n2n-vs-ours} is the main comparison under locked $R_{\mathrm{blend}}$.
 Dual Cosine is the classical fade on every board.
-Noise2Noise is the primary neural gate for this protocol (not a DenoiseOpt variant).
+Noise2Noise is the primary neural gate for this protocol (not a HybridSeam variant).
 
 \paragraph{Holdout.}
 In the earlier five-seed pilot (\texttt{20260719}--\texttt{20260723}), table means are
@@ -130,7 +130,7 @@ Both beat Dual Cosine (Appendix~\ref{app:secondary-results}).
 
 \paragraph{Factory and AKWF.}
 Evaluated zero-shot from synthetic training, Noise2Noise leads both Factory+FX ($0.754$ vs E2 $0.690$ on the $256$-cycle held-out split; Dual Cosine $0.606$) and AKWF OA ($0.744$ vs E2 $0.669$; Dual Cosine $0.414$).
-When both methods are trained/searched directly on the same disjoint $1{,}024$-cycle training splits, domain-trained \texttt{SeamN2N} ($4{,}000$ Adam steps) rises to $0.8772$ on Factory+FX and $0.8009$ on AKWF OA, while domain-searched DenoiseOpt ($80$ evaluations) reaches $\mathbf{0.9108}$ on Factory+FX ($+0.0336$, $193/256$ wins, Holm $p_{\mathrm{adj}}{=}4.19{\times}10^{-15}$) and $\mathbf{0.8740}$ on AKWF OA ($+0.0731$, $198/256$ wins, Holm $p_{\mathrm{adj}}{=}9.54{\times}10^{-21}$).
+When both methods are trained/searched directly on the same disjoint $1{,}024$-cycle training splits, domain-trained \texttt{SeamN2N} ($4{,}000$ Adam steps) rises to $0.8772$ on Factory+FX and $0.8009$ on AKWF OA, while domain-searched HybridSeam ($80$ evaluations) reaches $\mathbf{0.9108}$ on Factory+FX ($+0.0336$, $193/256$ wins, Holm $p_{\mathrm{adj}}{=}4.19{\times}10^{-15}$) and $\mathbf{0.8740}$ on AKWF OA ($+0.0731$, $198/256$ wins, Holm $p_{\mathrm{adj}}{=}9.54{\times}10^{-21}$).
 
 \begin{table}[htbp]
   \centering
@@ -298,7 +298,7 @@ Live hybrid champions stay compact (${\approx}24$k$\pm$2k params across short-Fi
   \centering
   \caption{Four-board comparison under $R_{\mathrm{blend}}$.
     Holdout and Multi-family: mean$\pm$std over $10$ eval seeds (\texttt{20260719}--\texttt{20260728}); E2\,(\texttt{2026072702}) beats \texttt{SeamN2N} on $10/10$ seeds on both boards (Holm-Bonferroni $p_{\mathrm{adj}}{=}0.0039$).
-    Factory+FX and AKWF OA ($256$ held-out cycles, $1{,}024$ train): domain-searched DenoiseOpt vs.\ domain-trained \texttt{SeamN2N} ($4{,}000$ steps) on identical splits (Wilcoxon Holm $p_{\mathrm{adj}}{=}4.19{\times}10^{-15}$ and $9.54{\times}10^{-21}$).}
+    Factory+FX and AKWF OA ($256$ held-out cycles, $1{,}024$ train): domain-searched HybridSeam vs.\ domain-trained \texttt{SeamN2N} ($4{,}000$ steps) on identical splits (Wilcoxon Holm $p_{\mathrm{adj}}{=}4.19{\times}10^{-15}$ and $9.54{\times}10^{-21}$).}
   \label{tab:n2n-vs-ours}
   \setlength{\tabcolsep}{7pt}
   \small
@@ -394,7 +394,7 @@ Thus both differentiable seam-pulling and compact neural residual blocks inside 
 \textbf{Power analysis for $n{=}3$ pilots and cross-domain periodic-boundary transfer.}
 For a two-sided exact sign-flip permutation test at $\alpha{=}0.05$, the minimum sample size is $n{=}6$ ($2\cdot 2^{-6}{=}0.03125<0.05$); thus the $n{=}3$ matched-$5$k ($\Delta{=}{+}0.0114$) and E2 plateau ($\Delta{=}{+}0.0115$, Cohen's $d{\approx}3.97$) pilots cannot reach $p{<}0.05$ regardless of effect size and would require $n{\ge}6$ search seeds (${\approx}216$\,GPU-h) for confirmatory testing.
 Why test non-audio domains? Every periodic engineering and spectral-FFT physics problem below shares the exact 1D/toroidal wrap-boundary geometry ($x[0]{\approx}x[L{-}1]$ under $L$-periodic tiling) as wavetable oscillators, so testing on non-audio periodic signals directly verifies that the learned cycle-local operator vocabulary does not overfit to sine+cliff audio shapes.
-To test as a single-seed exploratory demonstration whether cycle-local wrap-discontinuity repair transfers beyond audio wavetables to adjacent scientific and engineering domains, Table~\ref{tab:transfer-summary-main} summarizes the seven external periodic/quasi-periodic boards from Appendix~\ref{app:transfer-bundle} (Tables~\ref{tab:transfer-main}--\ref{tab:transfer-main-b}): industrial rotating-machinery bearings (CWRU, MFPT, Paderborn), cardiac electrophysiology ECG (MIT-BIH, PTB-XL), CNC servo toolpaths, and power-grid PMU synchrophasors ($n{=}256$ periods each). Under matched $n{=}256$-period held-out splits with identical $R_{\mathrm{blend}}$ evaluation, the single-seed domain-searched DenoiseOpt achieves higher $R_{\mathrm{blend}}$ than domain-trained \texttt{SeamN2N} on all $7/7$ scientific/engineering boards ($0.937$--$0.992$ vs $0.553$--$0.959$, exact two-sided sign test $p{=}0.0156$).
+To test as a single-seed exploratory demonstration whether cycle-local wrap-discontinuity repair transfers beyond audio wavetables to adjacent scientific and engineering domains, Table~\ref{tab:transfer-summary-main} summarizes the seven external periodic/quasi-periodic boards from Appendix~\ref{app:transfer-bundle} (Tables~\ref{tab:transfer-main}--\ref{tab:transfer-main-b}): industrial rotating-machinery bearings (CWRU, MFPT, Paderborn), cardiac electrophysiology ECG (MIT-BIH, PTB-XL), CNC servo toolpaths, and power-grid PMU synchrophasors ($n{=}256$ periods each). Under matched $n{=}256$-period held-out splits with identical $R_{\mathrm{blend}}$ evaluation, the single-seed domain-searched HybridSeam achieves higher $R_{\mathrm{blend}}$ than domain-trained \texttt{SeamN2N} on all $7/7$ scientific/engineering boards ($0.937$--$0.992$ vs $0.553$--$0.959$, exact two-sided sign test $p{=}0.0156$).
 
 \begin{table}[t]
   \centering
@@ -406,7 +406,7 @@ To test as a single-seed exploratory demonstration whether cycle-local wrap-disc
     \toprule
     Method & CWRU & MFPT & Paderborn & MIT-BIH (ECG) & PTB-XL (ECG) & CNC Servo & PMU Grid \\
     \midrule
-    \textbf{DenoiseOpt (Ours)} & \textbf{0.960} & \textbf{0.943} & \textbf{0.937} & \textbf{0.975} & \textbf{0.945} & \textbf{0.991} & \textbf{0.992} \\
+    \textbf{HybridSeam (Ours)} & \textbf{0.960} & \textbf{0.943} & \textbf{0.937} & \textbf{0.975} & \textbf{0.945} & \textbf{0.991} & \textbf{0.992} \\
     SeamN2N (domain-trained) & 0.866 & 0.866 & 0.842 & 0.750 & 0.754 & 0.553 & 0.959 \\
     no-bake & 0.845 & 0.866 & 0.838 & 0.750 & 0.762 & 0.450 & 0.936 \\
     DualCosine & 0.461 & 0.483 & 0.471 & 0.414 & 0.512 & 0.494 & 0.827 \\

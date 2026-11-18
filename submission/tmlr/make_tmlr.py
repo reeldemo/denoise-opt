@@ -89,12 +89,20 @@ if not ACC:
 \renewcommand{\href}[2]{\IfSubStr{#1}{reeldemo}{#2}{\orighref{#1}{#2}}}
 """
 
-# LLM-use footnote on the first page (TMLR FAQ). Wording pending Julian's OK.
-_who = ("The author", "the author's", "takes") if ACC else ("The authors", "the authors'", "take")
-AI_NOTE = (f"{_who[0]} used AI coding and writing assistants (Cursor and other LLM-based tools) to write code, run "
-           f"experiments and draft and edit text. The research questions, study design and conclusions are {_who[1]}. "
-           f"{_who[0]} checked every number against the released result files and every citation against its source, "
-           f"and {_who[2]} full responsibility for the content. Tools are listed in Section~\\ref{{sec:tooling}}.")
+# LLM-use footnote on the first page (TMLR FAQ). Wording approved by Julian (2026-11-18, 09:01); keep verbatim,
+# identical in the review and the accepted variant. "Section 8" is \\ref{sec:tooling} (checked against the PDF).
+AI_NOTE = ("The author used AI coding, research and writing assistants (Cursor, Grok Bot, Hermes Agent, Antigravity and "
+           "SciSpace) to write code, run experiments, search and read literature, and draft and edit text. The research "
+           "questions, study design and conclusions are the author's. The author checked every number against the released "
+           "result files and every citation against its source, and takes full responsibility for the content. "
+           "Tools used are listed in Section~\\ref{sec:tooling} (Tooling and AI use).")
+
+# Double-blind review name of the method. The public repository, the named paper and the accepted variant keep
+# "DenoiseOpt"; only the review variant says "HybridSeam" (hybrid GA+PPO search over seam-local repair operators).
+REVIEW_NAME = "HybridSeam"
+def review_rename(t):
+    t = t.replace("DenoiseOpt", REVIEW_NAME).replace("denoiseopt", REVIEW_NAME.lower())
+    return t
 title = r"""\title{Seam-Local Repair of Wavetable Wrap Discontinuities with a Self-Supervised Blended Residual}"""
 if ACC:
     author = r"\author{\name Julian M. Kleber \email julian.m.kleber@gmail.com \\ \addr Independent Researcher, ORCID 0000-0001-5518-0932}"
@@ -104,7 +112,7 @@ pre_doc = "\n".join([
     title, author,
     r"\def\month{MM}  % camera-ready only", r"\def\year{YYYY} % camera-ready only",
     r"\def\openreview{\url{https://openreview.net/forum?id=XXXX}} % camera-ready only",
-    r"\begin{document}", r"\maketitle", r"\begin{abstract}", abstract + "\\footnote{" + AI_NOTE + "}", r"\end{abstract}", "",
+    r"\begin{document}", r"\maketitle", r"\begin{abstract}", (abstract if ACC else review_rename(abstract)) + "\\footnote{" + AI_NOTE + "}", r"\end{abstract}", "",
 ])
 
 # ---------------------------------------------------------------- subsections / figures
@@ -115,6 +123,7 @@ for d in (out_sub, out_fig):
 
 def anonymise(t):
     if ACC: return t
+    t = review_rename(t)
     t = re.sub(r"\\href\{https?://github\.com/reeldemo[^}]*\}\{([^}]*)\}", r"\1", t)
     t = re.sub(r"\\url\{https?://github\.com/reeldemo[^}]*\}", r"\\textit{[anonymized repository]}", t)
     t = t.replace("Julian~M.~Kleber", "The author")
@@ -165,5 +174,9 @@ for u in sorted(used):
         print("WARNING missing figure", u)
 
 name = "main_accepted.tex" if ACC else "main.tex"
-(HERE / name).write_text(head + pre_doc + body, encoding="utf-8")
+# review variant: raster figures whose pixels carry identifying text are replaced by the sanitised copies
+if not ACC:
+    for f in sorted((HERE / "anon_figures").glob("*.png")):
+        shutil.copy(f, out_fig / f.name)
+(HERE / name).write_text(head + pre_doc + (body if ACC else review_rename(body)), encoding="utf-8")
 print("wrote", HERE / name, "figures:", len(list(out_fig.iterdir())))

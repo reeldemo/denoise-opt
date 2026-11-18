@@ -50,7 +50,7 @@ jobs:
           cd submission/tmlr
           pdftotext main.pdf review.txt
           tr '\n' ' ' < review.txt | sed 's/- //g' > review.flat
-          pat='github|reeldemo|reelsynth|denoise-opt|denoiseopt-paper|kleber|julian|orcid|0000-0001-5518|aixiv|klaut|sail\.black|obsevia|librebase|MIT-licensed'
+          pat='github|reeldemo|reelsynth|denoise-opt|denoiseopt-paper|kleber|julian|orcid|0000-0001-5518|aixiv|klaut|sail\.black|obsevia|librebase|MIT-licensed|denoiseopt'
           if grep -n -i -o -E ".{0,40}($pat).{0,40}" review.flat; then echo "identifying string in the review PDF"; exit 1; fi
           if pdfinfo main.pdf | grep -i -E "^(Author|Title|Subject|Keywords):.*($pat)"; then echo "identifying PDF metadata"; exit 1; fi
           echo "anonymity check passed"

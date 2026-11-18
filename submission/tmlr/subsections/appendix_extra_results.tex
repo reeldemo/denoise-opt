@@ -10,7 +10,7 @@ Selection and published comparison under v10.1 use $R_{\mathrm{blend}}{+}J$ with
 
 \subsection{Which families stay hard}
 \label{sec:family-hardness}
-On the fitted DenoiseOpt $100{,}000$-cycle bench, denoise score $D$ is lowest for \texttt{nonlinear} ($D\approx 0.39$) and \texttt{combo} ($D\approx 0.40$), then \texttt{triple\_mix} / \texttt{extreme\_overlay} ($D\approx 0.51$--$0.52$), while \texttt{harmonic\_fft} and \texttt{am\_fm} sit near $D\approx 0.69$--$0.70$.
+On the fitted HybridSeam $100{,}000$-cycle bench, denoise score $D$ is lowest for \texttt{nonlinear} ($D\approx 0.39$) and \texttt{combo} ($D\approx 0.40$), then \texttt{triple\_mix} / \texttt{extreme\_overlay} ($D\approx 0.51$--$0.52$), while \texttt{harmonic\_fft} and \texttt{am\_fm} sit near $D\approx 0.69$--$0.70$.
 Lit-combo champion family stress (prolonged residual) similarly ranks \texttt{open\_wrap\_bias} ($R\approx 0.83$) and \texttt{extreme\_overlay} / \texttt{combo} ($R\approx 0.88$--$0.89$) below \texttt{harmonic\_fft} ($R\approx 0.95$).
 Hard sounds recur.
 
@@ -118,7 +118,7 @@ Appendix Table~\ref{tab:cliff-strata} stratifies the $4{,}096$-tile holdout by w
 \subsection{Noise2Noise and sequence baselines}
 \label{sec:n2n-baselines}
 
-How does DenoiseOpt compare to true Noise2Noise-style and lightweight seq restorers on the same generator under $R_{\mathrm{blend}}$?
+How does HybridSeam compare to true Noise2Noise-style and lightweight seq restorers on the same generator under $R_{\mathrm{blend}}$?
 Primary corrupt$\to$corrupt N2N (train seed \texttt{424242}) reaches holdout $R_{\mathrm{blend}}\approx 0.975$ (Table~\ref{tab:n2n-vs-ours}), above the hybrid favorite ($0.970$).
 On the $4{,}096$-tile cliff draw, sibling-supervised N2N reaches $0.981$ and seq LSTM $0.986$ (Appendix Table~\ref{tab:cliff-strata}).
 Holdout tiles never enter training.
@@ -296,7 +296,7 @@ These tests are exploratory; $n{=}5$ seeds cannot reach $p<0.05$ under an exact 
 \begin{figure}[t]
   \centering
   \includegraphics[width=0.95\textwidth]{figures/fig_domain_search_curves.pdf}
-  \caption{Per-board DenoiseOpt (\texttt{hybrid\_lstm}) domain-search learning curves corresponding to Table~\ref{tab:n2n-vs-ours}.
+  \caption{Per-board HybridSeam (\texttt{hybrid\_lstm}) domain-search learning curves corresponding to Table~\ref{tab:n2n-vs-ours}.
     Left: Multi-family ($120$ evals, $120$ FitCell steps). Center: Factory+FX ($1{,}024$-cycle train split, $80$ evals, $100$ FitCell steps; held-out $256$-cycle $R_{\mathrm{blend}}{=}0.911$). Right: AKWF OA ($1{,}024$-cycle train split, $80$ evals, $100$ FitCell steps; held-out $256$-cycle $R_{\mathrm{blend}}{=}0.874$). Dotted/dashed lines show zero-shot \texttt{SeamN2N} and Dual Cosine on the same held-out splits.}
   \label{fig:domain-search-curves}
 \end{figure}

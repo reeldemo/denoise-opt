@@ -8,10 +8,10 @@
 | ORCID | 0000-0001-5518-0932 |
 | Affiliation | Independent Researcher (as in the manuscript) |
 | Contact (public) | julian.m.kleber@gmail.com |
-| Keywords | wavetable synthesis; wrap discontinuity; unsupervised repair; DenoiseOpt; seam restoration; Noise2Noise; neural architecture search; reinforcement learning; genetic algorithms; proximal policy optimization; hybrid meta-search; population-based training; audio signal processing |
-| Licence of the paper | CC BY 4.0 (TMLR applies this to every submission; the author keeps copyright). Repo `LICENSE`: text under CC BY 4.0 |
-| Code | https://github.com/reeldemo/denoise-opt (public; manuscript, results, code). Present in the non-anonymous build; withheld in the anonymous review build because TMLR requires double-blind. Never "on request". GitHub reports the repo licence as "NOASSERTION": add a standard code-licence file before camera-ready. |
+| Keywords | wavetable synthesis; wrap discontinuity; unsupervised repair; HybridSeam; seam restoration; Noise2Noise; neural architecture search; reinforcement learning; genetic algorithms; proximal policy optimization; hybrid meta-search; population-based training; audio signal processing |
+| Licence of the paper | CC BY 4.0 (TMLR applies this to every submission; the author keeps copyright). Repo `LICENSE`: code under MIT; `LICENSE-text`: manuscript text and figures under CC BY 4.0 |
+| Code | https://github.com/reeldemo/denoise-opt (public; manuscript, results, code). Present in the non-anonymous build; withheld in the anonymous review build because TMLR requires double-blind. Never "on request". Code licence: MIT (`LICENSE`). |
 | Funding | "no external funding" (manuscript) |
-| AI use | first-page footnote (TMLR FAQ, wording pending Julian's OK) and the section "Tooling and AI use" (Cursor, SciSpace, NotebookLM, aixiv.science, named only in the non-anonymous build) |
+| AI use | first-page footnote (TMLR FAQ, wording approved by Julian, 2026-11-18) naming Cursor, Grok Bot, Hermes Agent, Antigravity and SciSpace, and the section "Tooling and AI use" (the same five, plus NotebookLM and aixiv.science, which is named only in the non-anonymous build) |
 
 Not done by this package (needs Julian himself): OpenReview account and a complete profile, choice of action editor, the submit click.

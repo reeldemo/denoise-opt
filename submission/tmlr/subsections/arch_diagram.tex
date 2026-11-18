@@ -1,4 +1,4 @@
-% DenoiseOpt overview architecture diagram (TikZ); placed before component deep-dives
+% HybridSeam overview architecture diagram (TikZ); placed before component deep-dives
 \begin{figure}[t]
   \centering
   \resizebox{\columnwidth}{!}{%
@@ -44,12 +44,12 @@
     \draw[arr, dashed] (outer) |- ++(0,1.05) -| (cell);
   \end{tikzpicture}%
   }
-  \caption{DenoiseOpt overview (before component deep-dives).
+  \caption{HybridSeam overview (before component deep-dives).
   Same-seed generator $G$ yields ideal sibling $r^{\star}$ (cliff off) and cracked engine $x$ (cliff on).
   Repair operator $\Theta(x;h)$ may include DualCosine/FIR and optional residual/MoE experts.
   No-bake is the identity control $x\mapsto x$.
   Selection objective is $J = R_{\mathrm{blend}} - \lambda\cdot\mathrm{latency\_norm}$ ($\lambda{=}0.02$).
   DualCosine centering (not shown) is PPO advantage shaping only.
   Dashed feedback: architecture proposals update the operator. Pseudocode in Appendix~\protect\ref{app:algorithms}.}
-  \label{fig:denoiseopt-arch}
+  \label{fig:hybridseam-arch}
 \end{figure}

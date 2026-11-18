@@ -2,7 +2,7 @@
 \label{sec:transfer-main}
 
 \paragraph{Setup reminder.}
-Table~\ref{tab:transfer-main} reports the primary metric \textbf{locked $R_{\mathrm{blend}}$} (higher better; $\alpha{=}0.7$ seam/body blend from Section~\ref{sec:residual-score}) after training/searching DenoiseOpt
+Table~\ref{tab:transfer-main} reports the primary metric \textbf{locked $R_{\mathrm{blend}}$} (higher better; $\alpha{=}0.7$ seam/body blend from Section~\ref{sec:residual-score}) after training/searching HybridSeam
 (\texttt{hybrid\_lstm}, seed \texttt{1902771841}) on each transfer board
 from Section~\ref{sec:transfer-protocol} ($n{=}256$ periods, $L{=}256$).
 No PESQ/STOI/MOS appears on these boards: periods are non-speech wrap tiles, and the claim is wrap-protocol residual repair only.
@@ -21,7 +21,7 @@ signal\_heal\_transfer.
 \begin{table}[t]
   \centering
   \caption{Wrap-heal transfer under locked $R_{\mathrm{blend}}$ (higher better; wrap-protocol stress test).
-  Bearing boards ($n{=}256$ each). DenoiseOpt: \texttt{hybrid\_lstm}, seed \texttt{1902771841}.}
+  Bearing boards ($n{=}256$ each). HybridSeam: \texttt{hybrid\_lstm}, seed \texttt{1902771841}.}
   \label{tab:transfer-main}
   \setlength{\tabcolsep}{3pt}
   \footnotesize
