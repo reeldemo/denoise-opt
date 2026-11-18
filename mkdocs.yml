@@ -1,0 +1,30 @@
+site_name: DenoiseOpt
+site_description: Wrap-discontinuity repair in wavetable synthesis via hybrid GA-PPO meta-search
+repo_url: https://github.com/reeldemo/denoise-opt
+docs_dir: docs
+strict: true
+theme:
+  name: material
+  features:
+    - navigation.sections
+    - content.code.copy
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          paths: [scripts, scripts/engine, scripts/compat]
+          options:
+            show_source: false
+            docstring_style: google
+            show_root_heading: true
+exclude_docs: |
+  /audits/
+  /venues/
+nav:
+  - Home: index.md
+  - Install: install.md
+  - Repository layout: layout.md
+  - Reproduce the paper results: reproduce.md
+  - API reference: api.md
+  - Data and licence: data-and-licence.md

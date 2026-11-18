@@ -12,3 +12,8 @@ results/e*_holdout_*.json
 figures/e*.json
 !results/experiment_queue_status.json
 __pycache__/
+
+# MkDocs and LaTeX build output
+site/
+build/
+.venv/

@@ -1,0 +1,8 @@
+# Python packages imported by the experiment and plotting scripts in scripts/.
+# The quickstart and the statistics scripts need none of them (standard library only).
+# Versions are not pinned because the GPU environment of the original runs
+# (the .venv_gpu of the ReelSynth repository) did not record exact versions here.
+numpy
+scipy
+matplotlib
+torch
