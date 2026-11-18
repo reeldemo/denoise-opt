@@ -108,11 +108,13 @@ if ACC:
     author = r"\author{\name Julian M. Kleber \email julian.m.kleber@gmail.com \\ \addr Independent Researcher, ORCID 0000-0001-5518-0932}"
 else:
     author = r"\author{\name Anonymous authors \\ \addr Paper under double-blind review}"
+# Thin space before the LLM footnote so "Section 5." + superscript 1 is not read as "5.1" in PDF text.
+abs_body = (abstract if ACC else review_rename(abstract)).rstrip()
 pre_doc = "\n".join([
     title, author,
     r"\def\month{MM}  % camera-ready only", r"\def\year{YYYY} % camera-ready only",
     r"\def\openreview{\url{https://openreview.net/forum?id=XXXX}} % camera-ready only",
-    r"\begin{document}", r"\maketitle", r"\begin{abstract}", (abstract if ACC else review_rename(abstract)) + "\\footnote{" + AI_NOTE + "}", r"\end{abstract}", "",
+    r"\begin{document}", r"\maketitle", r"\begin{abstract}", abs_body + "\\,\\footnote{" + AI_NOTE + "}", r"\end{abstract}", "",
 ])
 
 # ---------------------------------------------------------------- subsections / figures
@@ -143,6 +145,10 @@ def anonymise(t):
     t = t.replace("ReelSynth", "the host synthesizer")
     # CRediT block names the single author
     t = re.sub(r"\\subsection\{Author contributions \(CRediT\)\}\n\\label\{sec:credit\}\n[^\n]*\n", "", t)
+    t = t.replace(
+        "(see \\texttt{LICENSE} and \\texttt{LICENSE-text} in the repository named in Section~\\ref{sec:data-availability}).",
+        "(licence files accompany the anonymized supplementary material; see Section~\\ref{sec:data-availability}).",
+    )
     return t
 
 for f in sorted((ROOT / "subsections").glob("*.tex")):
