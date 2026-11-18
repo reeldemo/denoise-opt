@@ -10,6 +10,8 @@ A looped wavetable period has a discontinuity where its end meets its start. The
 
 This repository holds the LaTeX sources, the figure and result JSON files behind the tables, the statistics scripts that can be rerun on CPU, and the experiment drivers. The engine that produced the raw searches is the separate ReelSynth repository (`reeldemo/reelsynth`) and is not needed for the steps below.
 
+Sole author: Julian M. Kleber. The tools that assisted the work are described in the Tooling section of the PDF. Ship status and the aiXiv listing notes are in [PAPER_SHIP_STATUS.md](PAPER_SHIP_STATUS.md).
+
 The built PDF is in the repository root. A map of the repository is in [docs/layout.md](docs/layout.md), and the documentation site is built with MkDocs Material from `docs/` and `mkdocs.yml`.
 
 ## Quickstart
