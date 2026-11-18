@@ -233,7 +233,7 @@ DualCosine centering is soft relative shaping for the actor--critic, not a hard 
 (1)~\textbf{FitCell loss:} $1 - R_{\mathrm{blend}}(r^{\star},x,y)$ with $\alpha{=}0.7$ and disjoint $\mathcal{S}/\mathcal{B}$ masks~\eqref{eq:mask-SB};
 (2)~\textbf{Champion selection:} latency-aware $J = R_{\mathrm{blend}} - \lambda\cdot\mathrm{latency\_norm}$ ($\lambda{=}0.02$,~\eqref{eq:outer-obj});
 (3)~\textbf{Primary reporting:} $R_{\mathrm{blend}}(r^{\star},x,y)$ on held-out seeds;
-(4)~\textbf{Legacy debug score:} prolonged $R$~\eqref{eq:prolonged-r}, retained only in historical search-trace artifacts and never used for primary selection or leaderboard reporting.
+(4)~\textbf{Legacy debug score:} prolonged $R$ ($R_{\mathrm{prol}}$), retained only in historical search-trace artifacts and never used for primary selection or leaderboard reporting.
 
 \subsection{Search pipeline}
 \label{sec:pipeline-overview}

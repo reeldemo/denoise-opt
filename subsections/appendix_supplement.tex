@@ -178,8 +178,8 @@ Appendix~\ref{app:secondary-results} and Section~\ref{sec:cliff-strata}.
     BeatDiff (Bedin NeurIPS\,2024) & OOD wrap probe in Table~\ref{tab:transfer-main}
       (MIT-BIH $0.4907$, PTB-XL $0.4933$). Drive prior (not HF).
       Clinical morph prior $\neq$ wrap residual \\
-    Paderborn KAt deep (Al~Firdausi CNN) & Trained CNN\_1D\_2L from scratch (not frozen
-      \texttt{model.pth}) on bearings K001/KA04/KI04/KB23. File-holdout seed \texttt{20260726},
+    Paderborn KAt deep (Al~Firdausi CNN) & Trained CNN\_1D\_2L from scratch (not a frozen
+      checkpoint) on bearings K001/KA04/KI04/KB23. File-holdout seed \texttt{20260726},
       train seed \texttt{42}, $20$ epochs. 4-class holdout acc $0.8590$ ($n{=}2560$ segs,
       NORMAL/IR/OR/OR+IR). Classifier wrap residual N/A. Arch-reuse wrap bake listed
       in Table~\ref{tab:transfer-main}$^\dagger$.
