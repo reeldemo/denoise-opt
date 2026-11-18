@@ -1,0 +1,39 @@
+\section{Related Work}
+\label{sec:related_work}
+
+I group prior work by mechanism.
+\textbf{Used} citations ground methods I build on or compare against under my protocol.
+\textbf{Screened} citations mark prior work I reviewed and ruled out (wrong domain, cost, or objective).
+I cite those papers for positioning only.
+They are not building blocks of DenoiseOpt.
+
+\paragraph{Wavetable / virtual-analog foundations and discontinuity control.}
+Foundational wavetable and virtual-analog (VA) oscillator work frames alias-free classic waveforms and wrap/corner discontinuities via BLIT/BLEP~\citep{stilson1996}, PolyBLEP~\citep{nam2009polyblep}, and BLAMP~\citep{esqueda2016blamp}.
+Unlike runtime oversampled VA oscillators, cycle-local VA repair approximations (\texttt{PolyBLEP} $0.795$ $R_{\mathrm{blend}}$ at $0.87$\,ms, \texttt{BLAMP} $0.914$ at $20$\,ms, \texttt{BLIT/BLEP} $0.632$ at $71$\,ms on seed \texttt{20260719}; Table~\ref{tab:baselines-main}) either under-correct value jumps or incur high per-batch cost, whereas searched compact operators reach $0.9903$ at $1.03$\,ms/batch.
+DDSP frames DSP modules as composable blocks~\citep{engel2020}.
+I reuse that framing for small bake/FIR/MLP seam operators at cycle scale, rather than end-to-end vocoders.
+
+\paragraph{Normalized cycle metrics.}
+Audio restoration and synthesis surveys routinely rank models with SNR/SDR-style normalized errors on declared masks~\citep{purwins2019,stoller2018}.
+My locked $R_{\mathrm{blend}}$ applies the same one-minus-relative-RMS clamp (Section~\ref{sec:residual-score}, Eq.~\eqref{eq:R-component}) separately on seam and body masks after tiling; it is a task-specific objective, not a perceptual score.
+
+\paragraph{Label-free restoration.}
+Noise2Noise learns restorers from corrupted observations alone~\citep{lehtinen2018,kashyap2021n2n}.
+Mixture-invariant training ranks unsupervised systems without stem labels~\citep{wisdom2020}.
+I train a corrupt-to-corrupt seam CNN on the same generator as the primary neural baseline (Section~\ref{sec:results}).
+Full Demucs / DiffWave stacks are screened: domain and bake-budget mismatch~\citep{dfossez2019,kong2021}.
+
+\paragraph{Compact waveform operators.}
+Wave-U-Net, Conv-TasNet, dual-path, and attention audio models supply block priors I shrink to bake width~\citep{stoller2018,luo2019,luo2020dprnn,subakan2021,ronneberger2015,he2016resnet,vaswani2017}.
+They supply block priors rather than serving as frozen full-scale separators inside every meta trial.
+
+\paragraph{Search and hybrids.}
+Neural architecture search (NAS) taxonomies, reinforcement-learning (RL) controllers, progressive and latency-aware NAS, aging evolution, population-based training (PBT), CMA-ES, and evolution-guided policy gradients motivate applying a hybrid outer loop to this DSP task~\citep{elsken2019,zoph2017nas,pham2018,liu2018pnas,tan2019mnasnet,real2019,jaderberg2017,hansen2016cmaes,khadka2018,schulman2017}.
+Mixture-of-experts (MoE) soft gates motivate routing among small heterogeneous operators under one residual score~\citep{shazeer2017}.
+Matched outer-loop bake-offs (Random, CMA-ES, REINFORCE, aging evolution, TPE vs hybrid) sit in Appendix~\ref{app:supplement}.
+I do not claim a new foundational NAS/RL algorithm.
+
+\paragraph{Used vs screened (short).}
+Used anchors include VA discontinuity control~\citep{stilson1996,esqueda2016blamp,nam2009polyblep}, unsupervised restoration~\citep{lehtinen2018,kashyap2021n2n,wisdom2020}, DDSP~\citep{engel2020}, compact waveform operators as above, and NAS/RL/PPO/PBT/CMA-ES/ERL/MoE as above.
+Screened as contrast only: MAML~\citep{finn2017}, DARTS~\citep{liu2019}, Demucs-scale enhancers~\citep{dfossez2019,dfossez2021}, DiffWave~\citep{kong2021}, and SEGAN-style full GAN loops~\citep{pascual2017}.
+Claims stay inside cycle-local seam restoration under a declared compute budget.
