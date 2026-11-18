@@ -149,6 +149,24 @@ def anonymise(t):
         "(see \\texttt{LICENSE} and \\texttt{LICENSE-text} in the repository named in Section~\\ref{sec:data-availability}).",
         "(licence files accompany the anonymized supplementary material; see Section~\\ref{sec:data-availability}).",
     )
+    # Broader impact / reproducibility (sec:ethics): supplementary ZIP renames the code tree to hybridseam/HostSynth.
+    t = t.replace(
+        "Paper sources, frozen figure JSONs, and build scripts live at\n"
+        "\\textit{[anonymized repository]}, and\n"
+        "experimental search runners remain at \\textit{[anonymized repository]}.",
+        "Paper sources, frozen figure JSONs, and build scripts are provided as anonymized supplementary material "
+        "(\\texttt{hybridseam.zip}), and experimental search runners are in the \\texttt{HostSynth} subtree of the same archive.",
+    )
+    t = t.replace(
+        "are published at \\textit{[anonymized repository]}\n"
+        "under \\texttt{figures/} and \\texttt{results/}.",
+        "are provided as anonymized supplementary material (\\texttt{hybridseam.zip})\n"
+        "under \\texttt{figures/} and \\texttt{results/}.",
+    )
+    t = t.replace(
+        "All experiments use the public procedural generators and open benchmarks in the released repository.",
+        "All experiments use the public procedural generators and open benchmarks in the supplementary archive.",
+    )
     return t
 
 for f in sorted((ROOT / "subsections").glob("*.tex")):
