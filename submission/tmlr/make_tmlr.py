@@ -108,11 +108,13 @@ if ACC:
     author = r"\author{\name Julian M. Kleber \email julian.m.kleber@gmail.com \\ \addr Independent Researcher, ORCID 0000-0001-5518-0932}"
 else:
     author = r"\author{\name Anonymous authors \\ \addr Paper under double-blind review}"
+# Thin space before the LLM footnote so "Section 5." + superscript 1 is not read as "5.1" in PDF text.
+abs_body = (abstract if ACC else review_rename(abstract)).rstrip()
 pre_doc = "\n".join([
     title, author,
     r"\def\month{MM}  % camera-ready only", r"\def\year{YYYY} % camera-ready only",
     r"\def\openreview{\url{https://openreview.net/forum?id=XXXX}} % camera-ready only",
-    r"\begin{document}", r"\maketitle", r"\begin{abstract}", (abstract if ACC else review_rename(abstract)) + "\\footnote{" + AI_NOTE + "}", r"\end{abstract}", "",
+    r"\begin{document}", r"\maketitle", r"\begin{abstract}", abs_body + "\\,\\footnote{" + AI_NOTE + "}", r"\end{abstract}", "",
 ])
 
 # ---------------------------------------------------------------- subsections / figures
@@ -143,6 +145,32 @@ def anonymise(t):
     t = t.replace("ReelSynth", "the host synthesizer")
     # CRediT block names the single author
     t = re.sub(r"\\subsection\{Author contributions \(CRediT\)\}\n\\label\{sec:credit\}\n[^\n]*\n", "", t)
+    t = t.replace(
+        "(see \\texttt{LICENSE} and \\texttt{LICENSE-text} in the repository named in Section~\\ref{sec:data-availability}).",
+        "(licence files accompany the anonymized supplementary material; see Section~\\ref{sec:data-availability}).",
+    )
+    # Broader impact / reproducibility (sec:ethics): match hybridseam.zip contents for double-blind review.
+    t = t.replace(
+        "Paper sources, frozen figure JSONs, and build scripts live at\n"
+        "\\textit{[anonymized repository]}, and\n"
+        "experimental search runners remain at \\textit{[anonymized repository]}.",
+        "The anonymized supplementary material (\\texttt{hybridseam.zip}) contains analysis and experiment scripts, "
+        "tests, frozen figure JSONs, result JSONs, small checkpoints, \\texttt{REPRO}/\\texttt{EVAL} documentation, "
+        "and a README quickstart.\n"
+        "Paper sources, manuscript build scripts, and the host-synthesizer code base required by the GPU search "
+        "runners are withheld for double-blind review and will be released upon acceptance.",
+    )
+    t = t.replace(
+        "are published at \\textit{[anonymized repository]}\n"
+        "under \\texttt{figures/} and \\texttt{results/}.",
+        "are provided as anonymized supplementary material (\\texttt{hybridseam.zip})\n"
+        "under \\texttt{figures/} and \\texttt{results/}.",
+    )
+    t = t.replace(
+        "All experiments use the public procedural generators and open benchmarks in the released repository.",
+        "All experiments use public procedural generators and open benchmarks; those corpora are public and "
+        "are not redistributed inside \\texttt{hybridseam.zip}.",
+    )
     return t
 
 for f in sorted((ROOT / "subsections").glob("*.tex")):

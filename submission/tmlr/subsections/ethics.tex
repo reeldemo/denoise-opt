@@ -14,9 +14,8 @@ Do not over-claim speech enhancement, mastering quality, or perceptual superiori
 Holdout seeds: \texttt{20260719}--\texttt{20260723}.
 Search seeds: \texttt{1902771841}, \texttt{2026072701}, \texttt{2026072702}.
 Noise2Noise train seed: \texttt{424242}.
-Paper sources, frozen figure JSONs, and build scripts live at
-\textit{[anonymized repository]}, and
-experimental search runners remain at \textit{[anonymized repository]}.
+The anonymized supplementary material (\texttt{hybridseam.zip}) contains analysis and experiment scripts, tests, frozen figure JSONs, result JSONs, small checkpoints, \texttt{REPRO}/\texttt{EVAL} documentation, and a README quickstart.
+Paper sources, manuscript build scripts, and the host-synthesizer code base required by the GPU search runners are withheld for double-blind review and will be released upon acceptance.
 CUDA benches need Python~3.12, PyTorch~$2.6$+CUDA~12.4, and NumPy/matplotlib.
 PESQ/STOI are omitted for non-speech cycles (domain mismatch), and MUSHRA was not run.
 
@@ -28,9 +27,13 @@ This research received no external funding.
 \subsection{Data availability}
 \label{sec:data-availability}
 Frozen evaluation artifacts (JSON matrices, search histories, fitted champions)
-are published at \textit{[anonymized repository]}
+are provided as anonymized supplementary material (\texttt{hybridseam.zip})
 under \texttt{figures/} and \texttt{results/}.
-All experiments use the public procedural generators and open benchmarks in the released repository.
+All experiments use public procedural generators and open benchmarks; those corpora are public and are not redistributed inside \texttt{hybridseam.zip}.
+
+\subsection{Code and text licence}
+\label{sec:code-licence}
+Source code is under the MIT License; this manuscript's text and figures are CC BY~4.0 (licence files accompany the anonymized supplementary material; see Section~\ref{sec:data-availability}).
 
 \subsection{Competing interests}
 \label{sec:competing}
