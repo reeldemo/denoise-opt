@@ -12,7 +12,7 @@ These constraints bound claim strength; they are not optional honesty footnotes.
     (Section~\ref{sec:listening-protocol}); they are \emph{not} a substitute for perceptual scores.
     Why listening was deferred: primary claims are objective cycle-local seam restoration under a locked protocol, where the HF click-splatter ($-46.62$\,dB vs $-32.82$\,dB \texttt{no-bake}) and LSD ($0.60$\,dB vs $1.82$\,dB) proxies (Table~\ref{tab:baselines-main}) directly quantify boundary-induced spectral artifacts. A concrete future listening protocol would run a blinded MUSHRA / ABX trial with $n{\ge}24$ listeners on $12$ stratified top-$25\%$ wrap-cliff tiles at $48$\,kHz comparing \texttt{no-bake}, \texttt{DualCosine}, \texttt{SeamN2N}, and \texttt{Ours E2}.
     Generalization to ``sounds better'' is therefore \emph{not} claimed.
-    PESQ/STOI are excluded (non-speech tiles). I do not invent THD+N or MOS tables.
+    PESQ and STOI are excluded because the test signals are non-speech cycles.
   \item \textbf{Metric lock and seed labeling.}
     Primary holdout and multi-family claims in Table~\ref{tab:n2n-vs-ours} use locked $R_{\mathrm{blend}}$ (Section~\ref{sec:residual-score}) over ten evaluation seeds (\texttt{20260719}--\texttt{20260728}); earlier five-seed pilot summaries are noted where applicable.
     Matched-$5$k outer-loop means use three primary search seeds (Table~\ref{tab:meta-approaches}), supplemented by two extra search seeds and a three-seed $5$k branch ablation (Section~\ref{sec:results}).
@@ -29,7 +29,7 @@ These constraints bound claim strength; they are not optional honesty footnotes.
     Cycle-GAN / BeatDiff / real KIT--PMU remain incomplete where noted
     (Table~\ref{tab:transfer-sota-status}).
   \item \textbf{Domain shift on zero-shot exports.}
-    Per-corpus domain search (\texttt{Ours (domain)}, Table~\ref{tab:n2n-vs-ours}) resolves the zero-shot gap on held-out Factory+FX and AKWF OA cycles, outperforming domain-trained \texttt{SeamN2N} ($p_{\mathrm{adj}}{\le}4.2{\times}10^{-15}$).
+    Per-corpus domain search (\texttt{Ours (domain)}, Table~\ref{tab:n2n-vs-ours}) resolves the zero-shot gap on held-out Factory+FX and AKWF OA cycles, scoring higher than domain-trained \texttt{SeamN2N} (Holm--Bonferroni $p_{\mathrm{adj}}{\le}4.2{\times}10^{-15}$).
     However, when evaluated \emph{zero-shot} without domain re-search, the wavetable meta favorite can still trail no-bake or FIR on Factory+FX / Rust export tiles while beating Dual Cosine.
     I do not claim universal zero-shot factory superiority.
   \item \textbf{Search geometry.}
