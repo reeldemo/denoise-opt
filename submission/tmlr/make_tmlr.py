@@ -149,13 +149,16 @@ def anonymise(t):
         "(see \\texttt{LICENSE} and \\texttt{LICENSE-text} in the repository named in Section~\\ref{sec:data-availability}).",
         "(licence files accompany the anonymized supplementary material; see Section~\\ref{sec:data-availability}).",
     )
-    # Broader impact / reproducibility (sec:ethics): supplementary ZIP renames the code tree to hybridseam/HostSynth.
+    # Broader impact / reproducibility (sec:ethics): match hybridseam.zip contents for double-blind review.
     t = t.replace(
         "Paper sources, frozen figure JSONs, and build scripts live at\n"
         "\\textit{[anonymized repository]}, and\n"
         "experimental search runners remain at \\textit{[anonymized repository]}.",
-        "Paper sources, frozen figure JSONs, and build scripts are provided as anonymized supplementary material "
-        "(\\texttt{hybridseam.zip}), and experimental search runners are in the \\texttt{HostSynth} subtree of the same archive.",
+        "The anonymized supplementary material (\\texttt{hybridseam.zip}) contains analysis and experiment scripts, "
+        "tests, frozen figure JSONs, result JSONs, small checkpoints, \\texttt{REPRO}/\\texttt{EVAL} documentation, "
+        "and a README quickstart.\n"
+        "Paper sources, manuscript build scripts, and the host-synthesizer code base required by the GPU search "
+        "runners are withheld for double-blind review and will be released upon acceptance.",
     )
     t = t.replace(
         "are published at \\textit{[anonymized repository]}\n"
@@ -165,7 +168,8 @@ def anonymise(t):
     )
     t = t.replace(
         "All experiments use the public procedural generators and open benchmarks in the released repository.",
-        "All experiments use the public procedural generators and open benchmarks in the supplementary archive.",
+        "All experiments use public procedural generators and open benchmarks; those corpora are public and "
+        "are not redistributed inside \\texttt{hybridseam.zip}.",
     )
     return t
 
