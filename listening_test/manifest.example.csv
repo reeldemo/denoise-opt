@@ -1,0 +1,12 @@
+tile,system,file
+tile01,IDEAL,tile01_ideal.wav
+tile01,OURS,tile01_ours.wav
+tile01,N2N,tile01_n2n.wav
+tile01,DUALCOSINE,tile01_dualcosine.wav
+tile01,NOBAKE,tile01_nobake.wav
+tile01,CRIPPLED,tile01_crippled.wav
+train01,IDEAL,train01_ideal.wav
+train01,OURS,train01_ours.wav
+train01,N2N,train01_n2n.wav
+train01,DUALCOSINE,train01_dualcosine.wav
+train01,NOBAKE,train01_nobake.wav

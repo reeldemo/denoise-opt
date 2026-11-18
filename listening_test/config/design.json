@@ -1,0 +1,31 @@
+{
+  "_comment": "Design constants for the DenoiseOpt crowdsourced listening test. Values marked ASSUMPTION are placeholders to be replaced by pilot estimates; nothing here has been measured.",
+  "stimulus": {
+    "format": "WAV, 44.1 kHz, mono, PCM16",
+    "duration_s": 3.0,
+    "pitch_hz": 440.0,
+    "vibrato": {"rate_hz": 5.0, "depth_fraction": 0.03},
+    "source": "reelsynth brand/artifacts/hear_vibrato_methods (nobake, dualcosine, ours_hybrid exist; ideal sibling and SeamN2N clips must still be exported)",
+    "loudness": "equal integrated loudness for all clips, level fixed in the pilot"
+  },
+  "systems": ["IDEAL", "OURS", "N2N", "DUALCOSINE", "NOBAKE"],
+  "reference_system": "IDEAL",
+  "gold_extra": "CRIPPLED",
+  "tiles_pool": 24,
+  "tiles_per_listener": 8,
+  "training_clips": 5,
+  "trapping_items": 3,
+  "ab_pair": ["OURS", "N2N"],
+  "ab_trials_per_listener": 8,
+  "scale_dcr": {"5": "Degradation is inaudible", "4": "Degradation is audible but not annoying", "3": "Degradation is slightly annoying", "2": "Degradation is annoying", "1": "Degradation is very annoying"},
+  "timing_s": {"dcr_item": 12, "ab_item": 14, "training_item": 12, "consent_instructions": 120, "slack_fraction": 0.20,
+               "screener_total": 240},
+  "exclusion": {"headphone_check_min_correct": 5, "headphone_check_trials": 6,
+                "gold_tolerance": 1, "max_failed_attention_items": 1, "min_dcr_completion_fraction": 1.0},
+  "pay": {"hourly_gbp": 12.50, "german_min_wage_eur_per_hour_2026": 13.90, "ecb_gbp_per_eur_2026_11_17": 0.83305},
+  "prolific": {"fee_corporate": 0.42857, "fee_academic": 0.33333, "min_gbp_per_hour": 6.0, "recommended_gbp_per_hour": 9.0, "vat_on_fee_assumed": 0.19},
+  "assumptions": {"screener_pass_rate": 0.70, "main_exclusion_rate": 0.15,
+                  "sigma_listener_x_system": 0.30, "sigma_tile_x_system": 0.35, "sigma_residual": 0.80,
+                  "sigma_pessimistic": {"listener_x_system": 0.40, "tile_x_system": 0.50, "residual": 1.00},
+                  "ab_icc": 0.10}
+}
