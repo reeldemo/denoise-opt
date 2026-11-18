@@ -9,6 +9,6 @@
 
 ## Licence
 
-- Manuscript text, figures and LaTeX sources: CC BY 4.0, see `LICENSE`.
-- Scripts: no licence file yet, so no code licence is granted.
+- Source code (scripts and tools): MIT, see `LICENSE`.
+- Manuscript text, figures and LaTeX sources: CC BY 4.0, see `LICENSE-text`.
 - Third-party audio samples: their own licences, see `SAMPLE_LICENSES.md`.

@@ -94,4 +94,4 @@ Cite with the metadata in [CITATION.cff](CITATION.cff). Author: Julian M. Kleber
 
 ## Licence
 
-The manuscript text, figures and LaTeX sources are licensed under CC BY 4.0, see [LICENSE](LICENSE). The scripts have no licence yet, so no code licence is granted. Third-party audio samples keep their own licences, see [SAMPLE_LICENSES.md](SAMPLE_LICENSES.md).
+The source code (scripts and tools) is licensed under the MIT licence, file `LICENSE`. The manuscript text, figures and LaTeX sources stay under CC BY 4.0, file `LICENSE-text`. Third-party audio samples keep their own licences, see [SAMPLE_LICENSES.md](SAMPLE_LICENSES.md).
