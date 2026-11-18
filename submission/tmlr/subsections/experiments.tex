@@ -45,7 +45,7 @@ Reproducibility: all primary tables, statistical tests, and figures reproduce fr
 \begin{itemize}
   \item \textbf{Primary procedural datasets.} Generator $G$: $L{=}256$ two-harmonic sine{+}cliff; seam width $W{=}8$; cliff amplitude $\pm\mathcal{U}(0.08,0.43)$; FitCell/search draws i.i.d.; frozen holdout metrics draw $n{=}4096$ (seed \texttt{20260719}) plus five-seed score batches (\texttt{20260719}--\texttt{20260723}).
     Multi-family SOTA: $10$ families $\times$ $2$ seeds $\times$ batch $64$ ($n{=}1280$).
-    Factory+FX / AKWF wavetable-native boards: $n{=}1280$ each (ReelSynth exports; AKWF CC0).
+    Factory+FX / AKWF wavetable-native boards: $n{=}1280$ each (host-synthesizer exports; AKWF CC0).
   \item \textbf{Transfer stress boards.} Seven wrap-protocol boards ($n{=}256$ each); full protocol and tables in Appendix~\ref{app:transfer-bundle}.
   \item \textbf{FitCell / outer loop.} Adam on $1-R_{\mathrm{blend}}$; D1 short cap ${\approx}16$--$48$ steps; converge campaign searchable patience/$\varepsilon$/$T_{\max}\!\in\!\{512,\ldots,2048\}$, batch ${\approx}96$, two sequential proposals/iter (Section~\ref{sec:pipeline-overview}).
     Matched $5$k evals: Random, CMA-ES, REINFORCE, Aging, TPE, hybrid (3 search seeds).
@@ -83,7 +83,7 @@ It is not the reward target.
 Table~\ref{tab:dataset-stats} and Figure~\ref{fig:dataset-size} inventory primary evaluation boards; transfer sizes are in Appendix~\ref{app:transfer-bundle}.
 The primary procedural holdout is a frozen $4{,}096$-cycle metrics draw ($L{=}256$, $N{=}16$ tiles, seed \texttt{20260719}) plus a matched score batch of $64$ cycles (five consecutive seeds for classical mean$\pm$std).
 Multi-family SOTA scores $20$ waveforms ($10$ families $\times$ $2$ seeds, batch $64$, $1{,}280$ cycles).
-Wavetable-native boards use ReelSynth Factory+FX exports ($n{=}1{,}280$: $640$ dry + $640$ FX) and AKWF CC0 cycles ($n{=}1{,}280$) so Plot~4 corpus bars are comparable to multi-family ($1{,}280$).
+Wavetable-native boards use host-synthesizer Factory+FX exports ($n{=}1{,}280$: $640$ dry + $640$ FX) and AKWF CC0 cycles ($n{=}1{,}280$) so Plot~4 corpus bars are comparable to multi-family ($1{,}280$).
 Sci/eng transfer tiles ($1{,}536$ periods total) are summarized in Appendix~\ref{app:transfer-bundle}.
 Search never trains on the frozen holdout. N2N/seq baselines use disjoint train seeds \texttt{424242}/\texttt{424243}.
 Artifacts: dataset artifacts.
@@ -158,7 +158,7 @@ Family-conditional hardness uses the separate Rust procedural $100{,}000$-cycle 
 A $4{,}096$-tile holdout draw (seed \texttt{20260719}) is stratified by engine wrap-jump percentiles (top 25\% / top 10\%), with cutoffs in the cliff-strata data.
 Hard-cliff is the operative regime for claims about DualCosine collapse vs favorite retention.
 Edge RMSE is the locked required seam-local secondary. Click energy is optional.
-Wavetable-native transfer (Phase~F1) scores true ReelSynth-exported factory periods (primary) and external AKWF CC0 WAVs (secondary) under the same close-seam$\to$open-wrap protocol.
+Wavetable-native transfer (Phase~F1) scores true synthesizer-exported factory periods (primary) and external AKWF CC0 WAVs (secondary) under the same close-seam$\to$open-wrap protocol.
 Procedural stand-ins are tertiary smoke only.
 Speech/music LibriSpeech/MUSDB corpora remain off.
 \input{subsections/experiments_eval_listening}

@@ -1,0 +1,63 @@
+name: paper build (TMLR)
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  paper:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: TMLR package must match make_tmlr.py output
+        run: |
+          python submission/tmlr/make_tmlr.py
+          git status --porcelain -- submission/tmlr
+          git diff --exit-code -- submission/tmlr/main.tex submission/tmlr/subsections
+          test -z "$(git status --porcelain --untracked-files=all -- submission/tmlr/subsections submission/tmlr/figures)"
+
+      - name: Install tectonic and poppler
+        run: |
+          sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+          curl --proto '=https' --tlsv1.2 -fsSL https://drop-sh.fullyjustified.net | sh
+          sudo mv tectonic /usr/local/bin/
+
+      - name: Build the anonymous review PDF and the two-column manuscript
+        run: |
+          (cd submission/tmlr && tectonic -X compile --keep-logs main.tex)
+          tectonic -X compile --keep-logs main.tex
+
+      - name: LaTeX log checks
+        run: |
+          for log in submission/tmlr/main.log main.log; do
+            if grep -E "(Reference|Citation) .* undefined" "$log"; then echo "undefined reference or citation in $log"; exit 1; fi
+          done
+          if grep -E "Overfull \\\\hbox" submission/tmlr/main.log; then echo "overfull hbox in the review build"; exit 1; fi
+
+      - name: Anonymity check of the review PDF (text and metadata)
+        run: |
+          cd submission/tmlr
+          pdftotext main.pdf review.txt
+          tr '\n' ' ' < review.txt | sed 's/- //g' > review.flat
+          pat='github|reeldemo|reelsynth|denoise-opt|denoiseopt-paper|kleber|julian|orcid|0000-0001-5518|aixiv|klaut|sail\.black|obsevia|librebase|MIT-licensed'
+          if grep -n -i -o -E ".{0,40}($pat).{0,40}" review.flat; then echo "identifying string in the review PDF"; exit 1; fi
+          if pdfinfo main.pdf | grep -i -E "^(Author|Title|Subject|Keywords):.*($pat)"; then echo "identifying PDF metadata"; exit 1; fi
+          echo "anonymity check passed"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: paper-pdfs
+          path: |
+            submission/tmlr/main.pdf
+            main.pdf

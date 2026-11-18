@@ -89,6 +89,12 @@ if not ACC:
 \renewcommand{\href}[2]{\IfSubStr{#1}{reeldemo}{#2}{\orighref{#1}{#2}}}
 """
 
+# LLM-use footnote on the first page (TMLR FAQ). Wording pending Julian's OK.
+_who = ("The author", "the author's", "takes") if ACC else ("The authors", "the authors'", "take")
+AI_NOTE = (f"{_who[0]} used AI coding and writing assistants (Cursor and other LLM-based tools) to write code, run "
+           f"experiments and draft and edit text. The research questions, study design and conclusions are {_who[1]}. "
+           f"{_who[0]} checked every number against the released result files and every citation against its source, "
+           f"and {_who[2]} full responsibility for the content. Tools are listed in Section~\\ref{{sec:tooling}}.")
 title = r"""\title{Seam-Local Repair of Wavetable Wrap Discontinuities with a Self-Supervised Blended Residual}"""
 if ACC:
     author = r"\author{\name Julian M. Kleber \email julian.m.kleber@gmail.com \\ \addr Independent Researcher, ORCID 0000-0001-5518-0932}"
@@ -98,7 +104,7 @@ pre_doc = "\n".join([
     title, author,
     r"\def\month{MM}  % camera-ready only", r"\def\year{YYYY} % camera-ready only",
     r"\def\openreview{\url{https://openreview.net/forum?id=XXXX}} % camera-ready only",
-    r"\begin{document}", r"\maketitle", r"\begin{abstract}", abstract, r"\end{abstract}", "",
+    r"\begin{document}", r"\maketitle", r"\begin{abstract}", abstract + "\\footnote{" + AI_NOTE + "}", r"\end{abstract}", "",
 ])
 
 # ---------------------------------------------------------------- subsections / figures
@@ -114,6 +120,22 @@ def anonymise(t):
     t = t.replace("Julian~M.~Kleber", "The author")
     t = t.replace("(reeldemo/denoise-opt)", "(anonymized repository)")
     t = re.sub(r"^%.*reeldemo.*\n", "", t, flags=re.M)
+    # project names identify the author: neutral wording in the review variant
+    t = t.replace("ReelSynth and denoise-opt are public repositories maintained by the author. ", "")
+    t = re.sub(r"\\href\{https?://github\.com/reeldemo/reelsynth\}\{ReelSynth repository\}", "host synthesizer's repository", t)
+    for a, b in (("in the ReelSynth repository", "in the host synthesizer's repository"),
+                 ("used by ReelSynth", "used by the host synthesizer"),
+                 ("ReelSynth-exported", "synthesizer-exported"),
+                 ("ReelSynth Factory+FX", "host-synthesizer Factory+FX"),
+                 ("ReelSynth factory", "host-synthesizer factory"),
+                 ("ReelSynth exports", "host-synthesizer exports"),
+                 ("ReelSynth export", "host-synthesizer export")):
+        t = t.replace(a, b)
+    t = t.replace("ReelSynth", "the host synthesizer")
+    # the review-service name points to the server that holds the named preprint
+    t = t.replace("\\textbf{aixiv.science} assisted", "\\textbf{An automated manuscript-review service} assisted")
+    # CRediT block names the single author
+    t = re.sub(r"\\subsection\{Author contributions \(CRediT\)\}\n\\label\{sec:credit\}\n[^\n]*\n", "", t)
     return t
 
 for f in sorted((ROOT / "subsections").glob("*.tex")):
@@ -121,6 +143,8 @@ for f in sorted((ROOT / "subsections").glob("*.tex")):
     t = re.sub(r"\\begin\{(figure|table|algorithm)\*\}", r"\\begin{\1}", t)
     t = re.sub(r"\\end\{(figure|table|algorithm)\*\}", r"\\end{\1}", t)
     t = t.replace("\\cite{", "\\citep{")
+    # wide 8-column table laid out for the two-column page (overfull by 35 pt in the 6.5 in TMLR block)
+    t = t.replace("\\label{tab:transfer-summary-main}\n  \\setlength{\\tabcolsep}{5pt}", "\\label{tab:transfer-summary-main}\n  \\setlength{\\tabcolsep}{2pt}")
     (out_sub / f.name).write_text(t, encoding="utf-8")
 if not ACC:
     (out_sub / "acknowledgments.tex").write_text(

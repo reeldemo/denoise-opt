@@ -139,7 +139,7 @@ Figure~\ref{fig:n2n-vs-ours} plots the four-board $R_{\mathrm{blend}}$ compariso
 \label{sec:real-wt}
 
 Does the wrap protocol transfer beyond synthetic sine cliffs onto true exports and third-party OA cycles?
-Table~\ref{tab:real-wt} scores ReelSynth-exported factory periods (primary realism) and Adventure Kid Waveforms (AKWF) CC0 single-cycle WAVs (secondary) after close-seam idealization and the same open-wrap cliff, under $R_{\mathrm{blend}}$.
+Table~\ref{tab:real-wt} scores synthesizer-exported factory periods (primary realism) and Adventure Kid Waveforms (AKWF) CC0 single-cycle WAVs (secondary) after close-seam idealization and the same open-wrap cliff, under $R_{\mathrm{blend}}$.
 Procedural stand-ins are demoted to tertiary smoke and no longer carry the primary realism claim.
 On exported factory periods the favorite ($R_{\mathrm{blend}}{\approx}0.699$) trails no-bake / FIR / poly / N2N while still beating Dual Cosine ($0.589$).
 On AKWF OA cycles the favorite ($0.679$) trails no-bake / N2N and scores above Dual Cosine ($0.424$) on mean $R_{\mathrm{blend}}$ (single-board means; not a listening claim).
@@ -147,7 +147,7 @@ Export gaps are listed in Section~\ref{sec:limitations}.
 
 \begin{table}[t]
   \centering
-  \caption{Wavetable-native wrap protocol under $R_{\mathrm{blend}}$ ($\alpha{=}0.7$). Close-seam ideal $\to$ open-wrap cliff (seed \texttt{20260719}). Primary = ReelSynth export. Secondary = AKWF CC0 files.}
+  \caption{Wavetable-native wrap protocol under $R_{\mathrm{blend}}$ ($\alpha{=}0.7$). Close-seam ideal $\to$ open-wrap cliff (seed \texttt{20260719}). Primary = host-synthesizer export. Secondary = AKWF CC0 files.}
   \label{tab:real-wt}
   \setlength{\tabcolsep}{6pt}
   \begin{adjustbox}{max width=\columnwidth}
@@ -197,7 +197,7 @@ It trades wrap energy for a wide end-fade distortion that $R_{\mathrm{blend}}$ p
 
 \paragraph{Scores.}
 Table~\ref{tab:va-seam-blep} reports batch means from the VA results (seed \texttt{20260719}, batch 64) under $R_{\mathrm{blend}}$.
-Code is in the ReelSynth repository: PolyBLEP matches \texttt{osc::va::poly\_blep}, BLIT/BLEP uses a raised-cosine step residual, and BLAMP applies a polyBLAMP lobe to the wrap slope jump.
+Code is in the host synthesizer's repository: PolyBLEP matches \texttt{osc::va::poly\_blep}, BLIT/BLEP uses a raised-cosine step residual, and BLAMP applies a polyBLAMP lobe to the wrap slope jump.
 PolyBLEP reaches mean $R_{\mathrm{blend}}\approx 0.795$ ($\Delta\approx{+}0.254$ vs DualCosine) but trails no-bake / \texttt{seam\_fir3}.
 BLIT/BLEP nearly zeros wrap-jump ($0.004$), yet mean $R_{\mathrm{blend}}$ falls to $0.632$ and hard cliffs collapse to $0.351$.
 BLAMP stays near no-bake on this value-cliff geometry (mean $0.914$).

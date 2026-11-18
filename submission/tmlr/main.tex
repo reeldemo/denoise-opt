@@ -42,7 +42,7 @@ Wavetable synthesis exhibits cycle-boundary wrap discontinuities when stored per
 
     In confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected), converged DenoiseOpt beats matched \texttt{SeamN2N} on $10$-seed Holdout ($0.9903$ vs $0.9764$, $p_{\mathrm{adj}}{=}0.0039$), $10$-seed Multi-family ($0.9324$ vs $0.9260$, $p_{\mathrm{adj}}{=}0.0039$), Factory+FX ($0.9108$ vs $0.8772$, $p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$), and AKWF OA ($0.8740$ vs $0.8009$, $p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$), remaining rank-invariant across $\alpha\in[0.3,0.9]$ and against circular Residual U-Nets ($44.5$k / $397.8$k) and a sawtooth/pulse generator ($0.9864$ vs $0.6451$).
     Across $n{=}1{,}024$ holdout evaluations, $R_{\mathrm{blend}}$ correlates negatively with $>2$\,kHz click splatter ($\rho{=}{-}0.9342$, $p{<}10^{-300}$) and LSD ($\rho{=}{-}0.6307$, $p{=}1.18{\times}10^{-114}$); on top-$10\%$ hard cliffs, Dual Cosine leaves $0.9913$ edge RMSE whereas E2 drops to $0.0086$--$0.0112$ (Table~\ref{tab:cliff-edge-rmse}).
-    In $6$-seed periodic-boundary TDSE replications, $400$-step FitCell fine-tuning reaches $0.9955{\pm}0.0013$ in 1D ($p{=}0.03125$, $0.9993$ fidelity, $97.8\%$ kinetic-energy error reduction) and $0.9711{\pm}0.0044$ in 2D ($p{=}0.03125$); exploratory pilots and non-audio transfer checks are separated in Section~\ref{sec:results}.
+    In $6$-seed periodic-boundary TDSE replications, $400$-step FitCell fine-tuning reaches $0.9955{\pm}0.0013$ in 1D ($p{=}0.03125$, $0.9993$ fidelity, $97.8\%$ kinetic-energy error reduction) and $0.9711{\pm}0.0044$ in 2D ($p{=}0.03125$); exploratory pilots and non-audio transfer checks are separated in Section~\ref{sec:results}.\footnote{The authors used AI coding and writing assistants (Cursor and other LLM-based tools) to write code, run experiments and draft and edit text. The research questions, study design and conclusions are the authors'. The authors checked every number against the released result files and every citation against its source, and take full responsibility for the content. Tools are listed in Section~\ref{sec:tooling}.}
 \end{abstract}
 \input{subsections/introduction}
 \input{subsections/related_work}
@@ -100,6 +100,26 @@ J.~Engel, L.~Hantrakul, C.~Gu, and A.~Roberts.
 \newblock DDSP: Differentiable digital signal processing.
 \newblock In \emph{ICLR}, 2020.
 \newblock \href{https://arxiv.org/abs/2001.04643}{arXiv:2001.04643}.
+
+\bibitem[Hantrakul and Yang(2018)]{hantrakul2018neuralwt}
+L.~Hantrakul and L.-C.~Yang.
+\newblock Neural Wavetable: a playable wavetable synthesizer using neural networks.
+\newblock \href{https://arxiv.org/abs/1811.05550}{arXiv:1811.05550}, 2018.
+
+\bibitem[Shan et~al.(2021)]{shan2021dwts}
+S.~Shan, L.~Hantrakul, J.~Chen, M.~Avent, and D.~Trevelyan.
+\newblock Differentiable wavetable synthesis.
+\newblock \href{https://arxiv.org/abs/2111.10003}{arXiv:2111.10003}, 2021.
+
+\bibitem[Lee et~al.(2024)]{lee2024wavespace}
+H.~Lee, K.~Kim, S.~Lee, and K.~Lee.
+\newblock Wavespace: A highly explorable wavetable generator.
+\newblock \href{https://arxiv.org/abs/2407.19862}{arXiv:2407.19862}, 2024.
+
+\bibitem[Yutani et~al.(2024)]{yutani2024cvae}
+T.~Yutani, Y.~Yamamoto, S.~Nakatani, and H.~Terasawa.
+\newblock Wavetable synthesis using CVAE for timbre control based on semantic label.
+\newblock \href{https://arxiv.org/abs/2410.18628}{arXiv:2410.18628}, 2024.
 
 \bibitem[Purwins et~al.(2019)]{purwins2019}
 H.~Purwins et al.

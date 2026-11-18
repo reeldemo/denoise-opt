@@ -64,7 +64,7 @@ Facts were read from each venue's official pages on 2026-11-18 (URL next to the 
 
 ## Manuscript changes needed for TMLR
 1. Anonymize (done in `submission/tmlr/`); Julian still has to provide an anonymized code mirror for the supplementary ZIP.
-2. Update stale repository references: `subsections/conclusion.tex` and `subsections/ethics.tex` still name the archived `reeldemo/denoiseopt-paper` as the paper repository.
+2. Done on branch `paper/tmlr-consolidated-1118`: `subsections/conclusion.tex` and `subsections/ethics.tex` now name `reeldemo/denoise-opt` as the paper repository (they named the archived `reeldemo/denoiseopt-paper` before).
 3. If the listening study is run, add its results and drop the `N_listeners = 0` statements; if not, keep wording as is (no change needed for TMLR).
 4. Length: main text is 28 single-column pages; trimming to about 12 would halve the review turnaround requested by TMLR (4 weeks to 2).
 5. The released audio clips cover no-bake, DualCosine, Ours and meta-search arms, but not SeamN2N/SeamResUNet. Add those exports before any audio-based claim (needed for the listening test anyway).

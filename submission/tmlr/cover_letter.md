@@ -18,13 +18,13 @@ Please consider the attached manuscript for TMLR.
 
 **Fit with TMLR.** The submission is an empirical study with sound validation and claims limited to the evidence, which is what TMLR's first acceptance criterion asks for; it makes no state-of-the-art or novelty claim beyond that.
 
-**Related versions.** An earlier version of this work is listed on aiXiv (aixiv.260719.000003) and received its automated review there. It is not published or accepted at an archival venue and is not under review elsewhere. The anonymous TMLR PDF does not link to the named version.
+**Prior versions and originality.** Earlier versions are public on the aiXiv preprint server (an archive, not an archival peer-reviewed venue. TMLR's policy accepts overlap with preprint servers). Those versions used a different title and different headline claims, and the submitted manuscript is the revised paper. To keep the review double-blind I do not link the preprint here and will add it, with the code links, in the camera-ready version. The work is not under review and has not been published elsewhere. [Pending Julian's OK]
 
-**Code and data.** MIT-licensed code and CC BY 4.0 manuscript sources are public (links withheld in the anonymous PDF; an anonymized mirror will be added to the supplementary ZIP). Audio comparison clips are in the ReelSynth repository.
+**Code and data.** Code, frozen result files and CC BY 4.0 manuscript sources are in a public repository (links withheld in the anonymous PDF; an anonymized mirror will be added to the supplementary ZIP). The repository has no code licence file yet. [Pending Julian: choose a code licence before camera-ready]
 
-**Human subjects / IRB:** none so far (a listening study is planned, see the separate listening-test PR). **Funding:** none. **Competing interests:** none.
+**Human subjects / IRB:** none so far (a listening study is planned) [Pending Julian's OK]. **Funding:** none. **Competing interests:** none.
 
-**LLM use:** the manuscript's "Tooling and AI use" section lists the AI-assisted tools (Cursor, SciSpace, NotebookLM, aiXiv review); the author checked all claims, numbers and citations against code and frozen result files and takes full responsibility. [Julian to confirm wording.]
+**LLM use:** stated in a footnote on the first page (TMLR FAQ) and in the manuscript's "Tooling and AI use" section (Cursor, SciSpace, NotebookLM, an automated manuscript-review service). The author checked all claims, numbers and citations against code and frozen result files and takes full responsibility. [Pending Julian's OK on the wording]
 
 Sincerely,
 Julian M. Kleber
