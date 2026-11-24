@@ -39,7 +39,7 @@ Paired multi-family comparisons use a two-sided sign test on per-board mean delt
 Matched-$5$k outer-loop comparisons use paired deltas across three search seeds per family; with $n{=}3$, two-sided sign-flip tests cannot reach $p<0.25$ when all deltas share sign, treat Table~\ref{tab:meta-approaches} as descriptive selection, not inferential ranking.
 I do \emph{not} run ANOVA across outer-loop families beyond mean$\pm$std in Table~\ref{tab:meta-approaches}, and I do not invent MOS confidence intervals.
 Scope: this is a technical investigation, not a human listening trial ($N_{\mathrm{listeners}}{=}0$; no preference rates).
-Reproducibility: all primary tables, statistical tests, and figures reproduce from the unified repository (\textit{[anonymized repository]}, RTX~3090, CUDA, PyTorch) via the repository's evaluation, domain-search, and plotting scripts.
+Reproducibility: all primary tables, statistical tests, and figures reproduce from the unified repository (\textit{[anonymized repository]}, CUDA, PyTorch) via the repository's evaluation, domain-search, and plotting scripts.
 
 \paragraph{Experimental setup (datasets, compute).}
 \begin{itemize}
@@ -50,9 +50,8 @@ Reproducibility: all primary tables, statistical tests, and figures reproduce fr
   \item \textbf{FitCell / outer loop.} Adam on $1-R_{\mathrm{blend}}$; D1 short cap ${\approx}16$--$48$ steps; converge campaign searchable patience/$\varepsilon$/$T_{\max}\!\in\!\{512,\ldots,2048\}$, batch ${\approx}96$, two sequential proposals/iter (Section~\ref{sec:pipeline-overview}).
     Matched $5$k evals: Random, CMA-ES, REINFORCE, Aging, TPE, hybrid (3 search seeds).
     Hybrid-only FitCell-to-plateau: $750$ outer iters, seed \texttt{1902771841} (${\approx}46.9$\,h wall).
-  \item \textbf{Baselines.} no-bake, DualCosine, FIR/endpoint classical board, SeamN2N (${\approx}53.5$k, $4000$ Adam steps, train seed \texttt{424242}), VA residuals where scored.
-  \item \textbf{Compute.} Single NVIDIA GeForce RTX~3090 ($24$\,GB); host desktop Windows; Python~$3.12$, PyTorch~$2.6$+CUDA~$12.4$; no multi-GPU.
-    Historical prolonged-$R$ $5$k-style freeze ${\approx}7.9$\,h (Table~\ref{tab:compute}); D1 hybrid mean wall ${\approx}8.4$\,h/seed.
+  \item \textbf{Baselines.} no-bake, DualCosine, FIR/endpoint classical board, SeamN2N gate (${\approx}53.5$k, $20{,}000$ Adam steps at batch $64$, train seed \texttt{424242}), VA residuals where scored.
+  \item \textbf{Compute.} One GPU per run, no multi-GPU. The historical prolonged-$R$ $5$k-style freeze (${\approx}7.9$\,h, Table~\ref{tab:compute}) ran on an NVIDIA GeForce RTX~3090 ($24$\,GB, Windows desktop, PyTorch~$2.6$+CUDA~$12.4$). The N2N gate retrain, the FitCell-to-plateau campaign and the holdout evaluations ran on an NVIDIA GeForce RTX~3060 ($12$\,GB, Linux, Python~$3.13$, PyTorch~$2.6$+CUDA~$12.4$). Each run records its GPU in its run metadata. D1 hybrid mean wall ${\approx}8.4$\,h/seed.
   \item \textbf{Artifacts.} Frozen JSON matrices and figure sources ship in the paper repository (Section~\ref{sec:ethics}).
 \end{itemize}
 

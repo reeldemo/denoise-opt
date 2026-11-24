@@ -346,7 +346,7 @@ Evaluating $10$-seed holdout rankings across $\alpha\in\{0.3,0.5,0.7,0.9\}$ conf
 The weight $\lambda{=}0.02$ in $J$ was fixed before the E2 searches and was not tuned. A re-ranking of the E2 search trials under other values of $\lambda$ was run during development, but its result file is not in the public release, so it is not reported here.
 
 \textbf{Main-text baseline summary.}
-Table~\ref{tab:baselines-main} collects the $10$-seed sine+cliff holdout scores of the proposed operator, the matched \texttt{SeamN2N} gate ($53.5$k parameters, 4-block 1D circular convolution with residual skip, $4{,}000$ Adam steps on seed \texttt{424242}), \texttt{no-bake} and \texttt{DualCosine} (from the released 10-seed result files), together with the classical VA repairs of Appendix Table~\ref{tab:va-seam-blep} on seed \texttt{20260719}.
+Table~\ref{tab:baselines-main} collects the $10$-seed sine+cliff holdout scores of the proposed operator, the matched \texttt{SeamN2N} gate ($53.5$k parameters, 4-block 1D circular convolution with residual skip, $20{,}000$ Adam steps at batch $64$ and learning rate $2{\times}10^{-3}$ on seed \texttt{424242}), \texttt{no-bake} and \texttt{DualCosine} (from the released 10-seed result files), together with the classical VA repairs of Appendix Table~\ref{tab:va-seam-blep} on seed \texttt{20260719}.
 Matched-capacity neural baselines and cycle-local VA repairs are the relevant peers under the real-time per-cycle bake budget (${\le}3$\,ms/batch).
 
 \begin{table}[t]
