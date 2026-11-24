@@ -13,9 +13,11 @@ from common import (
     FIGURES_DIR,
     RESULTS_DIR,
     engine_python,
+    guard_real_meta_run,
     is_experiment_complete,
     load_json,
     meta_approach_done,
+    meta_seed_dir,
     reelsynth_root,
     run_holdout_eval,
     save_json,
@@ -26,11 +28,19 @@ from common import (
 CONVERGE_ITERS = 750
 
 
-def run_converge_seed(seed: int, out_root: Path, *, dry_run: bool) -> dict:
+def run_converge_seed(
+    seed: int,
+    out_root: Path,
+    *,
+    dry_run: bool,
+    resume_from_dry: bool = False,
+) -> dict:
     root = reelsynth_root()
     py = engine_python()
     script = root / "scripts/bench_meta_approaches_5k.py"
-    seed_dir = out_root / str(seed)
+    seed_dir = meta_seed_dir(out_root, seed, dry_run)
+    if not dry_run:
+        guard_real_meta_run(out_root / str(seed), CONVERGE_ITERS, resume_from_dry=resume_from_dry)
     approach_dir = seed_dir / "hybrid_lstm"
     iters = 3 if dry_run else CONVERGE_ITERS
     if not meta_approach_done(approach_dir, iters):
@@ -68,6 +78,11 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument(
+        "--resume-from-dry",
+        action="store_true",
+        help="Allow full run when the real seed dir still has legacy dry-run checkpoints.",
+    )
     args = ap.parse_args()
 
     out = RESULTS_DIR / "e2_v14_converge_multiseed.json"
@@ -87,7 +102,9 @@ def main() -> int:
     seed_rows: list[dict] = []
     holdouts: list[dict] = []
     for seed in seeds:
-        row = run_converge_seed(seed, out_root, dry_run=args.dry_run)
+        row = run_converge_seed(
+            seed, out_root, dry_run=args.dry_run, resume_from_dry=args.resume_from_dry
+        )
         seed_rows.append(row)
         champ = row.get("champ_pt")
         if champ and Path(champ).is_file():

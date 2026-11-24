@@ -15,22 +15,27 @@ from common import (
     PAPER_ROOT,
     RESULTS_DIR,
     engine_python,
+    guard_real_meta_run,
     is_experiment_complete,
     load_json,
     meta_approach_done,
+    meta_seed_dir,
     og_last_iter,
     reelsynth_root,
+    resolve_gpu_rl_arch_script,
     run_holdout_eval,
     save_json,
     update_queue_status,
     utc_now,
 )
 
+# (arm, branches for gpu_rl_arch, harness script basename)
 ARMS = (
-    ("hybrid_ga_only", "ga"),
-    ("hybrid_ppo_only", "ppo"),
-    ("hybrid_pbt_only", "pbt"),
-    ("hybrid_lstm", "ppo,nas,pbt,ga,combo"),
+    ("hybrid_ga_only", "ga", "gpu_rl_arch"),
+    ("hybrid_ppo_only", "ppo", "gpu_rl_arch"),
+    ("hybrid_pbt_only", "pbt", "gpu_rl_arch"),
+    ("hybrid_full_gpu_rl_arch", "ppo,nas,pbt,ga,combo", "gpu_rl_arch"),
+    ("hybrid_lstm", None, "bench_meta_approaches_5k"),
 )
 
 
@@ -53,7 +58,7 @@ def run_search_arm(
 ) -> dict:
     root = reelsynth_root()
     py = engine_python()
-    og = root / "scripts/gpu_rl_arch.py"
+    og = resolve_gpu_rl_arch_script(root)
     run_id = f"paper-e4-{arm}-{iters}it-{seed}"
     run_dir = root / "brand/artifacts/models" / run_id
     if og_last_iter(run_dir) >= iters:
@@ -109,11 +114,20 @@ def run_search_arm(
     }
 
 
-def run_meta_hybrid(seed: int, iters: int, out_root: Path, dry_run: bool) -> dict:
+def run_meta_hybrid(
+    seed: int,
+    iters: int,
+    out_root: Path,
+    dry_run: bool,
+    *,
+    resume_from_dry: bool = False,
+) -> dict:
     root = reelsynth_root()
     py = engine_python()
     script = root / "scripts/bench_meta_approaches_5k.py"
-    seed_dir = out_root / str(seed)
+    seed_dir = meta_seed_dir(out_root, seed, dry_run)
+    if not dry_run:
+        guard_real_meta_run(out_root / str(seed), iters, resume_from_dry=resume_from_dry)
     approach_dir = seed_dir / "hybrid_lstm"
     target = min(iters, 3) if dry_run else iters
     if not meta_approach_done(approach_dir, target):
@@ -154,6 +168,7 @@ def main() -> int:
     ap.add_argument("--iters", type=int, default=5000)
     ap.add_argument("--force", action="store_true")
     ap.add_argument("--device", default="cuda")
+    ap.add_argument("--resume-from-dry", action="store_true")
     args = ap.parse_args()
 
     out = RESULTS_DIR / "e4_branch_ablation_5k.json"
@@ -174,19 +189,26 @@ def main() -> int:
     meta_root = reelsynth_root() / "brand/artifacts/paper_e4_meta_hybrid"
 
     for seed in seeds:
-        for arm, branches in ARMS:
+        for arm, branches, harness in ARMS:
             try:
-                if arm == "hybrid_lstm":
-                    row = run_meta_hybrid(seed, args.iters, meta_root, args.dry_run)
+                if harness == "bench_meta_approaches_5k":
+                    row = run_meta_hybrid(
+                        seed,
+                        args.iters,
+                        meta_root,
+                        args.dry_run,
+                        resume_from_dry=args.resume_from_dry,
+                    )
                 else:
                     row = run_search_arm(
                         arm=arm,
-                        branches=branches,
+                        branches=branches or "",
                         seed=seed,
                         iters=args.iters,
                         dry_run=args.dry_run,
                         device=args.device,
                     )
+                row["harness"] = harness
                 runs.append(row)
                 champ = row.get("champ_pt")
                 if champ and Path(champ).is_file():
@@ -211,7 +233,14 @@ def main() -> int:
         "complete": not args.dry_run,
         "iters_per_arm": args.iters,
         "search_seeds": list(seeds),
-        "arms": [{"name": a, "branches": b} for a, b in ARMS],
+        "arms": [
+            {"name": a, "branches": b, "harness": h} for a, b, h in ARMS
+        ],
+        "invalid_artifact_note": (
+            "Prior runs affected by dry-run/resume bugs: E4 hybrid_lstm seed 1902771841 "
+            "and all twelve E3 v13_rblend approach dirs under "
+            "/mnt/homelab-external/paper-gap-1124/dn_runs/fullset/ are invalid; re-run fullset."
+        ),
         "runs": runs,
         "holdout_evals": holdouts,
         "wall_s": time.time() - t0,
