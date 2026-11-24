@@ -14,10 +14,41 @@ import torch
 import torch.nn as nn
 
 from common import EXTENDED_HOLDOUT_SEEDS, bootstrap_reelsynth, save_json, utc_now
-from holdout_eval import load_hybrid_champ, score_seed
+from holdout_eval import score_seed
 
 
 REFIT_VAL_SEED = 777_001
+
+
+def make_batch_with_generator(
+    batch: int,
+    n: int,
+    device: torch.device,
+    gen: torch.Generator,
+) -> tuple[torch.Tensor, torch.Tensor]:
+    """Same distribution as gpu_rl_arch.make_batch but draws only from `gen`."""
+    import math
+
+    import gpu_rl_arch as og  # noqa: E402
+
+    t = torch.linspace(0, 1, n, device=device).unsqueeze(0).expand(batch, -1)
+    freqs = 1.0 + 3.0 * torch.rand(batch, 1, device=device, generator=gen)
+    phase = 2 * math.pi * torch.rand(batch, 1, device=device, generator=gen)
+    ideal = torch.sin(2 * math.pi * freqs * t + phase)
+    ideal = ideal + 0.15 * torch.sin(4 * math.pi * freqs * t + phase * 0.7)
+    eng = ideal.clone()
+    cliff = (0.08 + 0.35 * torch.rand(batch, 1, device=device, generator=gen)) * (
+        1.0 - 2.0 * torch.rand(batch, 1, device=device, generator=gen)
+    )
+    w = og.SEAM_W
+    for i in range(w):
+        a = i / max(w - 1, 1)
+        eng[:, i] = eng[:, i] + cliff.squeeze(-1) * (1 - a)
+        eng[:, -w + i] = eng[:, -w + i] - cliff.squeeze(-1) * a
+    noise = 0.02 * torch.randn(batch, n, device=device, generator=gen)
+    noise[:, w:-w] *= 0.15
+    eng = eng + noise
+    return ideal, eng
 
 
 def sha256_file(path: Path) -> str:
@@ -48,14 +79,14 @@ def plateau_refit(
     steps_used = 0
     stop_reason = "max_steps"
 
+    val_gen = torch.Generator(device=device)
+    val_gen.manual_seed(val_seed)
+    val_ideal, val_eng = make_batch_with_generator(batch, og.N, device, val_gen)
+
     def val_score() -> float:
-        torch.manual_seed(val_seed)
-        if device.type == "cuda":
-            torch.cuda.manual_seed_all(val_seed)
-        ideal, eng = og.make_batch(batch, og.N, device)
         with torch.no_grad():
-            out = og.apply_ops(eng, cell, ops)
-            return float(og.residual_score_blend(ideal, eng, out).mean().item())
+            out = og.apply_ops(val_eng, cell, ops)
+            return float(og.residual_score_blend(val_ideal, val_eng, out).mean().item())
 
     prev_val: float | None = None
     for step in range(1, max_steps + 1):
@@ -109,20 +140,56 @@ def fixed_steps_refit(
     return cell.state_dict(), steps, "fixed_steps"
 
 
-def load_champion_blob(champ: Path, device: torch.device):
-    bootstrap_reelsynth()
+def _import_gpu_rl_arch():
+    import os
+
+    root = os.environ.get("REELSYNTH_ROOT")
+    if root:
+        scripts = str(Path(root) / "scripts")
+        if scripts not in sys.path:
+            sys.path.insert(0, scripts)
+    engine_dir = str(Path(__file__).resolve().parent)
+    if engine_dir not in sys.path:
+        sys.path.insert(0, engine_dir)
     import gpu_rl_arch as og  # noqa: E402
+
+    return og
+
+
+def load_champion_blob(champ: Path, device: torch.device) -> tuple[Any, dict[str, Any], float, dict]:
+    og = _import_gpu_rl_arch()
 
     blob = torch.load(champ, map_location=device, weights_only=False)
     if "cell_state_dict" in blob and "architecture" in blob:
         cfg = og.ArchConfig.from_dict(blob["architecture"])
         hp_raw = blob.get("hyperparams") or {}
-        cell = og.SeamCell(cfg).to(device)
-        cell.load_state_dict(blob["cell_state_dict"], strict=False)
-        cell.eval()
+        state = blob["cell_state_dict"]
         lr = float(hp_raw.get("lr", 3e-3))
-        return cfg, cell, lr, blob
+        return cfg, state, lr, blob
     raise ValueError(f"Unrecognized champion blob keys in {champ}")
+
+
+def build_cell_from_champion(
+    cfg: Any,
+    state_dict: dict[str, torch.Tensor],
+    *,
+    device: torch.device,
+    init: str,
+    refit_seed: int,
+):
+    og = _import_gpu_rl_arch()
+
+    if init == "fresh":
+        torch.manual_seed(refit_seed)
+        if device.type == "cuda":
+            torch.cuda.manual_seed_all(refit_seed)
+        cell = og.SeamCell(cfg).to(device)
+    elif init == "search":
+        cell = og.SeamCell(cfg).to(device)
+        cell.load_state_dict(state_dict, strict=True)
+    else:
+        raise ValueError(f"Unknown init mode {init!r}")
+    return cell
 
 
 def eval_methods_on_holdout(
@@ -171,28 +238,28 @@ def run_refit(
         eval_seeds = (eval_seeds[0],)
         batch = min(batch, 8)
     dev = torch.device(device if device != "cuda" or torch.cuda.is_available() else "cpu")
-    cfg, cell, lr, _blob = load_champion_blob(champ, dev)
+    cfg, state_dict, lr, _blob = load_champion_blob(champ, dev)
+    cell = build_cell_from_champion(
+        cfg, state_dict, device=dev, init=init, refit_seed=refit_seed
+    )
     import gpu_rl_arch as og  # noqa: E402
 
     ops = list(cfg.ops)
     steps_used = 0
     stop_reason = "as_is"
-    torch.manual_seed(refit_seed)
-    if dev.type == "cuda":
-        torch.cuda.manual_seed_all(refit_seed)
 
     if mode == "plateau":
         max_s = 64 if dry_run else 2048
         state, steps_used, stop_reason = plateau_refit(
             cell, ops, device=dev, lr=lr, batch=batch, max_steps=max_s
         )
-        cell.load_state_dict(state)
+        cell.load_state_dict(state, strict=True)
     elif mode == "n2n_matched":
         n_steps = 32 if dry_run else 20_000
         state, steps_used, stop_reason = fixed_steps_refit(
             cell, ops, device=dev, lr=lr, batch=batch, steps=n_steps
         )
-        cell.load_state_dict(state)
+        cell.load_state_dict(state, strict=True)
     elif mode != "as_is":
         raise ValueError(f"Unknown mode {mode!r}")
 
