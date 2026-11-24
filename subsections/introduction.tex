@@ -33,11 +33,11 @@ The \textbf{outer loop} (meta-search) runs GA plus PPO over repair-operator grap
 A \textbf{holdout} freezes the evaluation set or seed for reported scores.
 
 \paragraph{Unsupervised, as used here.}
-Search never trains on paired studio-clean audio.
+Search does not train on paired studio-clean audio (Section~\ref{sec:eval-protocol}).
 The ideal sibling $r^{\star}$ is a procedural cliff-withheld twin of the cracked engine (self-supervised geometry for scoring), not a human-labeled clean recording.
 Operators are ranked under $R_{\mathrm{blend}}$ without requiring labeled clean targets at search time.
 
-I treat the task as \emph{cycle-local seam restoration}: edit a neighborhood of the wrap join (the seam), and optionally a small residual operator over the period, so multi-period playback matches an ideal reference that never opens the wrap cliff.
+I treat the task as \emph{cycle-local seam restoration}: edit a neighborhood of the wrap join (the seam), and optionally a small residual operator over the period, so multi-period playback matches an ideal reference without the wrap cliff (Section~\ref{sec:ideal-tile}).
 Agreement uses a discontinuity-weighted blend $R_{\mathrm{blend}}$ (seam fidelity vs the ideal, plus mid-cycle identity vs the cracked engine) under a latency-aware objective $J$ (Section~\ref{sec:residual-score}).
 
 \paragraph{Four roles.}

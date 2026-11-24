@@ -121,7 +121,7 @@ Appendix Table~\ref{tab:cliff-strata} stratifies the $4{,}096$-tile holdout by w
 How does HybridSeam compare to true Noise2Noise-style and lightweight seq restorers on the same generator under $R_{\mathrm{blend}}$?
 Primary corrupt$\to$corrupt N2N (train seed \texttt{424242}) reaches holdout $R_{\mathrm{blend}}\approx 0.975$ (Table~\ref{tab:n2n-vs-ours}), above the hybrid favorite ($0.970$).
 On the $4{,}096$-tile cliff draw, sibling-supervised N2N reaches $0.981$ and seq LSTM $0.986$ (Appendix Table~\ref{tab:cliff-strata}).
-Holdout tiles never enter training.
+Holdout tiles do not enter training (Section~\ref{sec:eval-protocol}).
 Classical DualCosine / \texttt{seam\_fir3} remain in Appendix Table~\ref{tab:cliff-strata}.
 Figure~\ref{fig:n2n-vs-ours} plots the four-board $R_{\mathrm{blend}}$ comparison.
 
