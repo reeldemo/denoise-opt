@@ -169,6 +169,58 @@ def og_last_iter(run_dir: Path) -> int:
     return last
 
 
+def meta_seed_dir(out_root: Path, seed: int, dry_run: bool) -> Path:
+    """Dry runs must not share the real seed output directory."""
+    name = f"{seed}-dry" if dry_run else str(seed)
+    return out_root / name
+
+
+def resolve_gpu_rl_arch_script(root: Path | None = None) -> Path:
+    """reelsynth uses overnight_gpu_rl_arch.py; denoise-opt engine may use gpu_rl_arch.py."""
+    base = root or reelsynth_root()
+    for name in ("overnight_gpu_rl_arch.py", "gpu_rl_arch.py"):
+        script = base / "scripts" / name
+        if script.is_file():
+            return script
+    raise FileNotFoundError(
+        f"No gpu RL arch runner under {base / 'scripts'} "
+        "(expected overnight_gpu_rl_arch.py or gpu_rl_arch.py)"
+    )
+
+
+def _dry_checkpoint_in_tree(seed_dir: Path, requested_iters: int) -> bool:
+    from bench_meta_resume import is_dry_run_checkpoint, load_checkpoint  # noqa: WPS433
+
+    if not seed_dir.is_dir():
+        return False
+    status = seed_dir / "STATUS.json"
+    if status.is_file():
+        try:
+            blob = json.loads(status.read_text(encoding="utf-8"))
+            extra = blob.get("extra") or {}
+            if extra.get("dry_run") and int(blob.get("target_iters", 0)) < requested_iters:
+                return True
+        except json.JSONDecodeError:
+            pass
+    for ckpt_path in seed_dir.glob("*/checkpoint.json"):
+        ckpt = load_checkpoint(ckpt_path)
+        if ckpt and is_dry_run_checkpoint(ckpt, requested_iters):
+            return True
+    return False
+
+
+def guard_real_meta_run(seed_dir: Path, requested_iters: int, *, resume_from_dry: bool = False) -> None:
+    """Refuse a full run if the real seed dir still holds dry-run checkpoints."""
+    if resume_from_dry:
+        return
+    if _dry_checkpoint_in_tree(seed_dir, requested_iters):
+        raise SystemExit(
+            f"Refusing real run: {seed_dir} contains dry-run checkpoint(s) "
+            f"(iters_done<=5 or iters_target<{requested_iters}). "
+            "Use dry-run output under <seed>-dry/ or pass --resume-from-dry to override."
+        )
+
+
 def meta_approach_done(approach_dir: Path, target_iters: int) -> bool:
     ckpt = approach_dir / "checkpoint.json"
     if ckpt.is_file():

@@ -13,9 +13,11 @@ from common import (
     FIGURES_DIR,
     RESULTS_DIR,
     engine_python,
+    guard_real_meta_run,
     is_experiment_complete,
     load_json,
     meta_approach_done,
+    meta_seed_dir,
     reelsynth_root,
     run_holdout_eval,
     save_json,
@@ -27,11 +29,20 @@ APPROACHES = "random,cmaes,reinforce,aging_evo,tpe,hybrid_lstm"
 META_ITERS = 5000
 
 
-def run_seed(seed: int, out_root: Path, *, iters: int, dry_run: bool) -> dict:
+def run_seed(
+    seed: int,
+    out_root: Path,
+    *,
+    iters: int,
+    dry_run: bool,
+    resume_from_dry: bool = False,
+) -> dict:
     root = reelsynth_root()
     py = engine_python()
     script = root / "scripts/bench_meta_approaches_5k.py"
-    seed_dir = out_root / str(seed)
+    seed_dir = meta_seed_dir(out_root, seed, dry_run)
+    if not dry_run:
+        guard_real_meta_run(out_root / str(seed), iters, resume_from_dry=resume_from_dry)
     target = min(iters, 2) if dry_run else iters
     names = [a.strip() for a in APPROACHES.split(",")]
     pending = [
@@ -67,6 +78,7 @@ def main() -> int:
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--force", action="store_true")
+    ap.add_argument("--resume-from-dry", action="store_true")
     args = ap.parse_args()
 
     out = RESULTS_DIR / "e3_meta_extra_seeds.json"
@@ -84,8 +96,16 @@ def main() -> int:
     rows = []
     holdouts = []
     for seed in seeds:
-        rows.append(run_seed(seed, out_root, iters=META_ITERS, dry_run=args.dry_run))
-        hybrid_dir = out_root / str(seed) / "hybrid_lstm"
+        rows.append(
+            run_seed(
+                seed,
+                out_root,
+                iters=META_ITERS,
+                dry_run=args.dry_run,
+                resume_from_dry=args.resume_from_dry,
+            )
+        )
+        hybrid_dir = meta_seed_dir(out_root, seed, args.dry_run) / "hybrid_lstm"
         champ = hybrid_dir / "champ_cell.pt"
         if champ.is_file():
             hpath = RESULTS_DIR / f"e3_holdout_hybrid_{seed}.json"
