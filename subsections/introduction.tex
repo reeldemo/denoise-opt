@@ -69,7 +69,7 @@ Classical virtual-analog tools already address wrap energy locally
 I score cycle-local bake versions of those operators beside Dual Cosine (Section~\ref{sec:va-seam-baselines}).
 Label-free restoration such as Noise2Noise shows that useful restorers can be trained without paired clean targets~\cite{lehtinen2018,kashyap2021n2n}; here an explicit seam geometry is what lets such reconstructors be ranked.
 On the search side, I \emph{reuse} known NAS, aging evolution, PBT, CMA-ES, and PPO tools~\cite{elsken2019,real2019,jaderberg2017,hansen2016cmaes,schulman2017,khadka2018}: GA for diversity, PPO for discrete architecture edits, PBT-style exploit--mutate on elites.
-The engineering choice is to combine them as an outer loop over compact seam-repair graphs; that combination is not claimed as an algorithmic contribution, and the $n{=}3$ outer-loop pilot serves solely as a compute-allocation heuristic rather than a confirmatory search-algorithm claim.
+The engineering choice is to combine them as an outer loop over compact seam-repair graphs. That combination is not claimed as an algorithmic contribution, and the $n{=}3$ outer-loop pilot serves solely as a compute-allocation heuristic rather than a confirmatory search-algorithm claim.
 
 \paragraph{Key findings.}
 Under the locked v10.1 $R_{\mathrm{blend}}$ protocol (objective wrap-discontinuity metrics only; no perceptual or listening claim, $N_{\mathrm{listeners}}{=}0$):

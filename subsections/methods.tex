@@ -139,7 +139,7 @@ R_{\mathrm{blend}}
 \end{aligned}
 \end{equation}
 Whole-curve prolonged $R$ is defined over the full tiled domain $\Omega{=}\{0,\dots,T{-}1\}$ as $R_{\mathrm{prol}}(r^{\star},y)=R(r^{\star},y;\Omega)$, which mixes seam repair with global waveform error; it is retained only as a superseded legacy key and never replaces $R_{\mathrm{blend}}$.
-For real-world wavetable corpora without a procedural generator (Factory+FX and AKWF OA in Table~\ref{tab:n2n-vs-ours}), the self-supervised protocol instantiates $r^{\star}$ directly from unperturbed real cycles on a disjoint training split and injects a controlled wrap-cliff perturbation to form $x$, evaluating on held-out real cycles.
+For real-world wavetable corpora without a procedural generator (Factory+FX and AKWF OA in Table~\ref{tab:n2n-vs-ours}), the self-supervised protocol instantiates $r^{\star}$ directly from unperturbed real cycles on a disjoint training split and injects a controlled wrap-cliff perturbation to form $x$. Evaluation uses held-out real cycles.
 
 \textbf{Roles of the three quantities.}
 \begin{center}

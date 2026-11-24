@@ -4,8 +4,8 @@
 \paragraph{Evaluation protocol (locked).}
 \label{sec:eval-protocol}
 All primary tables use the same locked residual.
-Given a cracked engine tile $x\in\mathbb{R}^{L}$ and its cliff-withheld ideal sibling $r^{\star}\in\mathbb{R}^{L}$ (generated directly from the underlying continuous oscillator prior to injecting the wrap-cliff offset and end-noise, using holdout PRNG seeds \texttt{20260719}--\texttt{20260728} strictly disjoint from search seeds \texttt{1902771841}, \texttt{2026072701}, \texttt{2026072702} so no FitCell gradient or search selection ever sees evaluation tiles),
-prolong each cycle $N{=}16$ times, form wrap neighborhoods of width $W{=}8$ at every period head/tail,
+Each evaluation uses a cracked engine tile $x\in\mathbb{R}^{L}$ and its cliff-withheld ideal sibling $r^{\star}\in\mathbb{R}^{L}$ (generated directly from the underlying continuous oscillator prior to injecting the wrap-cliff offset and end-noise, using holdout PRNG seeds \texttt{20260719}--\texttt{20260728} strictly disjoint from search seeds \texttt{1902771841}, \texttt{2026072701}, \texttt{2026072702} so no FitCell gradient or search selection sees evaluation tiles).
+I prolong each cycle $N{=}16$ times, form wrap neighborhoods of width $W{=}8$ at every period head/tail,
 and compute $R_{\mathrm{seam}}=R(r^{\star},y;\mathcal{S})$ and $R_{\mathrm{body}}=R(x,y;\mathcal{B})$ via~\eqref{eq:R-component} with $\varepsilon=10^{-6}$, then
 \[
 R_{\mathrm{blend}}=\alpha R_{\mathrm{seam}}+(1-\alpha)R_{\mathrm{body}},\qquad\alpha{=}0.7.
@@ -31,7 +31,7 @@ Venue: DSP / synthesis artifact repair (DAFx / AES / arXiv cs.SD).
 
 \paragraph{Statistical reporting (what I compute).}
 Unless a table caption says otherwise, multi-seed cells are arithmetic mean$\pm$sample std over the named seed list (not Gaussian confidence intervals).
-Paired holdout comparisons test the null hypothesis $H_0{:}\,\mathbb{E}[\Delta]{=}0$ on identical paired seed lists ($n{=}5$ or $n{=}10$ evaluation seeds) using both a two-sided exact binomial sign test on win counts and a two-sided exact sign-flip permutation test (enumerating all $2^n$ sign assignments on per-seed deltas $\Delta_i$, giving minimum attainable $p{=}2/2^n$: $0.0625$ at $n{=}5$ and $0.0020$ at $n{=}10$), alongside $10{,}000$-resample paired bootstrap 95\% CIs and Hedges $g_z$ in Appendix~\ref{app:secondary-results}.
+Paired holdout comparisons test the null hypothesis $H_0{:}\,\mathbb{E}[\Delta]{=}0$ on identical paired seed lists ($n{=}5$ or $n{=}10$ evaluation seeds). They use a two-sided exact binomial sign test on win counts and a two-sided exact sign-flip permutation test (enumerating all $2^n$ sign assignments on per-seed deltas $\Delta_i$, giving minimum attainable $p{=}2/2^n$: $0.0625$ at $n{=}5$ and $0.0020$ at $n{=}10$). Appendix~\ref{app:secondary-results} adds $10{,}000$-resample paired bootstrap 95\% CIs and Hedges $g_z$.
 All primary four-board comparisons in Table~\ref{tab:n2n-vs-ours} apply Holm--Bonferroni multiple-testing correction ($p_{\mathrm{adj}}{\le}0.0039$ across all four boards); small-$n{=}3$ outer-loop pilot checks remain unadjusted exploratory diagnostics.
 Search hyperparameters (learning rates, population sizes, mutation rates, and FitCell steps) are listed in Table~\ref{tab:hyperparams}.
 Win/loss \emph{counts} at small $n$ also report Wilson 95\% score intervals for the win proportion (e.g.\ 10/20 board wins $\Rightarrow$ CI $[0.30,0.70]$).
@@ -126,7 +126,7 @@ Artifacts: dataset artifacts.
 A metrics draw of $4{,}096$ cycles under the holdout seed yields mean ideal RMS $0.721\pm0.016$, mean engine residual RMS $0.021\pm0.013$, and mean absolute wrap jump $|x_0-x_{L-1}|$ of $0.913\pm0.634$.
 No-bake (passthrough) on that draw scores mean $R\approx0.971$.
 Method tables use a matched score batch of $64$ cycles from the same seed (the canonical evaluation tensors), five consecutive seeds for mean$\pm$std on the classical table, and the 20-waveform matrix for SOTA secondary metrics.
-Figure~\ref{fig:dataset-distributions} summarizes the $4{,}096$-cycle metrics draw: ideal RMS clusters near $0.72$, wrap jumps span nearly three orders of magnitude (median $\approx 0.83$), and no-bake $R$ is high on easy tiles but falls below $0.91$ on the hardest decile of wrap jumps.
+Figure~\ref{fig:dataset-distributions} summarizes the $4{,}096$-cycle metrics draw. Ideal RMS clusters near $0.72$, wrap jumps span nearly three orders of magnitude (median $\approx 0.83$), and no-bake $R$ is high on easy tiles but falls below $0.91$ on the hardest decile of wrap jumps.
 Figure~\ref{fig:intro-sine} is the documented sine-wrap edge case: a high-$|wrap|$ holdout tile where cliff modulation is visible, scored with DualCosine and the top neural favorite under the same residual $R$ (tile $R\approx0.9917$, favorite batch mean $R\approx0.991$).
 
 \begin{figure}[t]
