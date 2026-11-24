@@ -5,10 +5,10 @@ HybridSeam repairs wavetable wrap clicks with compact operators searched by hybr
 I reuse existing search tools; I do not introduce a new NAS algorithm.
 Noise2Noise is the neural gate. Dual Cosine is the classical fade.
 
-On five holdout seeds, short-FitCell hybrid scores $0.971{\pm}0.001$: below Noise2Noise ($0.977{\pm}0.001$), far above Dual Cosine ($0.542{\pm}0.038$); a ten-seed holdout confirms this gap ($0.9710{\pm}0.0029$ vs $0.9764{\pm}0.0020$, paired $\Delta{=}{-}0.0053$, $p{=}0.0020$).
+On five holdout seeds, short-FitCell hybrid scores $0.971{\pm}0.001$: below Noise2Noise ($0.977{\pm}0.002$), far above Dual Cosine ($0.542{\pm}0.038$); a ten-seed holdout confirms this gap ($0.9710{\pm}0.0029$ vs $0.9764{\pm}0.0020$, paired $\Delta{=}{-}0.0053$, $p{=}0.0020$).
 Multi-family board means are statistically indistinguishable from Noise2Noise.
 Hard cliffs collapse classical fades while searched operators hold.
-A matched $5$k bake-off gives hybrid the top descriptive mean ($0.9748{\pm}0.0018$; $n{=}3$ search seeds; vs runner-up $\Delta{=}{+}0.0114$, $p{=}0.25$), so compute goes to hybrid-only FitCell-to-plateau without treating the ranking as formal superiority (extra seeds and $5$k branch ablations confirm substantial outer-loop variance).
+A matched $5$k bake-off gives hybrid the top descriptive mean ($0.9748{\pm}0.0018$; $n{=}3$ search seeds; vs runner-up $\Delta{=}{+}0.0114$, $p{=}0.25$), so compute goes to hybrid-only FitCell-to-plateau without treating the ranking as formal superiority.
 FitCell-to-plateau replicated across three search seeds reaches $0.9881{\pm}0.0029$ on independent five-seed holdouts, clearing the frozen Noise2Noise gate ($0.9766$) on $3/3$ seeds (mean $\Delta{=}{+}0.0115$, $p{=}0.25$ at $n{=}3$; Section~\ref{sec:v14-converge}).
 Cross-domain transfer boards are wrap-protocol stress tests (Appendix~\ref{app:transfer-bundle}).
 No formal listening study was run; the claim is objective residual.

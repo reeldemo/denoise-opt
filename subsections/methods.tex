@@ -83,9 +83,9 @@ Unlike Noise2Noise corrupt-to-corrupt training~\cite{lehtinen2018,kashyap2021n2n
   \centering
   \caption{Consolidated metric role mapping.}
   \label{tab:metric-roles}
-  \setlength{\tabcolsep}{4pt}
+  \setlength{\tabcolsep}{3pt}
   \footnotesize
-  \begin{tabular}{@{}lll@{}}
+  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.43\columnwidth}>{\raggedright\arraybackslash}p{0.27\columnwidth}@{}}
     \toprule
     Symbol & Definition & Role \\
     \midrule
@@ -97,8 +97,7 @@ Unlike Noise2Noise corrupt-to-corrupt training~\cite{lehtinen2018,kashyap2021n2n
   \end{tabular}
 \end{table}
 
-\textbf{Worked example (Tile~46, Figure~\ref{fig:intro-sine}) and low-RMS edge case.}
-On holdout Tile~46 (seed \texttt{20260719}), \texttt{no-bake} gives $(R_{\mathrm{seam}},R_{\mathrm{body}},R_{\mathrm{blend}})=(0.853,1.000,0.897)$, \texttt{DualCosine} collapses the seam $(0.000,1.000,0.300)$, \texttt{SeamN2N} reaches $(0.967,0.996,0.975)$, and \texttt{Ours E2} reaches $(0.989,0.999,0.992)$.
+\textbf{Low-RMS edge case.}
 If an input's mid-cycle RMS approaches zero ($\mathrm{RMS}_{\mathcal{B}}(x)\to 0$), the denominator clamp $\epsilon{=}10^{-8}$ prevents division by zero and the $\max(0,\cdot)$ clamp keeps $R_{\mathrm{body}}\in[0,1]$, while $\alpha{=}0.7$ ensures seam errors still dominate $R_{\mathrm{blend}}$.
 
 \subsection{Blended residual score and latency-aware objective}
@@ -172,8 +171,8 @@ J&=R_{\mathrm{blend}}-\lambda\cdot\mathrm{latency\_norm},\\
 \end{aligned}
 \end{equation}
 FitCell minimizes $1-R_{\mathrm{blend}}$. Selection and champion updates use $J$.
-Here $\log(1+50)$ normalizes batch-64 CUDA runtime smoothly to $[0,1]$ against a $50$\,ms real-time bake ceiling (validated by the $\lambda\in[0,0.05]$ selection-invariance sweep in Section~\ref{sec:proxy-and-lambda}).
-Using the fixed target $a$ ($r^{\star}$ for $R_{\mathrm{seam}}$, $x$ for $R_{\mathrm{body}}$) as the reference denominator in $R(a,b;\mathcal{M})$ follows reference-based ratios such as SDR~\cite{purwins2019} and agrees closely with symmetric normalization ($r{=}0.9988, \rho{=}0.9997$ in Section~\ref{sec:proxy-and-lambda}).
+Here $\log(1+50)$ normalizes batch-64 CUDA runtime smoothly to $[0,1]$ against a $50$\,ms real-time bake ceiling; the ceiling and $\lambda$ were fixed a priori (Section~\ref{sec:proxy-and-lambda}).
+Using the fixed target $a$ ($r^{\star}$ for $R_{\mathrm{seam}}$, $x$ for $R_{\mathrm{body}}$) as the reference denominator in $R(a,b;\mathcal{M})$ follows reference-based ratios such as SDR~\cite{purwins2019}.
 A champion must also strictly beat the frozen corrupt$\to$corrupt Noise2Noise holdout $R_{\mathrm{blend}}$ (primary baseline).
 
 \textbf{Every} scored row applies some $\Theta$ to $x$ and is evaluated under~\eqref{eq:R-blend}.
@@ -334,7 +333,7 @@ Companion listings: Algorithms~\ref{alg:residual}--\ref{alg:hybrid} (Appendix~\r
     E2 plateau stopping rule & $\text{rel.\ }\Delta R_{\mathrm{blend}}<10^{-4}$ for $\text{patience}{=}3$ steps, grad clip $1.0$ \\
     Cycle length $L$ / tiles $N$ / seam $W$ & $256$ / $16$ / $8$ \\
     Fit steps / batch (default) & $24$ / $48$ \\
-    Algo tag & \texttt{PPO+GA+PBT+NAS+depth+MoE} \\
+    Algo tag & \texttt{PPO+GA+PBT+} \texttt{NAS+depth+MoE} \\
     \bottomrule
   \end{tabular}
 \end{adjustbox}

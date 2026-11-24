@@ -69,7 +69,7 @@ Noise2Noise on the multi-family matrix is Appendix Table~\ref{tab:sota-main}. Th
 
 \begin{table}[htbp]
   \centering
-  \caption{Canonical holdout under $R_{\mathrm{blend}}$ ($\alpha{=}0.7$; seed \texttt{20260719}). Mean$\pm$std over five seeds. No-bake $=$ unrepaired engine. Favorite $=$ locked v10.1 hybrid champ.}
+  \caption{Canonical holdout under $R_{\mathrm{blend}}$ ($\alpha{=}0.7$; seed \texttt{20260719}). Mean$\pm$std over five seeds. No-bake $=$ unrepaired engine. Favorite $=$ locked v10.1 hybrid champ. Rows are sorted by mean for reading only; no paired tests were run on this table, so rows with overlapping bands are not ranked against each other.}
   \label{tab:canonical-methods}
   \setlength{\tabcolsep}{6pt}
   \begin{adjustbox}{max width=\columnwidth}
@@ -301,10 +301,4 @@ These tests are exploratory; $n{=}5$ seeds cannot reach $p<0.05$ under an exact 
   \label{fig:domain-search-curves}
 \end{figure*}
 
-\begin{figure*}[t]
-  \centering
-  \includegraphics[width=0.95\textwidth]{figures/fig_cross_domain_quantum_samples.pdf}
-  \caption{Held-out wrap-repair sample visualizations beyond audio across quantum mechanics and engineering domains: 1D periodic ring TDSE ($\mathrm{Re}\,\psi$, top), PMU power-grid synchrophasor (middle), and CNC machining G01 trajectory (bottom).
-    Left: three tiled periods comparing ideal reference, \texttt{no-bake}, and FitCell-tuned \texttt{Ours}. Right: $48$-sample zoom around the first wrap boundary ($n{=}256$), where \texttt{DualCosine} introduces seam oscillations while \texttt{Ours} tracks the ideal boundary smoothly.}
-  \label{fig:cross-domain-quantum-samples}
-\end{figure*}
+

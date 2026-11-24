@@ -75,14 +75,14 @@ The engineering choice is to combine them as an outer loop over compact seam-rep
 Under the locked v10.1 $R_{\mathrm{blend}}$ protocol (objective wrap-discontinuity metrics only; no perceptual or listening claim, $N_{\mathrm{listeners}}{=}0$):
 \begin{itemize}
   \item \textbf{Confirmatory (Holm--Bonferroni corrected, Table~\ref{tab:n2n-vs-ours}):} Converged HybridSeam beats matched \texttt{SeamN2N} on $10$-seed Holdout ($0.9903{\pm}0.0010$ vs $0.9764{\pm}0.0020$, $p_{\mathrm{adj}}{=}0.0039$), $10$-seed Multi-family ($0.9324{\pm}0.0038$ vs $0.9260{\pm}0.0031$, $p_{\mathrm{adj}}{=}0.0039$), and domain-searched vs domain-trained \texttt{SeamN2N} on disjoint $256$-cycle held-out splits for Factory+FX ($0.9108{\pm}0.0845$ vs $0.8772{\pm}0.1218$, $p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$) and AKWF OA ($0.8740{\pm}0.1044$ vs $0.8009{\pm}0.1720$, $p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$).
-  \item \textbf{Hard cliffs \& perceptual/seam proxies:} On top-$10\%$ wrap cliffs, Dual Cosine collapses ($0.9913$ edge RMSE) while E2 plateau champions drop to $0.0086$--$0.0129$ vs $0.0203$ for \texttt{SeamN2N} (Table~\ref{tab:cliff-edge-rmse}), and $R_{\mathrm{blend}}$ tracks seam-local Edge RMSE ($\rho{=}{-}0.9737$, $p{<}10^{-300}$) and $>2$\,kHz click splatter ($\rho{=}{-}0.9342$, $p{<}10^{-300}$; Section~\ref{sec:proxy-and-lambda}).
+  \item \textbf{Hard cliffs:} On top-$10\%$ wrap cliffs, Dual Cosine collapses ($0.9913$ edge RMSE vs $0.0944$ for \texttt{no-bake}; Table~\ref{tab:cliff-edge-rmse}).
 \end{itemize}
 \paragraph{Exploratory compute-allocation note.}
 Under a $16$--$48$-step FitCell cap, the hybrid trails frozen Noise2Noise on $10$-seed holdout ($0.9710$ vs $0.9764$, $p{=}0.0020$); training to plateau (E2) reverses this gap.
 An underpowered $n{=}3$ search-seed pilot ($0.9748{\pm}0.0018$, $p{=}0.25$, requiring $n{\ge}6$ seeds for $\alpha{=}0.05$) is used strictly as an exploratory compute-allocation heuristic rather than a confirmatory search-family claim (Section~\ref{sec:results}).
 \paragraph{Scope and roadmap.}
 Cycle-local wavetable seam repair for DSP and synthesis venues; formal wrap-closure proofs, search-convergence theorems, and human perceptual trials ($N_{\mathrm{listeners}}{=}0$) are out of scope (Section~\ref{sec:limitations}).
-Section~\ref{sec:methods} defines $R_{\mathrm{blend}}$, $J$, and the operator space; Section~\ref{sec:experiments} details datasets and baselines; Section~\ref{sec:results} presents confirmatory, ablation, perceptual-proxy, and cross-domain/TDSE results.
+Section~\ref{sec:methods} defines $R_{\mathrm{blend}}$, $J$, and the operator space; Section~\ref{sec:experiments} details datasets and baselines; Section~\ref{sec:results} presents confirmatory, ablation and sensitivity results; exploratory cross-domain checks are in the appendix.
 
 \subsection{Contributions}
 \label{sec:contributions}
@@ -91,6 +91,6 @@ Section~\ref{sec:methods} defines $R_{\mathrm{blend}}$, $J$, and the operator sp
   \item \textbf{Ideal-sibling protocol.} Unsupervised scoring via a procedural cliff-withheld twin plus mid-cycle engine identity, without paired studio-clean targets at search time.
   \item \textbf{Compact repair-operator space.} Searchable graphs over classical seam ops (DualCosine, FIR, VA residuals) and tiny residual nets (MLP/FIR/U-Net-lite/LSTM-lite/MoE), not end-to-end Demucs-scale stacks (Section~\ref{sec:bake}, Appendix~\ref{app:algorithms}).
   \item \textbf{Engineering instantiation (not an algorithmic claim).} HybridSeam reuses standard GA--PPO(+PBT) primitives as an outer loop over that operator space; an exploratory $n{=}3$ six-way $5$k pilot ($p{=}0.25$) serves solely as a compute-allocation heuristic for FitCell-to-plateau (Tables~\ref{tab:meta-approaches},~\ref{tab:v14-hybrid-converge}).
-  \item \textbf{Open multi-seed, multi-family, and cross-domain evaluation.} Frozen \texttt{SeamN2N} and circular \texttt{SeamResUNet} neural baselines, $10$-seed holdout, multi-family, sawtooth/pulse, and wavetable-native boards, hard-cliff strata, $6$-seed Quantum Ring TDSE, and exploratory 2D/3D TDSE and 7-domain engineering transfer checks (Section~\ref{sec:ethics}, Appendix~\ref{app:transfer-bundle}).
+  \item \textbf{Open multi-seed, multi-family, and cross-domain evaluation.} A frozen \texttt{SeamN2N} neural baseline, $10$-seed holdout, multi-family and wavetable-native boards, hard-cliff strata, and exploratory 7-domain engineering transfer checks (Section~\ref{sec:ethics}, Appendix~\ref{app:transfer-bundle}).
 \end{enumerate}
 What is \emph{not} claimed as a contribution: a new foundational NAS/RL algorithm, formal wrap-closure theorems, or perceptual MOS/MUSHRA superiority.
