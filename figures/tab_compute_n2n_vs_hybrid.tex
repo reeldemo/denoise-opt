@@ -1,9 +1,10 @@
 \begin{table}[t]
   \centering
-  \caption{Compute comparison (RTX~3090; single GPU).
+  \caption{Compute comparison (single GPU per row; GPU model from run metadata).
     \textbf{Evaluations} counts outer-loop architecture proposals for hybrid search, or Adam steps for the one-shot Noise2Noise trainer.
-    GPU-hours are wall-clock on the logged run; TBD marks missing logs.
-    Noise2Noise gate $R_{\mathrm{blend}}$ is evaluated on the frozen holdout (seed \texttt{20260719}); hybrid $R_{\mathrm{blend}}$ rows are in-loop search scores unless noted.}
+    Matched-$5$k historical freeze used RTX~3090; N2N retrain, FitCell-to-plateau, and holdout re-scores used RTX~3060 (Section~\ref{sec:experiments}).
+    $5{,}000$ is the stopping gate on outer iterations; $\approx 6{,}922$ counts clean architecture evaluations in the archived trace when every proposal was scored.
+    Noise2Noise gate $R_{\mathrm{blend}}$ is on the frozen holdout (eval seed \texttt{20260719}).}
   \label{tab:compute-n2n-hybrid}
   \setlength{\tabcolsep}{3pt}
   \footnotesize

@@ -15,7 +15,7 @@ The evaluation protocol is stated in Section~\ref{sec:experiments}.
   \item \textbf{Which outer loop to keep} (Table~\ref{tab:meta-approaches}):
     hybrid has the top descriptive mean in a matched $5$k bake-off ($n{=}3$ search seeds; vs runner-up mean $\Delta{=}{+}0.0114$, bootstrap CI $[0.0064,0.0144]$, $p{=}0.25$; Appendix~\ref{sec:meta-approaches-results}), compute allocation only, not outer-loop superiority.
   \item \textbf{Longer FitCell} (Table~\ref{tab:v14-hybrid-converge}):
-    seed \texttt{1902771841} logs in-loop $R_{\mathrm{blend}}{\approx}0.9912$, and three-seed holdout replication reaches $0.9881{\pm}0.0029$ vs Noise2Noise gate $0.9766$ ($3/3$ wins, $p{=}0.25$ at $n{=}3$).
+    seed \texttt{1902771841} logs in-loop $R_{\mathrm{blend}}{\approx}0.9870$, and three-seed holdout replication reaches $0.9881{\pm}0.0029$ vs frozen N2N gate ${\approx}0.9750$ on eval seed \texttt{20260719} ($3/3$ holdout-batch wins, exact sign-flip $p{=}0.25$ at $n{=}3$ search seeds).
   \item \textbf{Where classical fails} (Section~\ref{sec:cliff-strata}):
     hard wrap cliffs collapse Dual Cosine; searched operators and Noise2Noise hold.
 \end{enumerate}
@@ -23,7 +23,7 @@ The evaluation protocol is stated in Section~\ref{sec:experiments}.
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{figures/fig_meta_heal_samples.png}
-  \caption{Holdout wrap-seam heal for the FitCell-to-plateau hybrid champion (in-loop $R_{\mathrm{blend}}{\approx}0.9912$, search seed \texttt{1902771841}; three-seed holdout mean $0.9881{\pm}0.0029$) vs no-bake, Dual Cosine, and ideal sibling $r^{\star}$.}
+  \caption{Holdout wrap-seam heal for the FitCell-to-plateau hybrid champion (synthetic sine+cliff tiles; in-loop $R_{\mathrm{blend}}{\approx}0.9870$, search seed \texttt{1902771841}; three-seed holdout mean $0.9881{\pm}0.0029$) vs no-bake, Dual Cosine, and ideal sibling $r^{\star}$.}
   \label{fig:meta-heal-samples}
 \end{figure}
 
@@ -137,7 +137,7 @@ When both methods are trained/searched directly on the same disjoint $1{,}024$-c
   \caption{Parameter count and inference latency under the locked holdout story.
     Favorite $\Theta$ is the v10.1 hybrid champion (search seed \texttt{1902771841}).
     SeamN2N is the frozen corrupt$\to$corrupt gate (train seed \texttt{424242}).
-    Holdout and multi-family $R_{\mathrm{blend}}$ rows report mean$\pm$std over ten evaluation seeds (\texttt{20260719}--\texttt{20260728}); earlier five-seed pilot numbers are noted in text.
+    Holdout $R_{\mathrm{blend}}$ uses ten evaluation seeds (\texttt{20260719}--\texttt{20260728}); the five-seed pilot subset appears in text only.
     Latency is CUDA ms/batch at $B{=}64$ (Table~\ref{tab:ours-n2n-latency}).}
   \label{tab:param-fairness}
   \setlength{\tabcolsep}{4pt}
@@ -146,7 +146,7 @@ When both methods are trained/searched directly on the same disjoint $1{,}024$-c
     \toprule
     Method & Params & Holdout $R_{\mathrm{blend}}$ & ms/$B{=}64$ \\
     \midrule
-    Favorite $\Theta$ (v10.1 hybrid) & ${\approx}121$k & $0.9708{\pm}0.0014$ & $8.20$ \\
+    Favorite $\Theta$ (v10.1 hybrid) & ${\approx}121$k & $0.9710{\pm}0.0029$ & $8.20$ \\
     SeamN2N (corrupt$\to$corrupt) & ${\approx}53.5$k & $0.9766{\pm}0.0019$ & $1.12$ \\
     Dual Cosine & $0$ & $0.542{\pm}0.038$ &, \\
     \bottomrule
@@ -176,14 +176,14 @@ The matched bake-off (Table~\ref{tab:meta-approaches}) already ranked hybrid fir
 I therefore stop spending matched budget on Random, CMA-ES, TPE, Aging, and REINFORCE.
 The follow-up is hybrid-only FitCell-to-plateau: every candidate trains until residual plateau
 (or a searchable hard cap $T_{\max}\!\in\!\{512,\ldots,2048\}$),
-with searchable patience, relative $\varepsilon$, batch size, and $\lambda$
+with searchable patience, relative $\varepsilon$, and batch size ($\lambda{=}0.02$ fixed in $J$)
 (artifacts \texttt{meta\_approach\_compare\_v14\_converge/}).
 
 The outer budget is $750$ evaluations with two sequential proposals per iteration on one GPU.
-On \textbf{search seed} \texttt{1902771841} only, the champion logs in-loop $R_{\mathrm{blend}}{\approx}0.9912$
-($J{\approx}0.9854$, $t{\approx}8.70$\,ms) after ${\approx}46.9$\,h wall on fresh procedural evaluation batches during the converge campaign.
-That score is \emph{not} the five-seed holdout mean (Table~\ref{tab:n2n-vs-ours}); it is compared against the frozen holdout Noise2Noise gate (${\approx}0.9750$; train seed \texttt{424242}, eval seed \texttt{20260719}).
-Multi-search-seed replication across three search seeds (\texttt{1902771841}, \texttt{2026072701}, and \texttt{2026072702}; $750$ evaluations each) confirms this effect on independent five-seed holdout batches. Holdout means are $0.9849$, $0.9893$, and $0.9902$ (mean $0.9881{\pm}0.0029$) and clear the frozen Noise2Noise holdout gate ($0.9766$) on $3/3$ seeds (mean $\Delta R_{\mathrm{blend}}{=}{+}0.0115$, Wilson 95\% CI $[0.44,1.00]$, exact sign-flip $p{=}0.25$ at $n{=}3$).
+On \textbf{search seed} \texttt{1902771841} only, the champion logs in-loop $R_{\mathrm{blend}}{\approx}0.9870$
+($J{\approx}0.9854$, $t{\approx}8.70$\,ms) after ${\approx}46.9$\,h wall on fresh procedural evaluation batches during the converge campaign (Figure~\ref{fig:v14-converge-curve}; \texttt{fig\_v14\_converge\_learning\_curve\_summary.json}).
+That score is \emph{not} the ten-seed holdout mean (Table~\ref{tab:n2n-vs-ours}); it is compared against the frozen Noise2Noise gate (${\approx}0.9750$; train seed \texttt{424242}, eval seed \texttt{20260719}).
+Multi-search-seed replication across three search seeds (\texttt{1902771841}, \texttt{2026072701}, and \texttt{2026072702}; $750$ evaluated proposals each) is descriptive: holdout means are $0.9849$, $0.9893$, and $0.9902$ (mean $0.9881{\pm}0.0029$), above the ten-seed N2N mean $0.9764$ on $3/3$ search draws (mean $\Delta R_{\mathrm{blend}}{=}{+}0.0115$, Wilson 95\% CI $[0.44,1.00]$, exact sign-flip $p{=}0.25$ at $n{=}3$).
 Figure~\ref{fig:v14-converge-curve} shows the learning curve; Table~\ref{tab:v14-hybrid-converge} summarizes the freeze.
 
 \begin{figure}[t]
@@ -279,7 +279,7 @@ on seed \texttt{1902771841}.
 The top panel is the short FitCell hybrid under locked $R_{\mathrm{blend}}{+}J$ ($1{,}200$ evaluations):
 raw $R_{\mathrm{blend}}$ clears Dual Cosine immediately and plateaus below the Noise2Noise gate (${\approx}0.975$).
 The bottom panel is the FitCell-to-plateau follow-up ($750$ evaluations):
-the same outer loop continues until residual plateau (final in-loop $R_{\mathrm{blend}}{\approx}0.9912$ on seed \texttt{1902771841}; three-seed holdout mean $0.9881{\pm}0.0029$; Section~\ref{sec:v14-converge}).
+the same outer loop continues until residual plateau (final in-loop $R_{\mathrm{blend}}{\approx}0.9870$ on seed \texttt{1902771841}; three-seed holdout mean $0.9881{\pm}0.0029$; Section~\ref{sec:v14-converge}).
 The matched multi-seed $R_{\mathrm{blend}}$ bake-off is in Table~\ref{tab:meta-approaches}.
 Live hybrid champions stay compact (${\approx}24$k$\pm$2k params across short-FitCell seeds), while mid-search graphs can swing from ${\approx}15$k to ${\approx}370$k.
 
@@ -295,7 +295,7 @@ Live hybrid champions stay compact (${\approx}24$k$\pm$2k params across short-Fi
 \begin{table*}[t]
   \centering
   \caption{Four-board comparison under $R_{\mathrm{blend}}$.
-    Holdout and Multi-family: mean$\pm$std over $10$ eval seeds (\texttt{20260719}--\texttt{20260728}); E2\,(\texttt{2026072702}) beats \texttt{SeamN2N} on $10/10$ seeds on both boards (Holm-Bonferroni $p_{\mathrm{adj}}{=}0.0039$).
+    Holdout and Multi-family (synthetic sine+cliff): mean$\pm$std over $10$ eval seeds (\texttt{20260719}--\texttt{20260728}); paired tests vs.\ frozen \texttt{SeamN2N} checkpoint (Holm-Bonferroni $p_{\mathrm{adj}}{=}0.0039$ for E2\,(\texttt{2026072702})).
     Factory+FX and AKWF OA ($256$ held-out cycles, $1{,}024$ train): domain-searched DenoiseOpt vs.\ domain-trained \texttt{SeamN2N} ($4{,}000$ steps) on identical splits (Wilcoxon Holm $p_{\mathrm{adj}}{=}4.19{\times}10^{-15}$ and $9.54{\times}10^{-21}$).}
   \label{tab:n2n-vs-ours}
   \setlength{\tabcolsep}{7pt}
@@ -347,7 +347,7 @@ The weight $\lambda{=}0.02$ in $J$ was fixed before the E2 searches and was not 
 
 \textbf{Main-text baseline summary.}
 Table~\ref{tab:baselines-main} collects the $10$-seed sine+cliff holdout scores of the proposed operator, the matched \texttt{SeamN2N} gate ($53.5$k parameters, 4-block 1D circular convolution with residual skip, $20{,}000$ Adam steps at batch $64$ and learning rate $2{\times}10^{-3}$ on seed \texttt{424242}), \texttt{no-bake} and \texttt{DualCosine} (from the released 10-seed result files), together with the classical VA repairs of Appendix Table~\ref{tab:va-seam-blep} on seed \texttt{20260719}.
-Matched-capacity neural baselines and cycle-local VA repairs are the relevant peers under the real-time per-cycle bake budget (${\le}3$\,ms/batch).
+The $52$k E2 champion ($1.97$\,ms) is the ${\le}3$\,ms/batch neural peer vs.\ $53.5$k \texttt{SeamN2N}; the $287$k E2 row ($3.52$\,ms) exceeds that bake budget.
 
 \begin{table}[t]
   \centering
@@ -371,7 +371,7 @@ Matched-capacity neural baselines and cycle-local VA repairs are the relevant pe
 
 \textbf{Power analysis for $n{=}3$ pilots and cross-domain periodic-boundary transfer.}
 For a two-sided exact sign-flip permutation test at $\alpha{=}0.05$, the minimum sample size is $n{=}6$ ($2\cdot 2^{-6}{=}0.03125<0.05$); thus the $n{=}3$ matched-$5$k ($\Delta{=}{+}0.0114$) and E2 plateau ($\Delta{=}{+}0.0115$, Cohen's $d{\approx}3.97$) pilots cannot reach $p{<}0.05$ regardless of effect size and would require $n{\ge}6$ search seeds (${\approx}216$\,GPU-h) for confirmatory testing.
-Why test non-audio domains? Every periodic engineering and spectral-FFT physics problem below shares the exact 1D/toroidal wrap-boundary geometry ($x[0]{\approx}x[L{-}1]$ under $L$-periodic tiling) as wavetable oscillators. Testing on non-audio periodic signals therefore checks whether the learned cycle-local operator vocabulary overfits to sine+cliff audio shapes.
+Why test non-audio domains? Every periodic board below uses length-$L$ toroidal tiling for scoring ($x[n{+}L]{=}x[n]$), the same 1D wrap geometry as wavetable cycles, without assuming $x[0]{\approx}x[L{-}1]$. Testing on non-audio periodic signals therefore checks whether the learned cycle-local operator vocabulary overfits to sine+cliff audio shapes.
 As a single-seed exploratory check of whether cycle-local wrap-discontinuity repair transfers beyond audio wavetables, Table~\ref{tab:transfer-summary-main} summarizes the seven external periodic/quasi-periodic boards from Appendix~\ref{app:transfer-bundle} (Tables~\ref{tab:transfer-main}--\ref{tab:transfer-main-b}). They cover industrial rotating-machinery bearings (CWRU, MFPT, Paderborn), cardiac electrophysiology ECG (MIT-BIH, PTB-XL), CNC servo toolpaths, and power-grid PMU synchrophasors ($n{=}256$ periods each). Under matched $n{=}256$-period held-out splits with identical $R_{\mathrm{blend}}$ evaluation, the single-seed domain-searched DenoiseOpt achieves higher $R_{\mathrm{blend}}$ than domain-trained \texttt{SeamN2N} on all $7/7$ scientific/engineering boards ($0.937$--$0.992$ vs $0.553$--$0.959$, exact two-sided sign test $p{=}0.0156$).
 
 \begin{table*}[t]
@@ -391,5 +391,7 @@ As a single-seed exploratory check of whether cycle-local wrap-discontinuity rep
     \bottomrule
   \end{tabular}
 \end{table*}
+
+\input{subsections/results_real_seam}
 
 % Secondary tables (canonical classical board, VA seam, factory export, Rust bench) moved to Appendix~\ref{app:secondary-results}. Cross-domain transfer boards moved to Appendix~\ref{app:transfer-bundle}.

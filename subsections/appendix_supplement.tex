@@ -239,7 +239,7 @@ These are branch labels in a single run, not separately fitted champions, so the
 They probe whether dropping GA or PPO collapses residual under a short budget; they are \emph{not} matched-$5$k competitors and must not overwrite Table~\ref{tab:meta-approaches}.
 \paragraph{How to read Table~\ref{tab:ablation}.}
 Left-column values are close to each other (${\approx}0.987$--$0.991$ prolonged $R$): in that single history, branch tags do not identify a unique winner, so I do not treat ``GA-only freeze'' as proof that GA alone suffices under locked $R_{\mathrm{blend}}$.
-Right-column short restarts under $R_{\mathrm{blend}}$ stay far below the matched-$5$k hybrid mean ($0.9748$) and the converge seed ($0.9912$) because the budget is only $150$ iterations with short FitCell, they are sensitivity checks, not leaderboard rows.
+Right-column short restarts under $R_{\mathrm{blend}}$ stay far below the matched-$5$k hybrid mean ($0.9748$) and the converge seed ($0.9870$) because the budget is only $150$ iterations with short FitCell, they are sensitivity checks, not leaderboard rows.
 The matched comparison that drives method choice remains Table~\ref{tab:meta-approaches}.
 Table~\ref{tab:compute} summarizes campaign compute (historical prolonged-$R$ search).
 

@@ -16,7 +16,7 @@ These constraints bound claim strength; they are not optional honesty footnotes.
   \item \textbf{Metric lock and seed labeling.}
     Primary holdout and multi-family claims in Table~\ref{tab:n2n-vs-ours} use locked $R_{\mathrm{blend}}$ (Section~\ref{sec:residual-score}) over ten evaluation seeds (\texttt{20260719}--\texttt{20260728}); earlier five-seed pilot summaries are noted where applicable.
     Matched-$5$k outer-loop means use three primary search seeds (Table~\ref{tab:meta-approaches}).
-    Single-seed in-loop FitCell-to-plateau ($R_{\mathrm{blend}}{\approx}0.9912$, seed \texttt{1902771841}; Table~\ref{tab:v14-hybrid-converge}) is distinct from the three-seed holdout replication ($0.9881{\pm}0.0029$; Section~\ref{sec:v14-converge}).
+    Single-seed in-loop FitCell-to-plateau ($R_{\mathrm{blend}}{\approx}0.9870$, seed \texttt{1902771841}; Table~\ref{tab:v14-hybrid-converge}) is distinct from the three-seed holdout replication ($0.9881{\pm}0.0029$; Section~\ref{sec:v14-converge}).
     Whole-curve prolonged $R$ near $0.991$ is a superseded debug score and must not overwrite holdout or converge readings.
   \item \textbf{Synthetic / proxy boards.}
     Primary search and holdout use procedural sine{+}cliff generators, not private studio stems.
@@ -50,6 +50,9 @@ These constraints bound claim strength; they are not optional honesty footnotes.
     None of these numbers has a result file or producing script in the public repositories, so they are withdrawn from this version rather than reported unverifiably. Restoring them requires re-running the evaluations and releasing the result files.
   \item \textbf{Hyperparameter probe.}
     The $\pm 50\%$ one-at-a-time probe (Appendix~\ref{app:supplement}) is not a full re-search of Table~\ref{tab:hyperparams}.
+  \item \textbf{Pending compute (explicit placeholders).}
+    \textbf{E3} extra matched-$5$k search seeds, \textbf{V1--V3} variant ablations, and refreshed real-seam boards remain \texttt{TBD} in tables until queued runs finish (\texttt{EXPERIMENT\_PLAN.md}; est.\ ${\sim}135$\,GPU-h for E3 alone).
+    No placeholder row reports a numeric score.
 \end{itemize}
 
 \subsection{Future work}

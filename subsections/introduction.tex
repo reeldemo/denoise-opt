@@ -2,13 +2,13 @@
 \label{sec:introduction}
 
 Wavetable oscillators store one period and wrap the read pointer at the end of the table.
-When those endpoints disagree, each wrap injects a discontinuity that listeners hear as a period-locked click, matching the boundary-wrap geometry that induces Gibbs/kinetic-energy spikes in spectral-FFT physics solvers and cyclic industrial sensors.
+Stored wavetables often mismatch at the wrap join ($x[0]\neq x[L{-}1]$), which can produce an audible click when the read pointer wraps; this is the seam-repair target, distinct from ordinary adjacent-sample variation within a smooth period.
 
 \paragraph{Wavetable synthesis in brief.}
 A wavetable synthesizer stores a single cycle of a waveform (the wavetable) and produces continuous tone by looping a read pointer through that table.
 Pitch is set by how fast the pointer advances. Timbre comes from the stored shape (and, in multi-table banks, from morphing across tables).
 Tiling the stored period yields a sustained note under playback.
-If the endpoints disagree ($x[0]\neq x[L-1]$), every wrap is a discontinuity at the wrap join (the seam), heard as a click locked to the fundamental.
+When endpoints disagree, tiling places a large sample jump at the wrap join (the seam), the usual click mechanism in wavetable playback.
 Figure~\ref{fig:wavetable-primer} shows one stored period, tiled playback with wrap marks, and a zoomed mismatched wrap.
 The same geometry appears whenever a short loop is tiled for listening or scoring.
 
@@ -74,12 +74,14 @@ The engineering choice is to combine them as an outer loop over compact seam-rep
 \paragraph{Key findings.}
 Under the locked v10.1 $R_{\mathrm{blend}}$ protocol (objective wrap-discontinuity metrics only; no perceptual or listening claim, $N_{\mathrm{listeners}}{=}0$):
 \begin{itemize}
-  \item \textbf{Confirmatory (Holm--Bonferroni corrected, Table~\ref{tab:n2n-vs-ours}):} Converged DenoiseOpt beats matched \texttt{SeamN2N} on $10$-seed Holdout ($0.9903{\pm}0.0010$ vs $0.9764{\pm}0.0020$, $p_{\mathrm{adj}}{=}0.0039$), $10$-seed Multi-family ($0.9324{\pm}0.0038$ vs $0.9260{\pm}0.0031$, $p_{\mathrm{adj}}{=}0.0039$), and domain-searched vs domain-trained \texttt{SeamN2N} on disjoint $256$-cycle held-out splits for Factory+FX ($0.9108{\pm}0.0845$ vs $0.8772{\pm}0.1218$, $p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$) and AKWF OA ($0.8740{\pm}0.1044$ vs $0.8009{\pm}0.1720$, $p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$).
+  \item \textbf{Synthetic-cliff confirmatory (Holm--Bonferroni, Table~\ref{tab:n2n-vs-ours}):} On procedural sine+cliff holdout, E2 DenoiseOpt exceeds frozen \texttt{SeamN2N} (same protocol, \emph{not} matched training targets) on ten evaluation seeds ($0.9903{\pm}0.0010$ vs $0.9764{\pm}0.0020$, $p_{\mathrm{adj}}{=}0.0039$) and multi-family ($p_{\mathrm{adj}}{=}0.0039$).
+  Factory+FX and AKWF use real cycles with \emph{injected} cliffs and per-domain search vs domain-trained N2N.
+  \item \textbf{Natural real seams (negative):} Without cliff injection, no-bake beats every repair on factory and AKWF held-out cycles (Section~\ref{sec:real-natural-seam}).
   \item \textbf{Hard cliffs:} On top-$10\%$ wrap cliffs, Dual Cosine collapses ($0.9913$ edge RMSE vs $0.0944$ for \texttt{no-bake}; Table~\ref{tab:cliff-edge-rmse}).
 \end{itemize}
 \paragraph{Exploratory compute-allocation note.}
 Under a $16$--$48$-step FitCell cap, the hybrid trails frozen Noise2Noise on $10$-seed holdout ($0.9710$ vs $0.9764$, $p{=}0.0020$); training to plateau (E2) reverses this gap.
-An underpowered $n{=}3$ search-seed pilot ($0.9748{\pm}0.0018$, $p{=}0.25$, requiring $n{\ge}6$ seeds for $\alpha{=}0.05$) is used strictly as an exploratory compute-allocation heuristic rather than a confirmatory search-family claim (Section~\ref{sec:results}).
+An underpowered $n{=}3$ search-seed pilot ($0.9748{\pm}0.0018$, exact sign-flip $p{=}0.25$) motivates hybrid-only FitCell-to-plateau; it is not confirmatory superiority over outer-loop families (Section~\ref{sec:results}).
 \paragraph{Scope and roadmap.}
 Cycle-local wavetable seam repair for DSP and synthesis venues; formal wrap-closure proofs, search-convergence theorems, and human perceptual trials ($N_{\mathrm{listeners}}{=}0$) are out of scope (Section~\ref{sec:limitations}).
 Section~\ref{sec:methods} defines $R_{\mathrm{blend}}$, $J$, and the operator space; Section~\ref{sec:experiments} details datasets and baselines; Section~\ref{sec:results} presents confirmatory, ablation and sensitivity results; exploratory cross-domain checks are in the appendix.

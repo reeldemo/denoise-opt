@@ -32,9 +32,10 @@ Ablations that drop GA or PPO (Table~\ref{tab:ablation}, right column) still cal
 \caption{DualCosine baseline}
 \label{alg:dualcosine}
 \begin{algorithmic}[1]
-\Require Engine cycle $x$
+\Require Ideal $r^{\star}$, engine cycle $x$, periods $N$
 \State Fade both ends of $x$ with raised-cosine windows of width $W$
-\State \Return $\mathrm{ResidualScore}(r^{\star},\,x_{\mathrm{faded}},\,N)$
+\State $y \gets x_{\mathrm{faded}}$
+\State \Return $\mathrm{ResidualScoreBlend}(r^{\star},\,x,\,y)$
 \end{algorithmic}
 \end{algorithm}
 
@@ -42,8 +43,8 @@ Ablations that drop GA or PPO (Table~\ref{tab:ablation}, right column) still cal
 \caption{No-bake (passthrough) control}
 \label{alg:no-bake}
 \begin{algorithmic}[1]
-\Require Engine cycle $x$ (open-wrap cliff present)
-\State \Return $\mathrm{ResidualScore}(r^{\star},\,x,\,N)$ \Comment{no operator: $x\mapsto x$}
+\Require Ideal $r^{\star}$, engine cycle $x$ (open-wrap cliff present)
+\State \Return $\mathrm{ResidualScoreBlend}(r^{\star},\,x,\,x)$ \Comment{no operator: $x\mapsto x$}
 \end{algorithmic}
 \end{algorithm}
 
@@ -65,7 +66,7 @@ Ablations that drop GA or PPO (Table~\ref{tab:ablation}, right column) still cal
 \Require Architecture cfg; hard cap $T_{\max}$; patience $P$; relative $\varepsilon$; batch $B$
 \State cell $\gets \mathrm{SeamCell}(\mathrm{cfg})$
 \State opt $\gets \mathrm{Adam}(\mathrm{cell.params})$
-\State prev $\gets \mathrm{null}$; stagnant $\gets 0$
+\State prev $\gets \mathrm{null}$; stagnant $\gets 0$; converged $\gets$ \textbf{false}
 \For{$t = 1,\ldots,T_{\max}$}
   \State ideal, eng $\gets \mathrm{MakeBatch}(B)$
   \State out $\gets \mathrm{ApplyOps}(\mathrm{eng},\,\mathrm{cell},\,\mathrm{cfg.ops})$
@@ -77,7 +78,7 @@ Ablations that drop GA or PPO (Table~\ref{tab:ablation}, right column) still cal
   \If{prev $\neq$ null and $|\mathrm{prev}-R|/\max(|\mathrm{prev}|,\varepsilon_{\mathrm{num}}) < \varepsilon$}
     \State stagnant $\gets$ stagnant $+1$
     \If{stagnant $\ge P$}
-      \State \textbf{break} \Comment{converged}
+      \State converged $\gets$ \textbf{true}; \textbf{break}
     \EndIf
   \Else
     \State stagnant $\gets 0$
@@ -93,7 +94,7 @@ Ablations that drop GA or PPO (Table~\ref{tab:ablation}, right column) still cal
 \label{alg:ga}
 \begin{algorithmic}[1]
 \Require Population $P$, tournament size $k$, crossover rate $p_c$, mutation rate $p_m$
-\State Sample $k$ genomes; parents $\gets$ top-2 by $R$
+\State Sample $k$ genomes; parents $\gets$ top-2 by $J$
 \State child $\gets$ Crossover(parents) with prob.\ $p_c$, else clone elite
 \State Mutate(child) with rate $p_m$ (ops, depth, operator type, $\theta$)
 \State Fit and evaluate child; insert into $P$ (replace worst if full)
@@ -119,7 +120,7 @@ Ablations that drop GA or PPO (Table~\ref{tab:ablation}, right column) still cal
 \label{alg:pbt}
 \begin{algorithmic}[1]
 \Require Population $P$, exploit quantile $q$, mutate scale $\sigma$
-\State Rank $P$ by $R$; for each bottom member, copy hyperparameters from a top-$q$ elite
+\State Rank $P$ by $J$; for each bottom member, copy hyperparameters from a top-$q$ elite
 \State Perturb copied hyperparameters by multiplicative noise of scale $\sigma$
 \State Refit briefly; write back into $P$
 \State \Return updated $P$
@@ -141,10 +142,11 @@ Ablations that drop GA or PPO (Table~\ref{tab:ablation}, right column) still cal
     \State cell, $R_{\mathrm{fit}} \gets \mathrm{FitCell}(\mathrm{cfg},\,\mathrm{hp.fit\_steps})$
     \State $R_{\mathrm{eval}} \gets \mathrm{EvalCell}(\mathrm{cell})$
     \State $R \gets \tfrac12 R_{\mathrm{fit}} + \tfrac12 R_{\mathrm{eval}}$ (+ optional depth/MoE bonus)
-    \State UpdatePopulation($P$, cfg, $R$)
+    \State $J \gets R - \lambda\cdot\mathrm{latency\_norm}(t_{\mathrm{ms}})$
+    \State UpdatePopulation($P$, cfg, $J$)
     \State PPOUpdate($\pi$, centered $\rho = R - R_{\mathrm{DualCosine}}$)
-    \If{$R > \mathrm{champ}.R$}
-      \State champ $\gets$ (cfg, cell, $R$)
+    \If{$J > \mathrm{champ}.J$ \textbf{and} $R$ clears gates}
+      \State champ $\gets$ (cfg, cell, $J$, $R$)
       \State boredom $\gets 0$
     \Else
       \State boredom $\gets$ boredom $+1$

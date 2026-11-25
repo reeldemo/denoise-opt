@@ -70,14 +70,16 @@ Self-Supervised Blended Residual}
     Code and artifacts: \url{https://github.com/reeldemo/denoise-opt}
   \end{center}
   \begin{abstract}
-    Wavetable synthesis exhibits cycle-boundary wrap discontinuities when stored periods do not join smoothly.
-    I frame wrap repair as cycle-local seam restoration, scored self-supervised against a procedural cliff-withheld sibling with a blended residual $R_{\mathrm{blend}}$.
-    DenoiseOpt reuses genetic search, PPO, and population-based training as an engineering outer loop and does not claim a new NAS or RL algorithm. Confirmatory evidence is against a matched Noise2Noise baseline (\texttt{SeamN2N}) and classical fades (\texttt{DualCosine}).
-    All evidence is objective ($N_{\mathrm{listeners}}{=}0$); listening tests remain future work.
+    Wavetable cycles that do not join smoothly at the wrap can produce period-locked clicks.
+    I search compact seam repair operators under a self-supervised blended residual $R_{\mathrm{blend}}$, using a procedural cliff-withheld sibling on synthetic tiles and genetic search, PPO, and population-based training as a reuse-only outer loop (not a new NAS algorithm).
+    Classically inspired fades and a corrupt-to-corrupt \texttt{SeamN2N} gate share evaluation protocol and capacity reporting, but FitCell sees exact sibling geometry that N2N does not.
+    All numbers are objective ($N_{\mathrm{listeners}}{=}0$).
 
-    In confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected), converged DenoiseOpt beats matched \texttt{SeamN2N} on $10$-seed Holdout ($0.9903$ vs $0.9764$, $p_{\mathrm{adj}}{=}0.0039$), $10$-seed Multi-family ($0.9324$ vs $0.9260$, $p_{\mathrm{adj}}{=}0.0039$), Factory+FX ($0.9108$ vs $0.8772$, $p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$), and AKWF OA ($0.8740$ vs $0.8009$, $p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$). The holdout ranking is unchanged for blend weights $\alpha\in[0.3,0.9]$.
-    With short FitCell budgets the hybrid trails Noise2Noise; only training to plateau reverses the gap, and the search-family comparison ($n{=}3$ seeds) is exploratory.
-    On top-$10\%$ hard wrap cliffs, \texttt{DualCosine} leaves $0.9913$ edge RMSE against $0.0944$ without repair (Table~\ref{tab:cliff-edge-rmse}). Exploratory non-audio transfer checks are reported separately in the appendix.
+    On \emph{synthetic} sine+cliff holdout, E2 DenoiseOpt exceeds frozen \texttt{SeamN2N} on ten evaluation seeds (Table~\ref{tab:n2n-vs-ours}; paired tests, Holm--Bonferroni).
+  Factory+FX and AKWF rows use real cycles with \emph{injected} cliffs and per-domain search versus domain-trained N2N.
+    On \emph{natural} factory and AKWF seams (no injection), no-bake beats every repair, including DenoiseOpt and N2N (Section~\ref{sec:real-natural-seam}).
+    Short-FitCell hybrid trails N2N on holdout, reversed after FitCell-to-plateau in reported runs; the $n{=}3$ search-family bake-off is exploratory.
+    Hard-cliff strata collapse \texttt{DualCosine}; cross-domain transfer is appendix-only.
   \end{abstract}
   \keywords{wavetable synthesis; wrap discontinuity; unsupervised repair; DenoiseOpt; seam restoration; Noise2Noise; neural architecture search; reinforcement learning; genetic algorithms; proximal policy optimization; hybrid meta-search; population-based training; audio signal processing}
   \vspace{0.6em}

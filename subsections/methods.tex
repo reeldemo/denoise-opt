@@ -77,13 +77,12 @@ For an arbitrary cracked period from this family, the sibling is obtained by rep
 Here \emph{self-supervised via a procedural sibling} means: no human-labeled clean audio and no studio-clean targets enter the search loop.
 Unlike Noise2Noise corrupt-to-corrupt training~\cite{lehtinen2018,kashyap2021n2n} (\texttt{SeamN2N}, which sees only independent corrupted draws $x_1,x_2$), $r^{\star}$ provides exact cliff-free seam geometry for scoring without supplying perceptual ground truth.
 
-\begin{table}[t]
+\begin{table*}[tbp]
   \centering
   \caption{Consolidated metric role mapping.}
   \label{tab:metric-roles}
-  \setlength{\tabcolsep}{3pt}
-  \footnotesize
-  \begin{tabular}{@{}l>{\raggedright\arraybackslash}p{0.43\columnwidth}>{\raggedright\arraybackslash}p{0.27\columnwidth}@{}}
+  \small
+  \begin{tabular*}{\textwidth}{@{\extracolsep{\fill}}l>{\raggedright\arraybackslash}p{0.38\textwidth}>{\raggedright\arraybackslash}p{0.32\textwidth}@{}}
     \toprule
     Symbol & Definition & Role \\
     \midrule
@@ -92,11 +91,11 @@ Unlike Noise2Noise corrupt-to-corrupt training~\cite{lehtinen2018,kashyap2021n2n
     $J$ & $R_{\mathrm{blend}}-\lambda\cdot\mathrm{latency\_norm}$ ($\lambda{=}0.02$) & Outer-loop champion selection \\
     $R_{\mathrm{prol}}$ & $R(r^{\star},y;\Omega)$ over full tiled $\Omega$ & Legacy debug only (unused in selection) \\
     \bottomrule
-  \end{tabular}
-\end{table}
+  \end{tabular*}
+\end{table*}
 
 \textbf{Low-RMS edge case.}
-If an input's mid-cycle RMS approaches zero ($\mathrm{RMS}_{\mathcal{B}}(x)\to 0$), the denominator clamp $\epsilon{=}10^{-8}$ prevents division by zero and the $\max(0,\cdot)$ clamp keeps $R_{\mathrm{body}}\in[0,1]$, while $\alpha{=}0.7$ ensures seam errors still dominate $R_{\mathrm{blend}}$.
+If an input's mid-cycle RMS approaches zero ($\mathrm{RMS}_{\mathcal{B}}(x)\to 0$), the denominator clamp $\varepsilon{=}10^{-6}$ (same as~\eqref{eq:R-component}) prevents division by zero and the $\max(0,\cdot)$ clamp keeps $R_{\mathrm{body}}\in[0,1]$, while $\alpha{=}0.7$ ensures seam errors still dominate $R_{\mathrm{blend}}$.
 
 \subsection{Blended residual score and latency-aware objective}
 \label{sec:residual-score}
@@ -169,9 +168,10 @@ J&=R_{\mathrm{blend}}-\lambda\cdot\mathrm{latency\_norm},\\
 \end{aligned}
 \end{equation}
 FitCell minimizes $1-R_{\mathrm{blend}}$. Selection and champion updates use $J$.
-Here $\log(1+50)$ normalizes batch-64 CUDA runtime smoothly to $[0,1]$ against a $50$\,ms real-time bake ceiling; the ceiling and $\lambda$ were fixed a priori (Section~\ref{sec:proxy-and-lambda}).
+Here $\log(1+50)$ is a \emph{reference scale} for batch-64 CUDA runtime (equals $1$ at $50$\,ms; can exceed $1$ above that); $\lambda$ was fixed a priori (Section~\ref{sec:proxy-and-lambda}).
 Using the fixed target $a$ ($r^{\star}$ for $R_{\mathrm{seam}}$, $x$ for $R_{\mathrm{body}}$) as the reference denominator in $R(a,b;\mathcal{M})$ follows reference-based ratios such as SDR~\cite{purwins2019}.
-A champion must also strictly beat the frozen corrupt$\to$corrupt Noise2Noise holdout $R_{\mathrm{blend}}$ (primary baseline).
+A champion must also beat the frozen corrupt$\to$corrupt Noise2Noise \emph{gate} score: checkpoint train seed \texttt{424242}, evaluated once on the frozen holdout draw (eval seed \texttt{20260719}, ${\approx}0.9750$ in artifacts).
+This gate is a post-search acceptance check on held-out tiles; FitCell and search selection still draw fresh procedural batches and never back-propagate on evaluation seeds (Section~\ref{sec:eval-protocol}).
 
 \textbf{Every} scored row applies some $\Theta$ to $x$ and is evaluated under~\eqref{eq:R-blend}.
 The ideal sibling is the seam scoring target. Body identity uses the engine.
@@ -264,7 +264,8 @@ The short-cap D1 FitCell (${\approx}16$--$48$ steps) is retained only for the si
 \label{sec:hybrid}
 
 Each iteration rotates among branches: PPO, GA, PBT, NAS, and combo.
-Selection and FitCell are always by absolute residual $R$ (maximize toward the ideal sibling, loss $1-R$).
+FitCell minimizes $1-R_{\mathrm{blend}}$.
+Population insertion, tournament parents, and champion retention use latency-aware $J$ (Algorithms~\ref{alg:ga}--\ref{alg:hybrid}); PPO advantage may use optional DualCosine centering without changing $J$.
 
 \paragraph{Near-ceiling scores need reward shaping.}
 \label{sec:reward-shaping}
@@ -288,7 +289,7 @@ Table and figure legends use the short display names below. Artifact folders kee
   \item \textbf{Cont.\ CMA-ES} (\texttt{cmaes}): diagonal covariance-matrix adaptation over a continuous encoding of depth, width, operator kind, block logits, and fit hyperparameters~\cite{hansen2016cmaes}.
   \item \textbf{Arch REINFORCE} (\texttt{reinforce}): vanilla policy gradient over discrete architecture-edit actions (no clipped surrogate). Contrast to PPO~\cite{schulman2017,zoph2017nas}.
   \item \textbf{Aging evolution} (\texttt{aging\_evo}): regularized evolution with oldest-member replacement after tournament parent selection~\cite{real2017large,real2019}, distinct from the hybrid's non-aging tournament GA branch.
-  \item \textbf{TPE Bayes NAS} (\texttt{tpe}): lightweight tree-structured Parzen estimator over discrete bake categoricals in the spirit of practical Bayesian optimization~\cite{snoek2012}.
+  \item \textbf{TPE Bayes NAS} (\texttt{tpe}): tree-structured Parzen estimator over discrete bake categoricals in the spirit of practical Bayesian optimization~\cite{snoek2012} (TPE formulation after Bergstra et al.).
 \end{itemize}
 I also run \textbf{Ours (hybrid GA--PPO)} (\texttt{hybrid\_lstm}): the multi-branch hybrid loop for $5{,}000$ evaluations with LSTM/xLSTM in the block vocabulary and online reward-mode / fit--PPO hyperparameter co-tuning, as the proposed matched-budget arm.
 Results appear in Appendix~\ref{app:supplement} (Table~\ref{tab:meta-approaches}, Figures~\ref{fig:meta-approach-bars}--\ref{fig:meta-approach-compare}). Healed-sample overlays appear in Figure~\ref{fig:meta-heal-samples}.

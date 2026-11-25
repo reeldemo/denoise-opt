@@ -22,6 +22,8 @@ git diff --exit-code figures/stats_paired_holdout.json figures/stats_meta_approa
 
 The expected output lines are listed in the README. In summary:
 
+Paired holdout statistics: `python3 scripts/stats_paired_holdout.py` reads `figures/multiseed_summary.json` and writes `figures/stats_paired_holdout.json` (5-seed and 20-board exploratory blocks).
+
 | Comparison (R_blend, hybrid minus other) | Difference | Bootstrap 95% interval | Wins |
 | --- | --- | --- | --- |
 | Five-seed holdout, vs Noise2Noise | -0.0059 | [-0.0068, -0.0053] | 0/5 |
