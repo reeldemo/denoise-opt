@@ -9,12 +9,12 @@ They are not building blocks of HybridSeam.
 
 \paragraph{Wavetable / virtual-analog foundations and discontinuity control.}
 Foundational wavetable and virtual-analog (VA) oscillator work frames alias-free classic waveforms and wrap/corner discontinuities via BLIT/BLEP~\citep{stilson1996,valimaki2007polyblep}, PolyBLEP~\citep{valimaki2007polyblep}, and BLAMP~\citep{esqueda2016blamp}.
-Unlike runtime oversampled VA oscillators, cycle-local VA repair approximations (\texttt{PolyBLEP} $0.795$ $R_{\mathrm{blend}}$ at $0.87$\,ms, \texttt{BLAMP} $0.914$ at $20$\,ms, \texttt{BLIT/BLEP} $0.632$ at $71$\,ms on seed \texttt{20260719}; Table~\ref{tab:baselines-main}) either under-correct value jumps or incur high per-batch cost, whereas searched compact operators reach $0.9903$ at $1.03$\,ms/batch.
+Unlike runtime oversampled VA oscillators, cycle-local VA repair approximations (\texttt{PolyBLEP} $0.795$ $R_{\mathrm{blend}}$ at $0.87$\,ms, \texttt{BLAMP} $0.914$ at $20$\,ms, \texttt{BLIT/BLEP} $0.632$ at $71$\,ms on seed \texttt{20260719}; Table~\ref{tab:baselines-main}) either under-correct value jumps or incur high per-batch cost. Searched compact operators reach $0.9903$ at $1.03$\,ms/batch.
 DDSP frames DSP modules as composable blocks~\citep{engel2020}.
 I reuse that framing for small bake/FIR/MLP seam operators at cycle scale, rather than end-to-end vocoders.
 
 \paragraph{Learned wavetable generation.}
-Learned models also generate or edit the stored cycles: an autoencoder that interpolates wavetables in latent space~\citep{hantrakul2018neuralwt}, a dictionary of one-period wavetables learned end to end for neural audio synthesis~\citep{shan2021dwts}, and variational models with factorised or label-conditioned latents for controllable wavetable generation~\citep{lee2024wavespace,yutani2024cvae}.
+Learned models also generate or edit the stored cycles. Examples are an autoencoder that interpolates wavetables in latent space~\citep{hantrakul2018neuralwt}, a dictionary of one-period wavetables learned end to end for neural audio synthesis~\citep{shan2021dwts}, and variational models with factorised or label-conditioned latents for controllable wavetable generation~\citep{lee2024wavespace,yutani2024cvae}.
 These methods produce or change whole cycles.
 The operators searched here act on the seam neighbourhood of a given cycle, so wavetables from such generators are possible inputs to the repair.
 

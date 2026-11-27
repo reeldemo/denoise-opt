@@ -59,7 +59,7 @@ Self-Supervised Blended Residual}
   Email:
   \href{mailto:julian.m.kleber@gmail.com}{\texttt{julian.m.kleber@gmail.com}}
 }
-\date{19 October 2026}
+\date{November 2026}
 \newcommand{\papershorttitle}{Wavetable Wrap-Discontinuity Repair}
 
 \begin{document}
@@ -70,14 +70,16 @@ Self-Supervised Blended Residual}
     Code and artifacts: \url{https://github.com/reeldemo/denoise-opt}
   \end{center}
   \begin{abstract}
-    Wavetable synthesis exhibits cycle-boundary wrap discontinuities when stored periods do not join smoothly.
-    I frame wrap repair as cycle-local seam restoration scored self-supervised via a procedural cliff-withheld sibling and a blended residual $R_{\mathrm{blend}}$.
-    DenoiseOpt reuses genetic search, PPO, and population-based training as an engineering outer loop without claiming a new NAS or RL algorithm; confirmatory evidence is solely against neural and classical baselines (\texttt{SeamN2N}, \texttt{SeamResUNet}, \texttt{DualCosine}).
-    Primary evidence is objective ($N_{\mathrm{listeners}}{=}0$; listening tests remain future work), supplemented by high-frequency click-splatter and log-spectral distortion (LSD) proxies.
+    Wavetable cycles that do not join smoothly at the wrap can produce period-locked clicks.
+    I search compact seam repair operators under a self-supervised blended residual $R_{\mathrm{blend}}$, using a procedural cliff-withheld sibling on synthetic tiles and genetic search, PPO, and population-based training as a reuse-only outer loop (not a new NAS algorithm).
+    Classically inspired fades and a corrupt-to-corrupt \texttt{SeamN2N} gate share evaluation protocol and capacity reporting, but FitCell sees exact sibling geometry that N2N does not.
+    All numbers are objective ($N_{\mathrm{listeners}}{=}0$).
 
-    In confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected), converged DenoiseOpt beats matched \texttt{SeamN2N} on $10$-seed Holdout ($0.9903$ vs $0.9764$, $p_{\mathrm{adj}}{=}0.0039$), $10$-seed Multi-family ($0.9324$ vs $0.9260$, $p_{\mathrm{adj}}{=}0.0039$), Factory+FX ($0.9108$ vs $0.8772$, $p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$), and AKWF OA ($0.8740$ vs $0.8009$, $p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$), remaining rank-invariant across $\alpha\in[0.3,0.9]$ and against circular Residual U-Nets ($44.5$k / $397.8$k) and a sawtooth/pulse generator ($0.9864$ vs $0.6451$).
-    Across $n{=}1{,}024$ holdout evaluations, $R_{\mathrm{blend}}$ correlates negatively with $>2$\,kHz click splatter ($\rho{=}{-}0.9342$, $p{<}10^{-300}$) and LSD ($\rho{=}{-}0.6307$, $p{=}1.18{\times}10^{-114}$); on top-$10\%$ hard cliffs, Dual Cosine leaves $0.9913$ edge RMSE whereas E2 drops to $0.0086$--$0.0112$ (Table~\ref{tab:cliff-edge-rmse}).
-    In $6$-seed periodic-boundary TDSE replications, $400$-step FitCell fine-tuning reaches $0.9955{\pm}0.0013$ in 1D ($p{=}0.03125$, $0.9993$ fidelity, $97.8\%$ kinetic-energy error reduction) and $0.9711{\pm}0.0044$ in 2D ($p{=}0.03125$); exploratory pilots and non-audio transfer checks are separated in Section~\ref{sec:results}.
+    On \emph{synthetic} sine+cliff holdout, E2 DenoiseOpt exceeds frozen \texttt{SeamN2N} on ten evaluation seeds (Table~\ref{tab:n2n-vs-ours}; paired tests, Holm--Bonferroni).
+  Factory+FX and AKWF rows use real cycles with \emph{injected} cliffs and per-domain search versus domain-trained N2N.
+    On \emph{natural} factory and AKWF seams (no injection), no-bake beats every repair, including DenoiseOpt and N2N (Section~\ref{sec:real-natural-seam}).
+    Short-FitCell hybrid trails N2N on holdout, reversed after FitCell-to-plateau in reported runs; the $n{=}3$ search-family bake-off is exploratory.
+    Hard-cliff strata collapse \texttt{DualCosine}; cross-domain transfer is appendix-only.
   \end{abstract}
   \keywords{wavetable synthesis; wrap discontinuity; unsupervised repair; DenoiseOpt; seam restoration; Noise2Noise; neural architecture search; reinforcement learning; genetic algorithms; proximal policy optimization; hybrid meta-search; population-based training; audio signal processing}
   \vspace{0.6em}

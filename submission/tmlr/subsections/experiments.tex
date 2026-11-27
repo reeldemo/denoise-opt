@@ -4,8 +4,8 @@
 \paragraph{Evaluation protocol (locked).}
 \label{sec:eval-protocol}
 All primary tables use the same locked residual.
-Given a cracked engine tile $x\in\mathbb{R}^{L}$ and its cliff-withheld ideal sibling $r^{\star}\in\mathbb{R}^{L}$ (generated directly from the underlying continuous oscillator prior to injecting the wrap-cliff offset and end-noise, using holdout PRNG seeds \texttt{20260719}--\texttt{20260728} strictly disjoint from search seeds \texttt{1902771841}, \texttt{2026072701}, \texttt{2026072702} so no FitCell gradient or search selection ever sees evaluation tiles),
-prolong each cycle $N{=}16$ times, form wrap neighborhoods of width $W{=}8$ at every period head/tail,
+Each evaluation uses a cracked engine tile $x\in\mathbb{R}^{L}$ and its cliff-withheld ideal sibling $r^{\star}\in\mathbb{R}^{L}$ (generated directly from the underlying continuous oscillator prior to injecting the wrap-cliff offset and end-noise, using holdout PRNG seeds \texttt{20260719}--\texttt{20260728} strictly disjoint from search seeds \texttt{1902771841}, \texttt{2026072701}, \texttt{2026072702} so no FitCell gradient or search selection sees evaluation tiles).
+I prolong each cycle $N{=}16$ times, form wrap neighborhoods of width $W{=}8$ at every period head/tail,
 and compute $R_{\mathrm{seam}}=R(r^{\star},y;\mathcal{S})$ and $R_{\mathrm{body}}=R(x,y;\mathcal{B})$ via~\eqref{eq:R-component} with $\varepsilon=10^{-6}$, then
 \[
 R_{\mathrm{blend}}=\alpha R_{\mathrm{seam}}+(1-\alpha)R_{\mathrm{body}},\qquad\alpha{=}0.7.
@@ -17,12 +17,12 @@ $J=R_{\mathrm{blend}}-\lambda\cdot\mathrm{latency\_norm}$ with $\lambda{=}0.02$ 
 $\mathrm{latency\_norm}=\log(1{+}t_{\mathrm{ms}})/\log(1{+}50)$.
 Frozen Noise2Noise corrupt$\to$corrupt holdout $R_{\mathrm{blend}}$ serves as the neural gate: short-FitCell hybrid search clears Dual Cosine but sits below this gate, whereas FitCell-to-plateau clears it across all three tested search seeds (Section~\ref{sec:results}).
 Secondary keys (SNR, SDR, wrap-jump, seam-local edge RMSE) are reported where tabulated;
-whole-curve prolonged $R$ is debug-only and never used for selection.
+whole-curve prolonged $R$ is debug-only and not used for selection (Section~\ref{sec:four-roles}).
 PESQ/STOI/MUSHRA are out of scope on non-speech cycles ($N_{\mathrm{listeners}}{=}0$).
 
 \paragraph{Which numbers are multi-seed.}
 Holdout / multi-family means are mean$\pm$std over five evaluation seeds (\texttt{20260719}--\texttt{20260723}), extended to ten evaluation seeds (\texttt{20260719}--\texttt{20260728}) in the released artifacts.
-Matched-$5$k ($5{,}000$-evaluation) outer-loop bake-off means are mean$\pm$std over $n{=}3$ pilot search seeds (\texttt{1902771841}, \texttt{2026072701}, \texttt{2026072702}), supplemented by two extra search seeds (\texttt{2026072703}, \texttt{2026072704}) and a three-seed $5$k branch ablation.
+Matched-$5$k ($5{,}000$-evaluation) outer-loop bake-off means are mean$\pm$std over $n{=}3$ pilot search seeds (\texttt{1902771841}, \texttt{2026072701}, \texttt{2026072702}).
 The FitCell-to-plateau follow-up (Section~\ref{sec:v14-converge}) reports both the single-seed in-loop freeze (\texttt{1902771841}) and three-seed holdout replication.
 N2N train seed is \texttt{424242}.
 Transfer Table~\ref{tab:transfer-main} is one domain-trained hybrid per board (search seed \texttt{1902771841}), not multi-seed averages.
@@ -31,7 +31,7 @@ Venue: DSP / synthesis artifact repair (DAFx / AES / arXiv cs.SD).
 
 \paragraph{Statistical reporting (what I compute).}
 Unless a table caption says otherwise, multi-seed cells are arithmetic mean$\pm$sample std over the named seed list (not Gaussian confidence intervals).
-Paired holdout comparisons test the null hypothesis $H_0{:}\,\mathbb{E}[\Delta]{=}0$ on identical paired seed lists ($n{=}5$ or $n{=}10$ evaluation seeds) using both a two-sided exact binomial sign test on win counts and a two-sided exact sign-flip permutation test (enumerating all $2^n$ sign assignments on per-seed deltas $\Delta_i$, giving minimum attainable $p{=}2/2^n$: $0.0625$ at $n{=}5$ and $0.0020$ at $n{=}10$), alongside $10{,}000$-resample paired bootstrap 95\% CIs and Hedges $g_z$ in Appendix~\ref{app:secondary-results}.
+Paired holdout comparisons test the null hypothesis $H_0{:}\,\mathbb{E}[\Delta]{=}0$ on identical paired seed lists ($n{=}5$ or $n{=}10$ evaluation seeds). They use a two-sided exact binomial sign test on win counts and a two-sided exact sign-flip permutation test (enumerating all $2^n$ sign assignments on per-seed deltas $\Delta_i$, giving minimum attainable $p{=}2/2^n$: $0.0625$ at $n{=}5$ and $0.0020$ at $n{=}10$). Appendix~\ref{app:secondary-results} adds $10{,}000$-resample paired bootstrap 95\% CIs and Hedges $g_z$.
 All primary four-board comparisons in Table~\ref{tab:n2n-vs-ours} apply Holm--Bonferroni multiple-testing correction ($p_{\mathrm{adj}}{\le}0.0039$ across all four boards); small-$n{=}3$ outer-loop pilot checks remain unadjusted exploratory diagnostics.
 Search hyperparameters (learning rates, population sizes, mutation rates, and FitCell steps) are listed in Table~\ref{tab:hyperparams}.
 Win/loss \emph{counts} at small $n$ also report Wilson 95\% score intervals for the win proportion (e.g.\ 10/20 board wins $\Rightarrow$ CI $[0.30,0.70]$).
@@ -39,7 +39,7 @@ Paired multi-family comparisons use a two-sided sign test on per-board mean delt
 Matched-$5$k outer-loop comparisons use paired deltas across three search seeds per family; with $n{=}3$, two-sided sign-flip tests cannot reach $p<0.25$ when all deltas share sign, treat Table~\ref{tab:meta-approaches} as descriptive selection, not inferential ranking.
 I do \emph{not} run ANOVA across outer-loop families beyond mean$\pm$std in Table~\ref{tab:meta-approaches}, and I do not invent MOS confidence intervals.
 Scope: this is a technical investigation, not a human listening trial ($N_{\mathrm{listeners}}{=}0$; no preference rates).
-Reproducibility: all primary tables, statistical tests, and figures reproduce from the unified repository (\textit{[anonymized repository]}, RTX~3090, CUDA, PyTorch) via the repository's evaluation, domain-search, and plotting scripts.
+Reproducibility: all primary tables, statistical tests, and figures reproduce from the unified repository (\textit{[anonymized repository]}, CUDA, PyTorch) via the repository's evaluation, domain-search, and plotting scripts.
 
 \paragraph{Experimental setup (datasets, compute).}
 \begin{itemize}
@@ -50,9 +50,8 @@ Reproducibility: all primary tables, statistical tests, and figures reproduce fr
   \item \textbf{FitCell / outer loop.} Adam on $1-R_{\mathrm{blend}}$; D1 short cap ${\approx}16$--$48$ steps; converge campaign searchable patience/$\varepsilon$/$T_{\max}\!\in\!\{512,\ldots,2048\}$, batch ${\approx}96$, two sequential proposals/iter (Section~\ref{sec:pipeline-overview}).
     Matched $5$k evals: Random, CMA-ES, REINFORCE, Aging, TPE, hybrid (3 search seeds).
     Hybrid-only FitCell-to-plateau: $750$ outer iters, seed \texttt{1902771841} (${\approx}46.9$\,h wall).
-  \item \textbf{Baselines.} no-bake, DualCosine, FIR/endpoint classical board, SeamN2N (${\approx}53.5$k, $4000$ Adam steps, train seed \texttt{424242}), VA residuals where scored.
-  \item \textbf{Compute.} Single NVIDIA GeForce RTX~3090 ($24$\,GB); host desktop Windows; Python~$3.12$, PyTorch~$2.6$+CUDA~$12.4$; no multi-GPU.
-    Historical prolonged-$R$ $5$k-style freeze ${\approx}7.9$\,h (Table~\ref{tab:compute}); D1 hybrid mean wall ${\approx}8.4$\,h/seed.
+  \item \textbf{Baselines.} no-bake, DualCosine, FIR/endpoint classical board, SeamN2N gate (${\approx}53.5$k, $20{,}000$ Adam steps at batch $64$, train seed \texttt{424242}), VA residuals where scored.
+  \item \textbf{Compute.} One GPU per run, no multi-GPU. The historical prolonged-$R$ $5$k-style freeze (${\approx}7.9$\,h, Table~\ref{tab:compute}) ran on an NVIDIA GeForce RTX~3090 ($24$\,GB, Windows desktop, PyTorch~$2.6$+CUDA~$12.4$). The N2N gate retrain, the FitCell-to-plateau campaign and the holdout evaluations ran on an NVIDIA GeForce RTX~3060 ($12$\,GB, Linux, Python~$3.13$, PyTorch~$2.6$+CUDA~$12.4$). Each run records its GPU in its run metadata. D1 hybrid mean wall ${\approx}8.4$\,h/seed.
   \item \textbf{Artifacts.} Frozen JSON matrices and figure sources ship in the paper repository (Section~\ref{sec:ethics}).
 \end{itemize}
 
@@ -64,10 +63,10 @@ The paper-facing evaluation corpus is a frozen draw from the same synthetic gene
 Cycles are length $L{=}256$.
 A two-harmonic sine is drawn with frequency $\sim\mathcal{U}(1,4)$ and phase $\sim\mathcal{U}(0,2\pi)$, then an open-wrap seam cliff of amplitude $\pm\mathcal{U}(0.08,0.43)$ is applied over $\texttt{SEAM\_W}{=}8$ samples at both ends.
 Seam-boosted Gaussian noise (scale $0.02$ at the ends, $0.15\times$ in the mid-cycle) forms the engine input.
-The ideal withholds the cliff and serves only as scoring target $r^{\star}$, never as a method output, while no-bake leaves the cracked engine unchanged and scores that unrepaired $x$ against the same $r^{\star}$.
+The ideal withholds the cliff and serves only as scoring target $r^{\star}$ (Section~\ref{sec:ideal-tile}), not as a method output, while no-bake leaves the cracked engine unchanged and scores that unrepaired $x$ against the same $r^{\star}$.
 Prolonged residual $R$ tiles each cycle $N{=}16$ times before the RMS ratio.
 Holdout seed \texttt{20260719} is distinct from hybrid search seed \texttt{1902771841}.
-The search campaign draws fresh i.i.d.\ batches from this generator and never trains on the frozen holdout tensors: there is no supervised clean/noisy training split of studio audio.
+The search campaign draws fresh i.i.d.\ batches from this generator and does not train on the frozen holdout tensors; there is no supervised clean/noisy training split of studio audio.
 
 \paragraph{Multi-family diversity ($\ge 20$ waveforms).}
 Beyond the single sine{+}cliff holdout, Phase~3a scores methods on \textbf{20} generative draws: ten family variants (\texttt{sine\_cliff}, \texttt{harmonic\_fft}, \texttt{am\_fm}, \texttt{nonlinear}, \texttt{combo}, \texttt{triple\_mix}, \texttt{extreme\_overlay}, \texttt{open\_wrap\_bias}, \texttt{soft\_noise}, \texttt{wide\_seam}) $\times$ two seeds (\texttt{20260719} and \texttt{20260720}), batch 64 each ($128$ cycles per family, $1{,}280$ total).
@@ -85,18 +84,17 @@ The primary procedural holdout is a frozen $4{,}096$-cycle metrics draw ($L{=}25
 Multi-family SOTA scores $20$ waveforms ($10$ families $\times$ $2$ seeds, batch $64$, $1{,}280$ cycles).
 Wavetable-native boards use host-synthesizer Factory+FX exports ($n{=}1{,}280$: $640$ dry + $640$ FX) and AKWF CC0 cycles ($n{=}1{,}280$) so Plot~4 corpus bars are comparable to multi-family ($1{,}280$).
 Sci/eng transfer tiles ($1{,}536$ periods total) are summarized in Appendix~\ref{app:transfer-bundle}.
-Search never trains on the frozen holdout. N2N/seq baselines use disjoint train seeds \texttt{424242}/\texttt{424243}.
+Search does not train on the frozen holdout (Section~\ref{sec:eval-protocol}). N2N/seq baselines use disjoint train seeds \texttt{424242}/\texttt{424243}.
 Artifacts: dataset artifacts.
 
-\begin{table}[htbp]
+\begin{table}[tbp]
   \centering
   \caption{Dataset statistics (evaluation boards).
     $L{=}256$ unless noted. Hours are raw source duration on disk where measurable, not tiled period count.
     Plot~4 compares ${\approx}1{,}280$-height boards only (multi-family / Factory+FX / AKWF / transfer).}
   \label{tab:dataset-stats}
   \setlength{\tabcolsep}{3pt}
-  \begin{adjustbox}{max width=\columnwidth}
-\begin{tabular}{@{}llp{0.42\columnwidth}@{}}
+\begin{tabular}{@{}llp{0.55\textwidth}@{}}
     \toprule
     Board & Size & Notes \\
     \midrule
@@ -113,7 +111,6 @@ Artifacts: dataset artifacts.
     synth CNC / PMU & $256{+}256$ & procedural pilots \\
     \bottomrule
   \end{tabular}
-\end{adjustbox}
 \end{table}
 
 \begin{figure}[t]
@@ -128,7 +125,7 @@ Artifacts: dataset artifacts.
 A metrics draw of $4{,}096$ cycles under the holdout seed yields mean ideal RMS $0.721\pm0.016$, mean engine residual RMS $0.021\pm0.013$, and mean absolute wrap jump $|x_0-x_{L-1}|$ of $0.913\pm0.634$.
 No-bake (passthrough) on that draw scores mean $R\approx0.971$.
 Method tables use a matched score batch of $64$ cycles from the same seed (the canonical evaluation tensors), five consecutive seeds for mean$\pm$std on the classical table, and the 20-waveform matrix for SOTA secondary metrics.
-Figure~\ref{fig:dataset-distributions} summarizes the $4{,}096$-cycle metrics draw: ideal RMS clusters near $0.72$, wrap jumps span nearly three orders of magnitude (median $\approx 0.83$), and no-bake $R$ is high on easy tiles but falls below $0.91$ on the hardest decile of wrap jumps.
+Figure~\ref{fig:dataset-distributions} summarizes the $4{,}096$-cycle metrics draw. Ideal RMS clusters near $0.72$, wrap jumps span nearly three orders of magnitude (median $\approx 0.83$), and no-bake $R$ is high on easy tiles but falls below $0.91$ on the hardest decile of wrap jumps.
 Figure~\ref{fig:intro-sine} is the documented sine-wrap edge case: a high-$|wrap|$ holdout tile where cliff modulation is visible, scored with DualCosine and the top neural favorite under the same residual $R$ (tile $R\approx0.9917$, favorite batch mean $R\approx0.991$).
 
 \begin{figure}[t]

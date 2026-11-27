@@ -1,0 +1,21 @@
+\subsection{Natural real seams (honest negative)}
+\label{sec:real-natural-seam}
+
+Primary holdout, multi-family, and wavetable boards with \emph{injected} wrap cliffs test recovery of a known no-cliff reference (Sections~\ref{sec:dataset},~\ref{sec:eval-protocol}).
+They do \emph{not} establish repair of cycles that are already stored as-is.
+
+I therefore score held-out Factory and AKWF cycles \textbf{without cliff injection}: input $x$ and reference $r^{\star}$ are the same stored period, and each method applies $\Theta(x;h)$ before the locked $R_{\mathrm{blend}}$ scorer (\texttt{results/real\_natural\_seam\_rblend.json}).
+On these natural seams, \textbf{no-bake wins every compared model}: AKWF no-bake $R_{\mathrm{blend}}{=}0.643$; Factory no-bake $0.617$.
+E2 DenoiseOpt champions (two--three search seeds) score $0.495$--$0.533$ on AKWF and $0.489$--$0.544$ on Factory.
+Train-seed-replicated \texttt{SeamN2N} ($3$ seeds) reaches $0.552{\pm}0.012$ (AKWF) and $0.554{\pm}0.008$ (Factory), still below no-bake.
+
+Component scores explain the failure mode.
+DenoiseOpt keeps waveform body identity ($R_{\mathrm{body}}{\approx}0.99$ vs N2N ${\approx}0.895$--$0.923$) but \emph{worsens} the seam term ($R_{\mathrm{seam}}{\approx}0.27$--$0.35$ vs ${\approx}0.40$ for N2N): operators trained on synthetic cliffs move real wrap joins away from the stored shape.
+I report timbre preservation and synthetic-cliff gains only; I do \textbf{not} claim real-seam repair or deployment-ready click removal.
+
+\textbf{Contrast (synthetic seams).}
+On procedural sine+cliff holdout, fourteen converged $20{,}000$-step E2 refits beat frozen \texttt{SeamN2N} on all $10/10$ evaluation seeds ($R_{\mathrm{blend}}$ roughly $0.985$--$0.992$).
+Claims of seam improvement are scoped to that synthetic training and test protocol.
+
+\paragraph{Pending full-set runs.}
+Table rows marked \texttt{TBD} await E3 (extra matched-$5$k search seeds), V1--V3 variant ablations, and any refreshed real-seam boards; placeholders are explicit in Section~\ref{sec:limitations}.
