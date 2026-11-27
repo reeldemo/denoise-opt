@@ -14,6 +14,8 @@ Sole author: Julian M. Kleber. The tools that assisted the work are described in
 
 The built PDF is in the repository root. A map of the repository is in [docs/layout.md](docs/layout.md), and the documentation site is built with MkDocs Material from `docs/` and `mkdocs.yml`.
 
+A sanitized research-journal snapshot (publication and compute status, 2026-11-27) is in [docs/JOURNAL.md](docs/JOURNAL.md).
+
 ## Quickstart
 
 Python 3 with no third-party packages (CI uses 3.12). This runs the unit and shell tests of the experiment launchers.
