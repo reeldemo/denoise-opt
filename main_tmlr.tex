@@ -1,0 +1,360 @@
+\documentclass[10pt]{article}
+% TMLR submission build. Default = anonymous review version.
+% Non-anonymous (preprint / camera-ready) build: compile main_tmlr_preprint.tex.
+\ifdefined\NONANON
+  \usepackage[preprint]{tmlr}
+\else
+  \usepackage{tmlr}
+\fi
+\usepackage[utf8]{inputenc}
+\setcitestyle{numbers,square,comma}
+%% DenoiseOpt paper -- arXiv-style double-column preprint
+%% Template: article[twocolumn] + local arxiv-twocolumn.sty
+%% Bibliography policy: OA-only (every \\bibitem has a downloadable OA PDF).
+%%
+%% PDF output name: pdflatex does not take the filename from \title.
+%% Build with -jobname matching the paper slug, e.g.:
+%%   pdflatex -jobname=Unsupervised_Wrap-Discontinuity_Repair_in_Wavetable_Synthesis_via_Hybrid_GA-PPO_Meta-Search_v14 main.tex
+%% or:  .\build.ps1   /   latexmk
+
+
+
+\usepackage[T1]{fontenc}
+
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{adjustbox}
+
+\usepackage[section]{placeins}
+\usepackage{amsmath,amssymb,amsthm}
+% Keep floats from stacking/bleeding across the column gutter.
+
+
+
+
+
+
+
+
+
+
+
+
+
+% Avoid stretched empty column bottoms when floats leave short columns.
+
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{float}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage{xurl}
+
+
+\usepackage[colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue]{hyperref}
+
+
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}
+
+\title{Seam-Local Repair of Wavetable Wrap Discontinuities with a Self-Supervised Blended Residual}
+\def\month{MM}\def\year{YYYY}\def\openreview{\url{https://openreview.net/forum?id=XXXX}}
+\ifdefined\NONANON
+\author{\name Julian M. Kleber \email julian.m.kleber@gmail.com \\
+        \addr Independent Researcher \\
+        ORCID: 0000-0001-5518-0932}
+\newcommand{\authorname}{Julian~M.~Kleber}
+\newcommand{\codehref}[2]{\href{#1}{#2}}
+\newcommand{\codeurl}[1]{\url{#1}}
+\else
+\author{Anonymous authors}
+\newcommand{\authorname}{The author}
+\newcommand{\codehref}[2]{#2}
+\newcommand{\codeurl}[1]{\textit{[URL withheld for double-blind review; added in the camera-ready version]}}
+\fi
+\providecommand{\keywords}[1]{}
+\begin{document}
+
+\maketitle
+\begin{abstract}
+    Wavetable synthesis exhibits cycle-boundary wrap discontinuities when stored periods do not join smoothly.
+    I frame wrap repair as cycle-local seam restoration scored self-supervised via a procedural cliff-withheld sibling and a blended residual $R_{\mathrm{blend}}$.
+    DenoiseOpt reuses genetic search, PPO, and population-based training as an engineering outer loop without claiming a new NAS or RL algorithm; confirmatory evidence is solely against neural and classical baselines (\texttt{SeamN2N}, \texttt{SeamResUNet}, \texttt{DualCosine}).
+    Primary evidence is objective ($N_{\mathrm{listeners}}{=}0$; listening tests remain future work), supplemented by high-frequency click-splatter and log-spectral distortion (LSD) proxies.
+
+    In confirmatory comparisons (Table~\ref{tab:n2n-vs-ours}, Holm--Bonferroni corrected), converged DenoiseOpt beats matched \texttt{SeamN2N} on $10$-seed Holdout ($0.9903$ vs $0.9764$, $p_{\mathrm{adj}}{=}0.0039$), $10$-seed Multi-family ($0.9324$ vs $0.9260$, $p_{\mathrm{adj}}{=}0.0039$), Factory+FX ($0.9108$ vs $0.8772$, $p_{\mathrm{adj}}{=}4.2{\times}10^{-15}$), and AKWF OA ($0.8740$ vs $0.8009$, $p_{\mathrm{adj}}{=}9.5{\times}10^{-21}$), remaining rank-invariant across $\alpha\in[0.3,0.9]$ and against circular Residual U-Nets ($44.5$k / $397.8$k) and a sawtooth/pulse generator ($0.9864$ vs $0.6451$).
+    Across $n{=}1{,}024$ holdout evaluations, $R_{\mathrm{blend}}$ correlates negatively with $>2$\,kHz click splatter ($\rho{=}{-}0.9342$, $p{<}10^{-300}$) and LSD ($\rho{=}{-}0.6307$, $p{=}1.18{\times}10^{-114}$); on top-$10\%$ hard cliffs, Dual Cosine leaves $0.9913$ edge RMSE whereas E2 drops to $0.0086$--$0.0112$ (Table~\ref{tab:cliff-edge-rmse}).
+    In $6$-seed periodic-boundary TDSE replications, $400$-step FitCell fine-tuning reaches $0.9955{\pm}0.0013$ in 1D ($p{=}0.03125$, $0.9993$ fidelity, $97.8\%$ kinetic-energy error reduction) and $0.9711{\pm}0.0044$ in 2D ($p{=}0.03125$); exploratory pilots and non-audio transfer checks are separated in Section~\ref{sec:results}.
+  \end{abstract}
+\ifdefined\NONANON
+\par\noindent{\small Code and artifacts: \url{https://github.com/reeldemo/denoise-opt}}
+\fi
+
+
+\input{tmlr/subsections/introduction}
+\input{tmlr/subsections/related_work}
+\input{tmlr/subsections/methods}
+\input{tmlr/subsections/experiments}
+\input{tmlr/subsections/results}
+\input{tmlr/subsections/results_eval_listening}
+\input{tmlr/subsections/discussion}
+\input{tmlr/subsections/tooling}
+\input{tmlr/subsections/ethics}
+\input{tmlr/subsections/limitations}
+\input{tmlr/subsections/conclusion}
+\input{tmlr/subsections/acknowledgments}
+
+\FloatBarrier
+{\footnotesize
+\setlength{\baselineskip}{11.5pt}
+\begin{thebibliography}{99}
+\setlength{\itemsep}{0.25ex plus 0.05ex}
+\setlength{\parsep}{0pt}
+\setlength{\parskip}{0pt}
+
+\bibitem{stilson1996}
+T.~Stilson and J.~O.~Smith.
+\newblock Alias-free digital synthesis of classic analog waveforms.
+\newblock In \emph{Proc.\ ICMC}, 1996.
+\newblock \url{https://ccrma.stanford.edu/~stilti/papers/blit.pdf}.
+
+\bibitem{esqueda2016blamp}
+F.~Esqueda, V.~V\"alim\"aki, and S.~Bilbao.
+\newblock Rounding corners with BLAMP.
+\newblock In \emph{Proc.\ DAFx}, 2016.
+\newblock \url{https://www.dafx.de/paper-archive/2016/dafxpapers/18-DAFx-16_paper_33-PN.pdf}.
+
+\bibitem{nam2009polyblep}
+J.~Nam, V.~V\"alim\"aki, J.~S.~Abel, and J.~O.~Smith.
+\newblock Efficient antialiasing oscillator algorithms using low-order fractional delay filters.
+\newblock In \emph{Proc.\ DAFx}, 2009.
+\newblock \url{https://ccrma.stanford.edu/~juhan/pubs/jnam-dafx09.pdf}.
+
+\bibitem{lehtinen2018}
+J.~Lehtinen et al.
+\newblock Noise2Noise: Learning image restoration without clean data.
+\newblock In \emph{ICML}, 2018.
+\newblock \href{https://arxiv.org/abs/1803.04189}{arXiv:1803.04189}.
+
+\bibitem{kashyap2021n2n}
+M.~M.~Kashyap, A.~Tambwekar, K.~Manohara, and S.~Natarajan.
+\newblock Speech denoising without clean training data: A Noise2Noise approach.
+\newblock In \emph{INTERSPEECH}, 2021.
+\newblock \url{https://www.isca-archive.org/interspeech_2021/kashyap21_interspeech.pdf}.
+
+\bibitem{engel2020}
+J.~Engel, L.~Hantrakul, C.~Gu, and A.~Roberts.
+\newblock DDSP: Differentiable digital signal processing.
+\newblock In \emph{ICLR}, 2020.
+\newblock \href{https://arxiv.org/abs/2001.04643}{arXiv:2001.04643}.
+
+\bibitem{purwins2019}
+H.~Purwins et al.
+\newblock Deep learning for audio signal processing.
+\newblock \emph{IEEE J.\ Sel.\ Topics Signal Process.}, 2019.
+\newblock \href{https://arxiv.org/abs/1905.00078}{arXiv:1905.00078}.
+
+\bibitem{stoller2018}
+D.~Stoller, S.~Ewert, and S.~Dixon.
+\newblock Wave-U-Net: A multi-scale neural network for end-to-end audio source separation.
+\newblock In \emph{ISMIR}, 2018.
+\newblock \href{https://arxiv.org/abs/1806.03185}{arXiv:1806.03185}.
+
+\bibitem{macartney2018}
+C.~Macartney and T.~Weyde.
+\newblock Improved speech enhancement with the Wave-U-Net.
+\newblock \href{https://arxiv.org/abs/1811.11307}{arXiv:1811.11307}, 2018.
+
+\bibitem{jansson2017}
+A.~Jansson et al.
+\newblock Singing voice separation with deep U-Net convolutional networks.
+\newblock In \emph{ISMIR}, 2017.
+\newblock \url{https://openaccess.city.ac.uk/id/eprint/19289/1/7bb8d1600fba70dd79408775cd0c37a4ff62.pdf}.
+
+\bibitem{luo2019}
+Y.~Luo and N.~Mesgarani.
+\newblock Conv-TasNet: Surpassing ideal time--frequency magnitude masking for speech separation.
+\newblock \emph{IEEE/ACM TASLP}, 2019.
+\newblock \href{https://arxiv.org/abs/1809.07454}{arXiv:1809.07454}.
+
+\bibitem{luo2020dprnn}
+Y.~Luo, Z.~Chen, and T.~Yoshioka.
+\newblock Dual-path RNN: Efficient long sequence modeling for time-domain speech separation.
+\newblock In \emph{ICASSP}, 2020.
+\newblock \href{https://arxiv.org/abs/1910.06379}{arXiv:1910.06379}.
+
+\bibitem{ronneberger2015}
+O.~Ronneberger, P.~Fischer, and T.~Brox.
+\newblock U-Net: Convolutional networks for biomedical image segmentation.
+\newblock In \emph{MICCAI}, 2015.
+\newblock \href{https://arxiv.org/abs/1505.04597}{arXiv:1505.04597}.
+
+\bibitem{he2016resnet}
+K.~He, X.~Zhang, S.~Ren, and J.~Sun.
+\newblock Deep residual learning for image recognition.
+\newblock In \emph{CVPR}, 2016.
+\newblock \href{https://arxiv.org/abs/1512.03385}{arXiv:1512.03385}.
+
+\bibitem{vaswani2017}
+A.~Vaswani et al.
+\newblock Attention is all you need.
+\newblock In \emph{NeurIPS}, 2017.
+\newblock \href{https://arxiv.org/abs/1706.03762}{arXiv:1706.03762}.
+
+\bibitem{elsken2019}
+T.~Elsken, J.~H.~Metzen, and F.~Hutter.
+\newblock Neural architecture search: A survey.
+\newblock \emph{JMLR}, 2019.
+\newblock \href{https://arxiv.org/abs/1808.05377}{arXiv:1808.05377}.
+
+\bibitem{zoph2017nas}
+B.~Zoph and Q.~V.~Le.
+\newblock Neural architecture search with reinforcement learning.
+\newblock In \emph{ICLR}, 2017.
+\newblock \href{https://arxiv.org/abs/1611.01578}{arXiv:1611.01578}.
+
+\bibitem{pham2018}
+H.~Pham et al.
+\newblock Efficient neural architecture search via parameter sharing.
+\newblock In \emph{ICML}, 2018.
+\newblock \href{https://arxiv.org/abs/1802.03268}{arXiv:1802.03268}.
+
+\bibitem{schulman2017}
+J.~Schulman et al.
+\newblock Proximal policy optimization algorithms.
+\newblock \href{https://arxiv.org/abs/1707.06347}{arXiv:1707.06347}, 2017.
+
+\bibitem{real2017large}
+E.~Real et al.
+\newblock Large-scale evolution of image classifiers.
+\newblock In \emph{ICML}, 2017.
+\newblock \href{https://arxiv.org/abs/1703.01041}{arXiv:1703.01041}.
+
+\bibitem{real2019}
+E.~Real, A.~Aggarwal, Y.~Huang, and Q.~V.~Le.
+\newblock Regularized evolution for image classifier architecture search.
+\newblock In \emph{AAAI}, 2019.
+\newblock \href{https://arxiv.org/abs/1802.01548}{arXiv:1802.01548}.
+
+\bibitem{jaderberg2017}
+M.~Jaderberg et al.
+\newblock Population based training of neural networks.
+\newblock \href{https://arxiv.org/abs/1711.09846}{arXiv:1711.09846}, 2017.
+
+\bibitem{khadka2018}
+S.~Khadka and K.~Tumer.
+\newblock Evolution-guided policy gradient in reinforcement learning.
+\newblock In \emph{NeurIPS}, 2018.
+\newblock \href{https://arxiv.org/abs/1805.07917}{arXiv:1805.07917}.
+
+\bibitem{hansen2016cmaes}
+N.~Hansen.
+\newblock The CMA evolution strategy: A tutorial.
+\newblock \href{https://arxiv.org/abs/1604.00772}{arXiv:1604.00772}, 2016.
+
+\bibitem{shazeer2017}
+N.~Shazeer et al.
+\newblock Outrageously large neural networks: The sparsely-gated mixture-of-experts layer.
+\newblock In \emph{ICLR}, 2017.
+\newblock \href{https://arxiv.org/abs/1701.06538}{arXiv:1701.06538}.
+
+\bibitem{snoek2012}
+J.~Snoek, H.~Larochelle, and R.~P.~Adams.
+\newblock Practical Bayesian optimization of machine learning algorithms.
+\newblock In \emph{NeurIPS}, 2012.
+\newblock \href{https://arxiv.org/abs/1206.2944}{arXiv:1206.2944}.
+
+\bibitem{tan2019mnasnet}
+M.~Tan et al.
+\newblock MnasNet: Platform-aware neural architecture search for mobile.
+\newblock In \emph{CVPR}, 2019.
+\newblock \href{https://arxiv.org/abs/1807.11626}{arXiv:1807.11626}.
+
+\bibitem{liu2018pnas}
+C.~Liu et al.
+\newblock Progressive neural architecture search.
+\newblock In \emph{ECCV}, 2018.
+\newblock \href{https://arxiv.org/abs/1712.00559}{arXiv:1712.00559}.
+
+\bibitem{wisdom2020}
+S.~Wisdom et al.
+\newblock Unsupervised sound separation using mixture invariant training.
+\newblock In \emph{NeurIPS}, 2020.
+\newblock \href{https://arxiv.org/abs/2006.12701}{arXiv:2006.12701}.
+
+\bibitem{subakan2021}
+C.~Subakan, M.~Ravanelli, S.~Cornell, M.~Bronzi, and J.~Zhong.
+\newblock Attention is all you need in speech separation.
+\newblock In \emph{ICASSP}, 2021.
+\newblock \href{https://arxiv.org/abs/2010.13154}{arXiv:2010.13154}.
+
+\bibitem{gong2021ast}
+Y.~Gong, Y.-A.~Chung, and J.~Glass.
+\newblock AST: Audio spectrogram transformer.
+\newblock In \emph{INTERSPEECH}, 2021.
+\newblock \href{https://arxiv.org/abs/2104.01778}{arXiv:2104.01778}.
+
+\bibitem{finn2017}
+C.~Finn, P.~Abbeel, and S.~Levine.
+\newblock Model-agnostic meta-learning for fast adaptation of deep networks.
+\newblock In \emph{ICML}, 2017.
+\newblock \href{https://arxiv.org/abs/1703.03400}{arXiv:1703.03400}. \textit{(Screened.)}
+
+\bibitem{liu2019}
+H.~Liu, K.~Simonyan, and Y.~Yang.
+\newblock DARTS: Differentiable architecture search.
+\newblock In \emph{ICLR}, 2019.
+\newblock \href{https://arxiv.org/abs/1806.09055}{arXiv:1806.09055}. \textit{(Screened.)}
+
+\bibitem{dfossez2019}
+A.~D\'efossez et al.
+\newblock Demucs: Deep extractor for music sources.
+\newblock \href{https://arxiv.org/abs/1911.13254}{arXiv:1911.13254}, 2019. \textit{(Screened.)}
+
+\bibitem{dfossez2020}
+A.~D\'efossez, G.~Synnaeve, and Y.~Adi.
+\newblock Real time speech enhancement in the waveform domain.
+\newblock In \emph{INTERSPEECH}, 2020. \textit{(Screened.)}
+\newblock \href{https://arxiv.org/abs/2006.12847}{arXiv:2006.12847}.
+
+\bibitem{dfossez2021}
+A.~D\'efossez.
+\newblock Hybrid spectrogram and waveform source separation.
+\newblock \href{https://arxiv.org/abs/2111.03600}{arXiv:2111.03600}, 2021. \textit{(Screened.)}
+
+\bibitem{kong2021}
+Z.~Kong et al.
+\newblock DiffWave: A versatile diffusion model for audio synthesis.
+\newblock In \emph{ICLR}, 2021.
+\newblock \href{https://arxiv.org/abs/2009.00713}{arXiv:2009.00713}. \textit{(Screened.)}
+
+\bibitem{pascual2017}
+S.~Pascual, A.~Bonafonte, and J.~Serr\`a.
+\newblock SEGAN: Speech enhancement generative adversarial network.
+\newblock In \emph{INTERSPEECH}, 2017. \textit{(Screened.)}
+\newblock \href{https://arxiv.org/abs/1703.09452}{arXiv:1703.09452}.
+
+\end{thebibliography}
+}
+
+\clearpage
+\appendix
+\renewcommand{\topfraction}{0.95}
+\renewcommand{\bottomfraction}{0.95}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.85}
+\renewcommand{\dbltopfraction}{0.95}
+\renewcommand{\dblfloatpagefraction}{0.85}
+\setcounter{topnumber}{6}
+\setcounter{bottomnumber}{6}
+\setcounter{totalnumber}{10}
+\setcounter{dbltopnumber}{4}
+\input{tmlr/subsections/appendix_algorithms}
+\input{tmlr/subsections/appendix_supplement}
+\input{tmlr/subsections/appendix_extra_results}
+\input{tmlr/subsections/appendix_transfer_bundle}
+
+\end{document}

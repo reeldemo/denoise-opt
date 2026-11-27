@@ -1,0 +1,56 @@
+\section{Limitations}
+\label{sec:limitations}
+
+These constraints bound claim strength; they are not optional honesty footnotes.
+
+\begin{itemize}
+  \item \textbf{No formal listening study (technical investigation only).}
+    $R_{\mathrm{blend}}$ and $J$ use a procedural no-cliff sibling for seams and an engine-identity prior for the mid-cycle body.
+    They do not measure listening quality.
+    No MOS, MUSHRA, or forced-choice A/B was run ($N_{\mathrm{listeners}}{=}0$); this work is framed strictly as a technical investigation rather than a human trial.
+    Released WAVs and vibrato spectrograms are for informal file inspection only
+    (Section~\ref{sec:listening-protocol}); they are \emph{not} a substitute for perceptual scores.
+    Why listening was deferred: primary claims are objective cycle-local seam restoration under a locked protocol, where the HF click-splatter ($-46.62$\,dB vs $-32.82$\,dB \texttt{no-bake}) and LSD ($0.60$\,dB vs $1.82$\,dB) proxies (Table~\ref{tab:baselines-main}) directly quantify boundary-induced spectral artifacts. A concrete future listening protocol would run a blinded MUSHRA / ABX trial with $n{\ge}24$ listeners on $12$ stratified top-$25\%$ wrap-cliff tiles at $48$\,kHz comparing \texttt{no-bake}, \texttt{DualCosine}, \texttt{SeamN2N}, and \texttt{Ours E2}.
+    Generalization to ``sounds better'' is therefore \emph{not} claimed.
+    PESQ and STOI are excluded because the test signals are non-speech cycles.
+  \item \textbf{Metric lock and seed labeling.}
+    Primary holdout and multi-family claims in Table~\ref{tab:n2n-vs-ours} use locked $R_{\mathrm{blend}}$ (Section~\ref{sec:residual-score}) over ten evaluation seeds (\texttt{20260719}--\texttt{20260728}); earlier five-seed pilot summaries are noted where applicable.
+    Matched-$5$k outer-loop means use three primary search seeds (Table~\ref{tab:meta-approaches}), supplemented by two extra search seeds and a three-seed $5$k branch ablation (Section~\ref{sec:results}).
+    Single-seed in-loop FitCell-to-plateau ($R_{\mathrm{blend}}{\approx}0.9912$, seed \texttt{1902771841}; Table~\ref{tab:v14-hybrid-converge}) is distinct from the three-seed holdout replication ($0.9881{\pm}0.0029$; Section~\ref{sec:v14-converge}).
+    Whole-curve prolonged $R$ near $0.991$ is a superseded debug score and must not overwrite holdout or converge readings.
+  \item \textbf{Synthetic / proxy boards.}
+    Primary search and holdout use procedural sine{+}cliff generators, not private studio stems.
+    Synthetic CNC/PMU transfer rows are procedural pilots when KIT / IEEE DataPort downloads are login-walled;
+    they do \emph{not} validate industrial toolpath or live-grid claims.
+  \item \textbf{Domain Noise2Noise vs transfer depth.}
+    Domain-trained Noise2Noise was scored on the seven wrap-protocol stress-test boards
+    (Appendix Table~\ref{tab:transfer-main}). It trails Ours on every column under $R_{\mathrm{blend}}$.
+    Latency timings in Appendix~\ref{app:supplement} still use the wavetable checkpoint zero-shot.
+    Cycle-GAN / BeatDiff / real KIT--PMU remain incomplete where noted
+    (Table~\ref{tab:transfer-sota-status}).
+  \item \textbf{Domain shift on zero-shot exports.}
+    Per-corpus domain search (\texttt{Ours (domain)}, Table~\ref{tab:n2n-vs-ours}) resolves the zero-shot gap on held-out Factory+FX and AKWF OA cycles, scoring higher than domain-trained \texttt{SeamN2N} (Holm--Bonferroni $p_{\mathrm{adj}}{\le}4.2{\times}10^{-15}$).
+    However, when evaluated \emph{zero-shot} without domain re-search, the wavetable meta favorite can still trail no-bake or FIR on Factory+FX / Rust export tiles while beating Dual Cosine.
+    I do not claim universal zero-shot factory superiority.
+  \item \textbf{Search geometry.}
+    Search scores Python generator draws.
+    The Python multi-family matrix is primary. Rust export is secondary.
+    Per-trial width is capped. Demucs-/diffusion-scale stacks were screened out.
+  \item \textbf{No wrap-closure theorems / no formal TCB.}
+    Endpoint-pin can zero wrap-jump while residual falls.
+    I claim tiled residual repair toward $r^{\star}$, not endpoint closure or search-convergence proofs.
+    Tooling checks are manual evidence alignment against frozen JSON (Section~\ref{sec:tooling}), not a trusted computing base or machine-checked verification.
+  \item \textbf{Transfer scope.}
+    Sci/eng wrap transfer is a classical-board stress test of the wrap protocol, not deep CWRU/ECG SOTA
+    (Table~\ref{tab:transfer-sota-status}).
+  \item \textbf{Small-$n$ search-seed and transfer statistics.}
+    While primary holdout ($n{=}10$ eval seeds, Holm $p_{\mathrm{adj}}{=}0.0039$), multi-family ($n{=}10$ eval seeds, Holm $p_{\mathrm{adj}}{=}0.0039$), and Factory+FX / AKWF OA ($N{=}256$ disjoint cycles, Holm $p_{\mathrm{adj}}{\le}4.2{\times}10^{-15}$) comparisons in Table~\ref{tab:n2n-vs-ours} are now powered with paired permutation tests, the matched outer-loop and E2 FitCell-to-plateau runs ($n{=}3$ search seeds at ${\approx}36$\,h/seed, exact sign-flip $p{=}0.25$) and Rust transfer ($n{=}20$ tiles) remain small-$n$ exploratory checks; I do not treat overlapping mean$\pm$std bands as proof of superiority without paired tests.
+  \item \textbf{Hyperparameter probe.}
+    The $\pm 50\%$ one-at-a-time probe (Appendix~\ref{app:supplement}) is not a full re-search of Table~\ref{tab:hyperparams}.
+\end{itemize}
+
+\subsection{Future work}
+\label{sec:outlook}
+
+A follow-up can treat which sounds fail as the primary object: stratified residual heatmaps over procedural families, cliff-size conditioning, and family-specialist operators under the same outer loop.
+A powered formal listening study (MOS or forced-choice on high-wrap tiles) remains the clearest missing perceptual check and is required before any ``sounds better'' claim.
